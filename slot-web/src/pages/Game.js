@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import Screen from "../Screen";
 function Game() {
   const [autoPlay, setAutoPlay] = useState(false);
 
@@ -8,8 +8,8 @@ function Game() {
     // Default options are marked with *
     return fetch(url, {
       body: JSON.stringify({
-        "ip": "string",
-        "buttonNo": 0
+        "ip": "192.168.10.71",
+        "buttonNo": 77
       }), // must match 'Content-Type' header
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, same-origin, *omit
@@ -59,7 +59,7 @@ function Game() {
         <div style={styles.slotBackground}>
           <img src={'/banner-wolf.png'}/>
           <div style={styles.screen}>
-
+            <Screen />
           </div>
           <div style={styles.buttonTable}>
             <button 
