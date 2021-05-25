@@ -8,8 +8,8 @@ function Game() {
     // Default options are marked with *
     return fetch(url, {
       body: JSON.stringify({
-        "ip": "string",
-        "buttonNo": 0
+        "ip": "192.168.10.71",
+        "buttonNo": 77 // Max bet: 99, spin: 77
       }), // must match 'Content-Type' header
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       credentials: 'same-origin', // include, same-origin, *omit
