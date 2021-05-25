@@ -1,3 +1,5 @@
+import { useHistory } from "react-router-dom";
+
 // Style
 import machineIcon from '../../asset/egzj1ui37v.jpeg';
 import { makeStyles } from '@material-ui/core/styles';
@@ -41,11 +43,17 @@ const useStyles = makeStyles(theme => ({
 
 export default function MachineItem() {
   const classes = useStyles();
+
+  let history = useHistory();
   //   const [expanded, setExpanded] = useState(false);
 
   //   const handleExpandClick = () => {
   //     setExpanded(!expanded);
   //   };
+
+  function selectMachine() {
+    history.push("/game");
+  }
 
   return (
     <Card className={classes.root}>
@@ -70,7 +78,12 @@ export default function MachineItem() {
         </Typography>
       </CardContent>
       <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-        <Button variant="contained" color="primary" style={{}}>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          style={{}}
+          onClick={() => selectMachine()}
+        >
           開始玩
         </Button>
         {/* <IconButton

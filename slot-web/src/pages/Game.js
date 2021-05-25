@@ -80,7 +80,7 @@ function Game() {
             >
               開分
             </button>
-            <button 
+            {/* <button 
               style={styles.buttonOpen}
               onClick={() => setAutoPlay(pre => {
                 console.log('auto staus: ', !pre); 
@@ -88,7 +88,7 @@ function Game() {
               })}
             >
               自動
-            </button>
+            </button> */}
           </div>
           <div style={styles.details}>
 

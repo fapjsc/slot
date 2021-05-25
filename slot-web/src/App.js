@@ -7,6 +7,8 @@ import {
 
 import './App.css';
 import Home from './pages/Home';
+import Game from './pages/Game';
+import Auth from './pages/Auth';
 
 function App() {
   return (
@@ -14,26 +16,21 @@ function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/about">
-            <About />
+          <Route path="/game">
+            <Game />
           </Route>
-          <Route path="/users">
-            <Users />
+          <Route path="/auth">
+            <Auth />
+          </Route>
+          <Route path="/home">
+            <Home />
           </Route>
           <Route path="/">
-            <Home />
+            <Auth />
           </Route>
         </Switch>
     </Router>
   );
-}
-
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
 }
 
 export default App;
