@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Home() {
+function Game() {
   const [autoPlay, setAutoPlay] = useState(false);
 
   function spin() {
@@ -153,4 +153,4 @@ const styles = {
   },
 };
 
-export default Home;
+export default Game;
