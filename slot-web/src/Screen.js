@@ -26,11 +26,17 @@ function Screen(){
       offerToReceiveVideo: true
     };
 	var room = 'foo';
-	const [pc ,setPc] = useState(new RTCPeerConnection(pcConfig));
-	console.log(pc);
-    /////////////////////////////////////////////
+	const [pc ,setPc] = useState(new RTCPeerConnection(pcConfig)); 
 
  	useEffect(() => {
+      var host = window.location.host;
+      var deviceId;
+      if(host === "220.135.67.240:3443"){
+        deviceId = "a7117e38aa22ed4ebf83e272b54ef07adcf35691f1fe696d91d2c841883c5e8c"; 
+      }
+      else {
+        deviceId =null;
+      }
 	    socket.on('created', function(room) {
 	      console.log('Created room ' + room);
 	      setCallee(true);
@@ -65,7 +71,7 @@ function Screen(){
 	    navigator.mediaDevices.getUserMedia({
 
 	      audio: false,
-	      video: {width : 300, height:360, deviceId : "880bdb9d33e0d5811a8010ac923bbaa3413c81e6cd4a202f5aace7cdc8c44e43"}
+	      video: {width : 300, height:360, deviceId : deviceId}
 	    })
 	    .then(gotStream)
 	    .catch(function(e) {
