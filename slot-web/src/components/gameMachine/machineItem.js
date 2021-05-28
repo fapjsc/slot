@@ -52,7 +52,7 @@ export default function MachineItem() {
   //   };
 
   function selectMachine() {
-    history.push("/game");
+    history.replace("/game");
   }
 
   return (

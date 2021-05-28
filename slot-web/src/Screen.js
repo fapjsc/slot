@@ -1,14 +1,12 @@
 import React, {useState, useContext, useCallback, useEffect} from 'react';
 import {SocketContext} from './context/socket';
-function Screen(){
+function Screen(props){
 	const socket = useContext(SocketContext);
-    const [isChannelReady,setChannelReady] = useState(false);
-    const [isCallee,setCallee] = useState(false);
-    var isStarted = false;
-    const [localStream, setlocalStream] = useState(null);
-    var remoteStream;
-    var turnReady;
-	var remoteVideo
+  const [isChannelReady,setChannelReady] = useState(false);
+  var isStarted = false;
+  var remoteStream;
+  var turnReady;
+	var remoteVideo;
     var pcConfig = {
       'iceServers': [{
         'urls': 'stun:stun.l.google.com:19302'
@@ -25,23 +23,18 @@ function Screen(){
       offerToReceiveAudio: true,
       offerToReceiveVideo: true
     };
-	var room = 'foo';
+	var room = props.room;
+
 	const [pc ,setPc] = useState(new RTCPeerConnection(pcConfig)); 
 
- 	useEffect(() => {
-      var host = window.location.host;
-      var deviceId;
-      if(host === "220.135.67.240:3443"){
-        deviceId = "a7117e38aa22ed4ebf83e272b54ef07adcf35691f1fe696d91d2c841883c5e8c"; 
-      }
-      else {
-        deviceId =null;
-      }
-	    socket.on('created', function(room) {
-	      console.log('Created room ' + room);
-	      setCallee(true);
-	    });
+  // var pc;
 
+ 	useEffect(async () => {
+	    // socket.on('created', function(room) {
+	    //   console.log('Created room ' + room);
+	    // });
+      wait(1000);
+      setPc(new RTCPeerConnection(pcConfig));
 	    socket.on('full', function() {
 	      console.log('Room ' + room + ' is full');
 	    });
@@ -50,7 +43,6 @@ function Screen(){
 	      console.log('Another peer made a request to join room ' + room);
 	      console.log('This peer is the initiator of room ' + room + '!');
 	      setChannelReady(true);
-	      console.log()
 	    });
 
 	    socket.on('joined', function(room) {
@@ -64,36 +56,35 @@ function Screen(){
 	    });
 
 	    if (room !== '') {
+
 	      socket.emit('create or join', room);
 	      console.log('Attempted to create or  join room', room);
 	    }
-
-	    navigator.mediaDevices.getUserMedia({
-
-	      audio: false,
-	      video: {width : 300, height:360, deviceId : deviceId}
-	    })
-	    .then(gotStream)
-	    .catch(function(e) {
-	      alert('getUserMedia() error: ' + e.name);
-	    });
+      // navigator.mediaDevices.getUserMedia({
+      //   audio: true,
+      //   video: true
+      // })
+      // .then(gotStream)
+      // .catch(function(e) {
+      //   alert('getUserMedia() error: ' + e.name);
+      // });
+      return hangup() ;
 
 	 }, []);
 
-	useEffect(() => {
+	useEffect(async () => {
+    await wait(200);
 	    socket.on('message', async function(message) {
+        if(isChannelReady ==false || pc ==null) return;
 	      console.log('Client received message:', message);
-	      console.log(pc,isCallee,isChannelReady);
-	      if(! isStarted) wait(3000);
-	      if (message.type === 'offer' && isCallee && isChannelReady) {
-	        pc.setRemoteDescription(new RTCSessionDescription(message
-	          ));
-	        doAnswer();
-	      } 
-	      else if (message.type === 'answer' && isChannelReady) {
-	        pc.setRemoteDescription(new RTCSessionDescription(message));
-	      } 
+        if (message.type === 'offer') {
+          await wait(500);
+          pc.setRemoteDescription(new RTCSessionDescription(message
+            ));
+          doAnswer();
+        } 
 	      else if (message.type === 'candidate' ) {
+          await wait(1000);
 	        var candidate = new RTCIceCandidate({
 	          sdpMLineIndex: message.label,
 	          candidate: message.candidate
@@ -101,19 +92,20 @@ function Screen(){
 	        pc.addIceCandidate(candidate);
 	      } 
 	      else if (message === 'bye') {
+          await wait(500);
 	        handleRemoteHangup();
 	      }
 	    });
-	},[isCallee,isChannelReady]);
+	},[isChannelReady,pc]);
 
 	useEffect(() => {
-		console.log("effect",isCallee,isChannelReady,localStream);
-		if((isCallee == true || isChannelReady == true) &&localStream != null) {
-	    	remoteVideo = document.querySelector('#remoteVideo');
-		    console.log(socket);
-		    maybeStart(pc);
-		}
-	}, [isCallee,isChannelReady,localStream,pc])
+		console.log("effect",isChannelReady);
+		if (isChannelReady == false || pc ==null) return;
+                  console.log(pc);
+  	remoteVideo = document.querySelector('#remoteVideo');
+    console.log(socket);
+    maybeStart();
+	}, [isChannelReady,pc])
 
 	const wait = (timer) => {
 		return new Promise( resolve => {
@@ -127,19 +119,12 @@ function Screen(){
       socket.emit('message', message);
     }
 
-    function maybeStart(pc) {
+    function maybeStart() {
       console.log('>>>>>> creating peer connection');
       createPeerConnection();
-      pc.addStream(localStream);
-      isStarted = true;
-      if(!isCallee) doCall();
+      isStarted =true;
     }
 
-    function gotStream(stream) {
-      console.log('Adding local stream.');
-      setlocalStream(stream);
-      sendMessage('got user media');
-    }
 
     function handleRemoteStreamAdded(event) {
       console.log('Remote stream added.');
@@ -154,7 +139,6 @@ function Screen(){
     function hangup() {
       console.log('Hanging up.');
       stop();
-      sendMessage('bye');
     }
 
     function handleRemoteHangup() {
@@ -163,27 +147,25 @@ function Screen(){
     }
 
     function stop() {
-      isStarted = false;
-      // pc.close();
-      // setPc(null);
+      setChannelReady(false);
+      sendMessage("bye")  
+      pc.close();
     }
-
     window.onbeforeunload = function() {
-      sendMessage('bye');
+      console.log("sdsdf");
+      sendMessage("bye")  ;  
     };
-
     /////////////////////////////////////////////////////////
 
     async function createPeerConnection() {
       try {
-      	if(!isCallee){
-	        pc.onicecandidate = handleIceCandidate;
-	        pc.onaddstream = handleRemoteStreamAdded;
-	        pc.onremovestream = handleRemoteStreamRemoved;
-   		}
+        // pc.onicecandidate = handleIceCandidate;
+        pc.onaddstream = handleRemoteStreamAdded;
+        pc.onremovestream = handleRemoteStreamRemoved;
       } catch (e) {
         console.log('Failed to create PeerConnection, exception: ' + e.message);
         alert('Cannot create RTCPeerConnection object.');
+        if(pc == null) maybeStart();
         return;
       }
     }
@@ -227,10 +209,6 @@ function Screen(){
 
     function onCreateSessionDescriptionError(error) {
       console.log('Failed to create session description: ' + error.toString());
-    }
-    const click = () => {
-    	room = "sadsdf";
-    	socket.emit("full")
     }
 	return (
 		<video id="remoteVideo" autoPlay> </video>

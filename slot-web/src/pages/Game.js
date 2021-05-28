@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
+import { useHistory } from "react-router-dom";
 import Screen from "../Screen";
+import {SocketContext} from '../context/socket';
 function Game() {
   const [autoPlay, setAutoPlay] = useState(false);
-
+  const socket = useContext(SocketContext);
+  let history = useHistory();
+  const gameName = "Testing Ver.1.0";
   function spin() {
     let url = 'http://192.168.10.60/api/GameButtonApi';
     // Default options are marked with *
@@ -24,7 +28,13 @@ function Game() {
     })
     .then(response => console.log(response)) // 輸出成 json
   }
-  
+  function leave() {
+    console.log("leave..");
+    socket.emit("leave", gameName);
+    socket.removeAllListeners();
+    history.replace("/home");
+
+  }
   function openScore() {
     let url = 'http://192.168.10.60/api/OnlineCashPointApi';
 
@@ -54,12 +64,12 @@ function Game() {
     <div className="App">
       <div className="App-background">
         <p>
-          Testing Ver.1.0
+          {gameName}
         </p>
         <div style={styles.slotBackground}>
           <img src={'/banner-wolf.png'}/>
           <div style={styles.screen}>
-            <Screen />
+            <Screen room={gameName}/>
           </div>
           <div style={styles.buttonTable}>
             <button 
@@ -79,6 +89,12 @@ function Game() {
               onClick={() => openScore()}
             >
               開分
+            </button>
+            <button 
+              style={styles.buttonLeave}
+              onClick={() => leave()}
+            >
+              離開
             </button>
             {/* <button 
               style={styles.buttonOpen}
