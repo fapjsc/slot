@@ -1,0 +1,33 @@
+.backImg {
+  background-size: cover;
+}
+.buttonPosition {
+  position: absolute;
+  top: 380px;
+  left: 150px;
+  background-color: #0d3875;
+  padding: 15px;
+  margin: 0 15px;
+  padding-bottom: 45px;
+  font-size: 1.2rem;
+  border-color: #0d3875;
+  border-radius: 10px;
+}
+.buttonPosition2 {
+  position: absolute;
+  top: 250px;
+  left: 350px;
+  background-color: #0d3875;
+  padding: 15px;
+  margin: 0 15px;
+  padding-bottom: 45px;
+  font-size: 1.2rem;
+  border-color: #abe73b;
+  border-radius: 10px;
+}
+
+.divPosition {
+    display: inline-block;
+  position: relative;
+  text-align: center;
+}
