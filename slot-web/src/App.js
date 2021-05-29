@@ -5,7 +5,7 @@ import { SocketContext, socket } from './context/socket';
 import Home from './pages/Home';
 import Game from './pages/Game';
 import Auth from './pages/Auth';
-import GameStart from './pages/GameStart';
+// import GameStart from './pages/GameStart';
 import LoadingScreen from './pages/LoadingScreen';
 
 // Style
@@ -25,9 +25,9 @@ function App() {
           <Route path="/game">
             <Game />
           </Route>
-          <Route path="/gameStart">
+          {/* <Route path="/gameStart">
             <GameStart />
-          </Route>
+          </Route> */}
           <Route path="/auth">
             <Auth />
           </Route>
