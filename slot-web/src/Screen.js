@@ -71,8 +71,9 @@ function Screen(props){
 	 }, []);
 
 	useEffect(async () => {
-	    socket.on('message', async function(message) {
+	    socket.on('message', async function(message, flag) {
         console.log(pc);
+        if(room != flag) return;
         if(isChannelReady ==false || pc ==null) return;
 	      console.log('Client received message:', message);
         if (message.type === 'offer') {
@@ -111,9 +112,9 @@ function Screen(props){
 			}, timer)
 		});
 	}
-    function sendMessage(message) {
-      console.log('Client sending message: ', message);
-      socket.emit('message', message);
+    function sendMessage(message, room) {
+      console.log('Client sending message: ', message, room);
+      socket.emit('message', message, room);
     }
 
     function maybeStart() {
@@ -176,7 +177,7 @@ function Screen(props){
           label: event.candidate.sdpMLineIndex,
           id: event.candidate.sdpMid,
           candidate: event.candidate.candidate
-        });
+        }, room);
       } else {
         console.log('End of candidates.');
       }
@@ -197,7 +198,7 @@ function Screen(props){
     function setLocalAndSendMessage(sessionDescription) {
       pc.setLocalDescription(sessionDescription);
       console.log('setLocalAndSendMessage sending message', sessionDescription);
-      sendMessage(sessionDescription);
+      sendMessage(sessionDescription,room);
     }
 
     function onCreateSessionDescriptionError(error) {
