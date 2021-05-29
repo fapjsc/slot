@@ -28,7 +28,6 @@ function Screen(props){
 	const [pc ,setPc] = useState(null); 
 
   // var pc;
-
  	useEffect(() => {
 	    // socket.on('created', function(room) {
 	    //   console.log('Created room ' + room);
@@ -187,11 +186,6 @@ function Screen(props){
       console.log('createOffer() error: ', event);
     }
 
-    function doCall() {
-      console.log('Sending offer to peer');
-      pc.createOffer(setLocalAndSendMessage, handleCreateOfferError);
-    }
-
     function doAnswer() {
       console.log('Sending answer to peer.');
       pc.createAnswer().then(
@@ -210,7 +204,7 @@ function Screen(props){
       console.log('Failed to create session description: ' + error.toString());
     }
 	return (
-		<video id="remoteVideo" autoPlay> </video>
+		<video id="remoteVideo" autoPlay mute> </video>
 	);
 }
 export default Screen;
