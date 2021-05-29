@@ -1,19 +1,19 @@
-import "./GameStart.css";
-import { Button } from "antd";
-import Layout from "antd/lib/layout/layout";
+import './GameStart.css';
+import { Button } from 'antd';
+import Layout from 'antd/lib/layout/layout';
 
 const GameStart = () => {
   return (
     <Layout>
       <div className="divPosition">
-        <img className="backImg" src={"/barLeft.jpg"} />
+        <img className="backImg" src={'/barLeft.jpg'} />
       </div>
       <div className="divPosition">
-        <img className="backImg" src={"/center.jpg"} />
+        <img className="backImg" src={'/center.jpg'} />
         <Button className="buttonPosition">MAX BET</Button>
       </div>
       <div className="divPosition">
-        <img className="backImg" src={"/barRight.jpg"} />
+        <img className="backImg" src={'/barRight.jpg'} />
       </div>
 
       <div>

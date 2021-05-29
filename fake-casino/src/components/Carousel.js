@@ -32,7 +32,7 @@ export default function SimpleSlider() {
 
   const handleClick = () => {
     const w = window.open('about:blank');
-    w.location.href = 'http://localhost:3001/';
+    w.location.href = 'http://192.168.10.59:3001/';
   };
 
   return (
