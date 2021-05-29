@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+/slot-web/node_modules
+/fake-casino/node_modules
+*/node_modules
 /.pnp
 .pnp.js
 
