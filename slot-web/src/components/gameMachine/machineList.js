@@ -1,8 +1,8 @@
 // Components
 import MachineItem from './machineItem';
+import WolfGame from './WolfGame';
 
 // Style
-// import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
@@ -28,7 +28,7 @@ export default function MachineList() {
         </Grid>
 
         <Grid item xs={12} sm={4} md={3} className={classes.grid}>
-          <MachineItem />
+          <WolfGame />
         </Grid>
 
         <Grid item xs={12} sm={4} md={3} className={classes.grid}>
