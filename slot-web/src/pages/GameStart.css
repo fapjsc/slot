@@ -1,33 +1,107 @@
 .backImg {
   background-size: cover;
 }
+
+.gameTab {
+  position: absolute;
+  display: inline-block;
+  top: 370px;
+  right: 40px;
+}
+
+.gameTabButton {
+  background-color: #042a5f;
+  padding: 10px;
+  margin: 0 10px;
+  padding-bottom: 10px;
+  font-size: 1rem;
+  color: azure;
+  font-weight: bold 5px;
+  border-color: #073370;
+  border-radius: 10px;
+}
+
 .buttonPosition {
   position: absolute;
-  top: 380px;
-  left: 150px;
-  background-color: #0d3875;
-  padding: 15px;
-  margin: 0 15px;
-  padding-bottom: 45px;
-  font-size: 1.2rem;
-  border-color: #0d3875;
+  top: 430px;
+  left: 100px;
+  background-color: #042a5f;
+  padding: 10px;
+  margin: 0 10px;
+  padding-bottom: 10px;
+  color: rgb(255, 240, 240);
+  font-size: 1rem;
+  font-weight: bold 5px;
+  border-color: #073370;
   border-radius: 10px;
 }
 .buttonPosition2 {
   position: absolute;
-  top: 250px;
-  left: 350px;
-  background-color: #0d3875;
-  padding: 15px;
-  margin: 0 15px;
-  padding-bottom: 45px;
-  font-size: 1.2rem;
-  border-color: #abe73b;
+  top: 370px;
+  left: 120px;
+  background-color: #ebdada;
+  padding: 10px;
+  margin: 0 10px;
+  padding-bottom: 10px;
+  color: rgb(14, 0, 0);
+  font-size: 1rem;
+  font-weight: bold;
+  border-color: #d2e9bf;
   border-radius: 10px;
 }
 
+.buttonPosition3 {
+  position: absolute;
+  top: 430px;
+  right: 120px;
+  background-color: #0d6349;
+  padding: 10px;
+  margin: 0 10px;
+  padding-bottom: 10px;
+  color: azure;
+  font-size: 1rem;
+  font-weight: bold 5px;
+  border-color: #81f722;
+  border-radius: 50%;
+}
+
+.buttonPosition4 {
+  position: absolute;
+  top: 430px;
+  right: 200px;
+  background-color: #e01313;
+  padding: 10px;
+  margin: 0 10px;
+  padding-bottom: 10px;
+  color: azure;
+  font-size: 1rem;
+  font-weight: bold 5px;
+  border-color: #81f722;
+  border-radius: 50%;
+}
+
 .divPosition {
-    display: inline-block;
+  display: inline-block;
   position: relative;
   text-align: center;
+}
+
+@media screen and (min-width: 767px) {
+  /* .divPosition Button {
+    width: 10%;
+    margin: 0 0;
+  } */
+  /* .divPosition{width: 0; max-width: 2080px; margin: 0 0;} */
+  /* .card .machine-state { width: 20%; clear:none } */
+}
+
+@media (max-width: 767px) {
+}
+@media (max-width: 480px) {
+}
+@media (min-width: 768px) and (max-width: 979px) {
+}
+@media (min-width: 980px) {
+}
+@media (min-width: 1200px) {
 }
