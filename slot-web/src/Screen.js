@@ -25,16 +25,15 @@ function Screen(props){
     };
 	var room = props.room;
 
-	const [pc ,setPc] = useState(new RTCPeerConnection(pcConfig)); 
+	const [pc ,setPc] = useState(null); 
 
   // var pc;
 
- 	useEffect(async () => {
+ 	useEffect(() => {
 	    // socket.on('created', function(room) {
 	    //   console.log('Created room ' + room);
 	    // });
-      wait(1000);
-      setPc(new RTCPeerConnection(pcConfig));
+      setPc(new RTCPeerConnection);
 	    socket.on('full', function() {
 	      console.log('Room ' + room + ' is full');
 	    });
@@ -73,8 +72,8 @@ function Screen(props){
 	 }, []);
 
 	useEffect(async () => {
-    await wait(200);
 	    socket.on('message', async function(message) {
+        console.log(pc);
         if(isChannelReady ==false || pc ==null) return;
 	      console.log('Client received message:', message);
         if (message.type === 'offer') {
@@ -101,7 +100,6 @@ function Screen(props){
 	useEffect(() => {
 		console.log("effect",isChannelReady);
 		if (isChannelReady == false || pc ==null) return;
-                  console.log(pc);
   	remoteVideo = document.querySelector('#remoteVideo');
     console.log(socket);
     maybeStart();
@@ -148,8 +146,9 @@ function Screen(props){
 
     function stop() {
       setChannelReady(false);
-      sendMessage("bye")  
-      pc.close();
+      socket.emit("leave", room);
+      // socket.removeAllListeners();
+
     }
     window.onbeforeunload = function() {
       console.log("sdsdf");

@@ -59,7 +59,12 @@ function Game() {
     })
     .then(response => console.log(response))
   }
+  useEffect(() => {
 
+    return () => {
+      window.location.reload();
+    }
+  }, [])
   return (
     <div className="App">
       <div className="App-background">
