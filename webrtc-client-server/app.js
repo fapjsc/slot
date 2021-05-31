@@ -1,15 +1,7 @@
-// var deviceId;
-// signal_server_url
-// if(signal_server_url != "http://220.135.67.240:3443"){
-//   deviceId = "a7117e38aa22ed4ebf83e272b54ef07adcf35691f1fe696d91d2c841883c5e8c"; 
-// }
-// else {
-//   deviceId =null;
-// }
 
-const signal_server_url = "http://220.135.67.240:3333/";
+const signal_server_url = "http://192.168.10.115:3333/";
 const socket = io.connect( signal_server_url);
-// var localStream = [];
+
 var isStart =false;
 const pcConfig = {
   'iceServers': [{
@@ -30,6 +22,9 @@ const wait = (timer) => {
     }, timer)
   });
 }
+window.onbeforeunload = function(e) {
+  socket.emit("bye");
+};
 const handleIceCandidate = (event) => {
   console.log('icecandidate event: ', event);
   var room = event.target.room;
@@ -47,20 +42,13 @@ const handleIceCandidate = (event) => {
 const handleRemoteStreamRemoved = (event) => {
     console.log('Remote stream removed. Event: ', event);
 }
-// const addLocalStream = (stream) => {
-//   console.log(element);
-//   console.log('Adding local stream.');
-//   peerConnection[stream.id] = new RTCPeerConnection(pcConfig);
-//   peerConnection[stream.id].onicecandidate = handleIceCandidate;
-//   peerConnection[stream.id].addStream(stream);
-//   socket.emit('create or join', stream.id);
-// }
+
 const sendMessage = (message, room) => {
   console.log('Client sending message: ', message, room);
   socket.emit('message', message, room);
 }
 const doCall = async (room) => {
-  await wait(1000);
+  await wait(100);
   console.log('Sending offer to peer');
   peerConnection[room].createOffer().then(
     sessionDescription =>{
@@ -70,12 +58,7 @@ const doCall = async (room) => {
     }, room)
     .catch(handleCreateOfferError);
 }
-// const setLocalAndSendMessage = (sessionDescription) => {
-//   peerConnection[room].setLocalDescription(sessionDescription);
-//   console.log('setLocalAndSendMessage sending message', sessionDescription);
-//   sendMessage(sessionDescription);
 
-// }
 const handleCreateOfferError  = (event) => {
   console.log('createOffer() error: ', event);
 }
@@ -112,6 +95,7 @@ socket.on('log', function(array) {
 });
 
 socket.on('message', async function(message, room) {
+  if(!isNaN(parseInt(room))) return;
   console.log('Client received message:', message,room);
   if (message.type === 'answer' ) {
       console.log(room);
@@ -124,33 +108,12 @@ socket.on('message', async function(message, room) {
     });
     peerConnection[room].addIceCandidate(candidate);
   } 
-  else if (message === 'bye') {
-    handleRemoteHangup();
-  }
   console.log(peerConnection[room]);
 });
 
 
-
-// const addVideo = (stream) => {
-//   var video = document.createElement("video");
-//   console.log(video);
-//   window.stream = stream;
-//   video.srcObject = stream;
-//   document.getElementById("video").appendChild(video);
-
-// }
 var Devices = navigator.mediaDevices.enumerateDevices();
-// navigator.mediaDevices.getUserMedia({
-//   audio: false,
-//   video: {
-//     deviceId: "2d8f7bbc7ca168f1c0ef0d7173f44aede422cb817aea27057d521b89f93a529c",
-//     width : 300, height:360
-//   }
-// }).then(addVideo)
-// .catch(function(e) {
-//     console.log('getUserMedia() error: ' + e.name);
-// })
+
 console.log(Devices);
 Promise.all([Devices]).then(devices => {
   console.log(devices);
@@ -165,13 +128,14 @@ Promise.all([Devices]).then(devices => {
       })
       .then(stream => {
         console.log('Adding local stream.');
-        peerConnection[element.deviceId.substring(0,7)] = new RTCPeerConnection(pcConfig);
-        peerConnection[element.deviceId.substring(0,7)].onicecandidate = handleIceCandidate;
-        peerConnection[element.deviceId.substring(0,7)].addStream(stream);
-        peerConnection[element.deviceId.substring(0,7)].room = element.deviceId.substring(0,7);
-        console.log(peerConnection[element.deviceId.substring(0,7)]);
-        socket.emit('create or join', element.deviceId.substring(0,7));
-        console.log('Attempted to create or  join room', element.deviceId.substring(0,7));
+        var device_str = "."+element.deviceId.substring(0,7);
+        peerConnection[device_str] = new RTCPeerConnection(pcConfig);
+        peerConnection[device_str].onicecandidate = handleIceCandidate;
+        peerConnection[device_str].addStream(stream);
+        peerConnection[device_str].room = device_str;
+        console.log(peerConnection[device_str]);
+        socket.emit('create', device_str);
+        console.log('Attempted to create or  join room', device_str);
 
 
       }, element)
