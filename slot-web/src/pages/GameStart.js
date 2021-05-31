@@ -2,10 +2,23 @@ import "./GameStart.css";
 import React, { useState } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
+<<<<<<< Updated upstream
+=======
+import Box from "@material-ui/core/Box";
+>>>>>>> Stashed changes
 import Drawer from "@material-ui/core/Drawer";
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles({
+<<<<<<< Updated upstream
+=======
+  root: {
+    display: "flex",
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "flex-end",
+  },
+>>>>>>> Stashed changes
   list: {
     width: 250,
   },
@@ -39,12 +52,11 @@ const GameStart = () => {
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
-    >
-      dss
-    </div>
+    ></div>
   );
 
   return (
+<<<<<<< Updated upstream
     <>
       <div>
         {["left"].map((anchor) => (
@@ -65,6 +77,38 @@ const GameStart = () => {
         
       </div>
       <div className="divPosition">
+=======
+    <Box style={{ backgroundColor: "red" }} className={classes.root}>
+      <Box className="divPosition" color="primary.main">
+        <img className="backImg" src={"/barLeft.jpg"} />
+        <div className="gameDrawer">
+          {["設定"].map((anchor) => (
+            <React.Fragment key={anchor}>
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{
+                  fontSize: "1.2rem",
+                  fontWeight: "bold",
+                  color: "azure",
+                }}
+                onClick={toggleDrawer(anchor, true)}
+              >
+                {anchor}
+              </Button>
+              <Drawer
+                anchor={anchor}
+                open={state[anchor]}
+                onClose={toggleDrawer(anchor, false)}
+              >
+                {list(anchor)}
+              </Drawer>
+            </React.Fragment>
+          ))}
+        </div>
+      </Box>
+      <Box className="divPosition">
+>>>>>>> Stashed changes
         <img className="backImg" src={"/center.jpg"} />
         <button className="buttonPosition" type="primary">
           MAX BET
@@ -78,6 +122,7 @@ const GameStart = () => {
         <button className="buttonPosition4" type="primary">
           AUTO SPIN
         </button>
+<<<<<<< Updated upstream
         <div>
           <div className="gameTab">
             <span
@@ -101,6 +146,29 @@ const GameStart = () => {
         <img className="backImg" src={"/barRight.jpg"} />
       </div>
     </>
+=======
+        <div className="gameTab">
+          <span
+            style={{
+              fontSize: "1.0rem",
+              color: "white",
+              fontWeight: "bold",
+              padding: "5px",
+            }}
+          >
+            點數
+          </span>
+          <input />
+          <button className="gameTabButton" type="primary">
+            投入代幣
+          </button>
+        </div>
+      </Box>
+      <Box className="divPosition">
+        <img className="backImg" src={"/barRight.jpg"} />
+      </Box>
+    </Box>
+>>>>>>> Stashed changes
   );
 };
 
