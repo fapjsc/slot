@@ -7,9 +7,11 @@ function Game() {
   const socket = useContext(SocketContext);
   let history = useHistory();
   let {camera} = useParams();
-  setInterval(() => {
+  var checkConnection = setInterval(() => {
     if(socket.connected == false){
+      alert("連線錯誤，或socket服務異常");
       leave();
+      clearInterval(checkConnection);
     }
   }, 1000);
   function spin() {
@@ -65,9 +67,7 @@ function Game() {
     .then(response => console.log(response))
   }
   useEffect(() => {
-    console.log(camera);
     return () => {
-      if(socket.connected == false) alert("連線錯誤");
       window.location.reload();
     }
   }, [])
@@ -80,7 +80,7 @@ function Game() {
         <div style={styles.slotBackground}>
           <img src={'/banner-wolf.png'}/>
           <div style={styles.screen}>
-            <Screen room={camera}/>
+            <Screen room={camera} leave={leave} />
           </div>
           <div style={styles.buttonTable}>
             <button 

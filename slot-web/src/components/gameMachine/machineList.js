@@ -24,11 +24,11 @@ export default function MachineList() {
     <div className={classes.root}>
       <Grid container spacing={3} style={{ padding: 10 }}>
         <Grid item xs={12} sm={4} md={3} className={classes.grid}>
-          <MachineItem camera="2d8f7bb"/>
+          <MachineItem camera="0"/>
         </Grid>
 
         <Grid item xs={12} sm={4} md={3} className={classes.grid}>
-          <MachineItem camera="0890289"/>
+          <MachineItem camera="1"/>
         </Grid>
 
         <Grid item xs={12} sm={4} md={3} className={classes.grid}>
