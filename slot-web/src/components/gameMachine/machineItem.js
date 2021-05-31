@@ -41,9 +41,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function MachineItem(props) {
+export default function MachineItem() {
   const classes = useStyles();
-  const camera = props.camera;
+
   let history = useHistory();
   //   const [expanded, setExpanded] = useState(false);
 
@@ -51,9 +51,9 @@ export default function MachineItem(props) {
   //     setExpanded(!expanded);
   //   };
 
-  function selectMachine() {
-    history.replace("/game/"+camera);
-  }
+  const selectMachine = () => {
+    history.replace('/game');
+  };
 
   return (
     <Card className={classes.root}>

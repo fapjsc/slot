@@ -22,7 +22,7 @@ function App() {
           <Route path="/loading">
             <LoadingScreen />
           </Route>
-           <Route path="/game/:camera">
+          <Route path="/game">
             <Game />
           </Route>
           {/* <Route path="/gameStart">

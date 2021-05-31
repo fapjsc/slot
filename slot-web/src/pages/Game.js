@@ -1,17 +1,12 @@
-import React, { useState, useEffect,useContext} from 'react';
-import { useHistory, useParams } from "react-router-dom";
+import React, { useState, useEffect,useContext } from 'react';
+import { useHistory } from "react-router-dom";
 import Screen from "../Screen";
 import {SocketContext} from '../context/socket';
 function Game() {
   const [autoPlay, setAutoPlay] = useState(false);
   const socket = useContext(SocketContext);
   let history = useHistory();
-  let {camera} = useParams();
-  setInterval(() => {
-    if(socket.connected == false){
-      leave();
-    }
-  }, 1000);
+  const gameName = "Testing Ver.1.0";
   function spin() {
     let url = 'http://192.168.10.60/api/GameButtonApi';
     // Default options are marked with *
@@ -35,7 +30,7 @@ function Game() {
   }
   function leave() {
     console.log("leave..");
-    socket.emit("leave", camera);
+    socket.emit("leave", gameName);
     socket.removeAllListeners();
     history.replace("/home");
 
@@ -65,9 +60,8 @@ function Game() {
     .then(response => console.log(response))
   }
   useEffect(() => {
-    console.log(camera);
+
     return () => {
-      if(socket.connected == false) alert("連線錯誤");
       window.location.reload();
     }
   }, [])
@@ -75,12 +69,12 @@ function Game() {
     <div className="App">
       <div className="App-background">
         <p>
-          {camera}
+          {gameName}
         </p>
         <div style={styles.slotBackground}>
           <img src={'/banner-wolf.png'}/>
           <div style={styles.screen}>
-            <Screen room={camera}/>
+            <Screen room={gameName}/>
           </div>
           <div style={styles.buttonTable}>
             <button 
