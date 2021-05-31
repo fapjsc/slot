@@ -66,7 +66,7 @@ function Screen(props){
       // .catch(function(e) {
       //   alert('getUserMedia() error: ' + e.name);
       // });
-      return hangup() ;
+      // return hangup() ;
 
 	 }, []);
 
