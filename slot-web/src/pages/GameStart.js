@@ -1,6 +1,18 @@
-import './GameStart.css';
-import { Button } from 'antd';
-import Layout from 'antd/lib/layout/layout';
+import "./GameStart.css";
+import React, { useState } from "react";
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import Button from "@material-ui/core/Button";
+
+const useStyles = makeStyles({
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: "auto",
+  },
+});
 
 const GameStart = () => {
   const classes = useStyles();
@@ -35,23 +47,24 @@ const GameStart = () => {
   return (
     <>
       <div>
-      {[ 'left' ].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-          <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
-            {list(anchor)}
-          </Drawer>
-        </React.Fragment>
+        {["left"].map((anchor) => (
+          <React.Fragment key={anchor}>
+            <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+            <Drawer
+              anchor={anchor}
+              open={state[anchor]}
+              onClose={toggleDrawer(anchor, false)}
+            >
+              {list(anchor)}
+            </Drawer>
+          </React.Fragment>
         ))}
       </div>
       <div className="divPosition">
-        <img className="backImg" src={'/barLeft.jpg'} />
+        <p><img className="backImg" src={"/barLeft.jpg"} /></p>
+        
       </div>
       <div className="divPosition">
-<<<<<<< HEAD
-        <img className="backImg" src={'/center.jpg'} />
-        <Button className="buttonPosition">MAX BET</Button>
-=======
         <img className="backImg" src={"/center.jpg"} />
         <button className="buttonPosition" type="primary">
           MAX BET
@@ -83,10 +96,9 @@ const GameStart = () => {
             </button>
           </div>
         </div>
->>>>>>> ece555a32017b8450ac6addff949a18249d96e91
       </div>
       <div className="divPosition">
-        <img className="backImg" src={'/barRight.jpg'} />
+        <img className="backImg" src={"/barRight.jpg"} />
       </div>
     </>
   );
