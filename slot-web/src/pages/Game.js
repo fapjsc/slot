@@ -6,7 +6,14 @@ function Game() {
   const [autoPlay, setAutoPlay] = useState(false);
   const socket = useContext(SocketContext);
   let history = useHistory();
-  const gameName = "Testing Ver.1.0";
+  let {camera} = useParams();
+  var checkConnection = setInterval(() => {
+    if(socket.connected == false){
+      alert("連線錯誤，或socket服務異常");
+      leave();
+      clearInterval(checkConnection);
+    }
+  }, 1000);
   function spin() {
     let url = 'http://192.168.10.60/api/GameButtonApi';
     // Default options are marked with *
@@ -60,7 +67,6 @@ function Game() {
     .then(response => console.log(response))
   }
   useEffect(() => {
-
     return () => {
       window.location.reload();
     }
@@ -74,7 +80,7 @@ function Game() {
         <div style={styles.slotBackground}>
           <img src={'/banner-wolf.png'}/>
           <div style={styles.screen}>
-            <Screen room={gameName}/>
+            <Screen room={camera} leave={leave} />
           </div>
           <div style={styles.buttonTable}>
             <button 

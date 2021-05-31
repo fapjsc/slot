@@ -24,14 +24,8 @@ function Screen(props){
       offerToReceiveVideo: true
     };
 	var room = props.room;
-
 	const [pc ,setPc] = useState(null); 
-
-  // var pc;
  	useEffect(() => {
-	    // socket.on('created', function(room) {
-	    //   console.log('Created room ' + room);
-	    // });
       setPc(new RTCPeerConnection);
 	    socket.on('full', function() {
 	      console.log('Room ' + room + ' is full');
@@ -51,28 +45,34 @@ function Screen(props){
 
 	    socket.on('log', function(array) {
 	      console.log.apply(console, array);
+        var clinet_num = array[1].split(" ")[4];
+
+        if( clinet_num == 0) {
+          alert("相機異常!!!");
+          props.leave();
+        }
+
+        if( clinet_num == 2){
+          alert("遊戲進行中 !!!");
+          props.leave();
+        }
+
 	    });
 
-	    if (room !== '') {
-
-	      socket.emit('create or join', room);
-	      console.log('Attempted to create or  join room', room);
-	    }
-      // navigator.mediaDevices.getUserMedia({
-      //   audio: true,
-      //   video: true
-      // })
-      // .then(gotStream)
-      // .catch(function(e) {
-      //   alert('getUserMedia() error: ' + e.name);
-      // });
-      // return hangup() ;
-
+      socket.on("bye", () => {
+        alert("相機異常!!!");
+        handleRemoteHangup();
+      })
+      if (room !== '') {
+        socket.emit('join', room);
+        console.log('Attempted to join room', room);
+      }
 	 }, []);
 
 	useEffect(async () => {
-	    socket.on('message', async function(message) {
-        console.log(pc);
+	    socket.on('message', async function(message, flag) {
+                    console.log(pc);
+        if(room != flag) return;
         if(isChannelReady ==false || pc ==null) return;
 	      console.log('Client received message:', message);
         if (message.type === 'offer') {
@@ -89,14 +89,10 @@ function Screen(props){
 	        });
 	        pc.addIceCandidate(candidate);
 	      } 
-	      else if (message === 'bye') {
-          await wait(500);
-	        handleRemoteHangup();
-	      }
 	    });
 	},[isChannelReady,pc]);
 
-	useEffect(() => {
+	useEffect(async () => {
 		console.log("effect",isChannelReady);
 		if (isChannelReady == false || pc ==null) return;
   	remoteVideo = document.querySelector('#remoteVideo');
@@ -146,12 +142,12 @@ function Screen(props){
     function stop() {
       setChannelReady(false);
       socket.emit("leave", room);
+      props.leave();
       // socket.removeAllListeners();
 
     }
     window.onbeforeunload = function() {
-      console.log("sdsdf");
-      sendMessage("bye")  ;  
+        ;  
     };
     /////////////////////////////////////////////////////////
 
@@ -204,7 +200,7 @@ function Screen(props){
       console.log('Failed to create session description: ' + error.toString());
     }
 	return (
-		<video id="remoteVideo" autoPlay mute> </video>
+		<video id="remoteVideo" autoPlay mute="true"> </video>
 	);
 }
 export default Screen;
