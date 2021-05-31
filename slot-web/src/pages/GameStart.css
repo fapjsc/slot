@@ -99,9 +99,15 @@
   
 }
 @media screen and (min-width: 480px) {
+  .backImg {
+    width: 50%;
+  }
 }
 @media screen and (min-width: 768px) and (max-width: 979px) {
-   .divPosition  {
+  .backImg {
+    width: 50%;
+  }
+  .divPosition  {
     width: fit-content;
     /* clear:both; */
     /* max-width: 1080px; */
@@ -117,6 +123,11 @@
   } */
 }
 @media screen and (min-width: 980px) {
+  /* .divPosition .backImg {
+    width: 30%;
+    max-width: 1080px;    
+    margin: 0 0;
+  } */
 }
 @media screen and (min-width: 1200px) {
 }
