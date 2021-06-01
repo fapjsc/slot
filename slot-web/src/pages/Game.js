@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import Screen from '../Screen';
-import { SocketContext } from '../context/socket';
+import React, { useState, useEffect,useContext} from 'react';
+import { useHistory, useParams } from "react-router-dom";
+import Screen from "../Screen";
+import {SocketContext} from '../context/socket';
 function Game() {
   const [autoPlay, setAutoPlay] = useState(false);
   const socket = useContext(SocketContext);
@@ -35,8 +35,8 @@ function Game() {
     }).then((response) => console.log(response)); // 輸出成 json
   }
   function leave() {
-    console.log('leave..');
-    socket.emit('leave', camera);
+    console.log("leave..");
+    socket.emit("leave", camera);
     socket.removeAllListeners();
     history.replace('/home');
   }

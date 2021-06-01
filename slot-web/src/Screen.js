@@ -25,6 +25,8 @@ function Screen(props){
     };
 	var room = props.room;
 	const [pc ,setPc] = useState(null); 
+
+  // var pc;
  	useEffect(() => {
       setPc(new RTCPeerConnection);
 	    socket.on('full', function() {
