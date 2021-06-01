@@ -52,7 +52,7 @@ export default function MachineItem() {
   //   };
 
   const selectMachine = () => {
-    history.replace('/game');
+    history.replace('/game/:camera');
   };
 
   return (
