@@ -14,6 +14,20 @@ function Game() {
       clearInterval(checkConnection);
     }
   }, 1000);
+  
+  useEffect(() => {
+    return () => {
+      window.location.reload();
+    };
+  }, []);
+  
+  function leave() {
+    console.log("leave..");
+    socket.emit("leave", camera);
+    socket.removeAllListeners();
+    history.replace('/home');
+  }
+
   function spin() {
     let url = 'http://192.168.10.60/api/GameButtonApi';
     // Default options are marked with *
@@ -34,12 +48,7 @@ function Game() {
       referrer: 'no-referrer', // *client, no-referrer
     }).then((response) => console.log(response)); // 輸出成 json
   }
-  function leave() {
-    console.log("leave..");
-    socket.emit("leave", camera);
-    socket.removeAllListeners();
-    history.replace('/home');
-  }
+
   function openScore() {
     let url = 'http://192.168.10.60/api/OnlineCashPointApi';
 
@@ -63,11 +72,7 @@ function Game() {
       referrer: 'no-referrer',
     }).then((response) => console.log(response));
   }
-  useEffect(() => {
-    return () => {
-      window.location.reload();
-    };
-  }, []);
+
   return (
     <div className="App">
       <div className="App-background">

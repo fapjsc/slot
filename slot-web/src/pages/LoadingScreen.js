@@ -40,6 +40,7 @@ const LoadingScreen = () => {
     }, 5000);
     // eslint-disable-next-line
   }, []);
+  
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>

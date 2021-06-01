@@ -60,7 +60,7 @@ export default function MachineItem(props) {
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            X2
+            {props.magnification ? props.magnification : 'X2'}
           </Avatar>
         }
         // action={
@@ -68,18 +68,22 @@ export default function MachineItem(props) {
         //     <MoreVertIcon />
         //   </IconButton>
         // }
-        title="麻雀物語2"
-        subheader="September 14, 2021"
+        title={props.title ? props.title : "麻雀物語2"}
+        subheader={props.subHeader ? props.subHeader : "September 14, 2021"}
       />
-      <CardMedia className={classes.media} image={machineIcon} title="Paella dish" />
+      <CardMedia 
+        className={classes.media} 
+        image={props.machineIcon ? props.machineIcon : machineIcon} 
+        title="Paella dish" 
+      />
       <CardContent style={{ height: 90 }}>
         <Typography variant="body2" color="textSecondary" component="p">
-          機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G
+          {props.descreption ? props.descreption : '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'}
         </Typography>
       </CardContent>
       <CardActions disableSpacing style={{ justifyContent: 'center' }}>
         <Button variant="contained" color="primary" style={{}} onClick={() => selectMachine()}>
-          開始玩
+        {props.buttonName ? props.buttonName : '開始玩'}
         </Button>
         {/* <IconButton
           className={clsx(classes.expand, {
