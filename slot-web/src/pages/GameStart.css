@@ -1,5 +1,4 @@
 .backImg {
-  
 }
 
 .gameTab {
@@ -87,13 +86,7 @@
 }
 
 .divPosition {
-<<<<<<< Updated upstream
-  display: inline-block;
   position: relative;
-  text-align: center;
-=======
-  position: relative;
->>>>>>> Stashed changes
 }
 
 @media (min-width: 767px) {
@@ -105,31 +98,6 @@
   /* .card .machine-state { width: 20%; clear:none } */
 }
 
-<<<<<<< Updated upstream
-@media screen and (max-width: 767px) {
-  
-}
-@media screen and (min-width: 480px) {
-  .backImg {
-    width: 50%;
-  }
-}
-@media screen and (min-width: 768px) and (max-width: 979px) {
-  .backImg {
-    width: 50%;
-  }
-  .divPosition  {
-    width: fit-content;
-    /* clear:both; */
-    /* max-width: 1080px; */
-  }
-  /* .divPosition {
-    width:100%;
-    height:100%;
-  } */
-   
-   /* .buttonPosition {
-=======
 @media (max-width: 767px) {
   /* .backImg {
     width:50%;
@@ -147,21 +115,11 @@
 }
 @media (min-width: 768px) and (max-width: 979px) {
   /* .buttonPosition {
->>>>>>> Stashed changes
     width: 20%;
     clear: none;
   } */
 }
-<<<<<<< Updated upstream
-@media screen and (min-width: 980px) {
-  /* .divPosition .backImg {
-    width: 30%;
-    max-width: 1080px;    
-    margin: 0 0;
-  } */
-=======
 @media (min-width: 980px) {
->>>>>>> Stashed changes
 }
 @media (min-width: 1200px) {
 }
