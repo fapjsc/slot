@@ -35,7 +35,7 @@ io.on('connection', function(socket) {
       var room = device_map[parseInt(room)];
     }
     else {
-      var room = room_map[room];
+      var room = device_map.indexOf(room);
     }
     log('Client said: ', message, room);
     // for a real app, would be room-only (not broadcast)
@@ -51,7 +51,6 @@ io.on('connection', function(socket) {
       log('Client ID ' + socket.id + ' created room ' + device);
       socket.emit('created', device);
       device_map.push(device);
-      room_map[device] = device_map.length -1;
   });
 
   socket.on('join', function(room) {
