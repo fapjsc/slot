@@ -19,11 +19,10 @@ function App() {
             renders the first one that matches the current URL. */}
 
         <Switch>
-          <Route path="/game/:camera">
           <Route path="/loading">
             <LoadingScreen />
           </Route>
-          <Route path="/game">
+          <Route path="/game/:camera">
             <Game />
           </Route>
           <Route path="/gameStart">
