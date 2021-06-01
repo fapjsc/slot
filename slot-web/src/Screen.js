@@ -1,12 +1,12 @@
 import React, {useState, useContext, useCallback, useEffect} from 'react';
 import {SocketContext} from './context/socket';
 function Screen(props){
-	const socket = useContext(SocketContext);
+  const socket = useContext(SocketContext);
   const [isChannelReady,setChannelReady] = useState(false);
   var isStarted = false;
   var remoteStream;
   var turnReady;
-	var remoteVideo;
+  var remoteVideo;
     var pcConfig = {
       'iceServers': [{
         'urls': 'stun:stun.l.google.com:19302'
@@ -23,30 +23,28 @@ function Screen(props){
       offerToReceiveAudio: true,
       offerToReceiveVideo: true
     };
-	var room = props.room;
-	const [pc ,setPc] = useState(null); 
-
-  // var pc;
- 	useEffect(() => {
+  var room = props.room;
+  const [pc ,setPc] = useState(null); 
+  useEffect(() => {
       setPc(new RTCPeerConnection);
-	    socket.on('full', function() {
-	      console.log('Room ' + room + ' is full');
-	    });
+      socket.on('full', function() {
+        console.log('Room ' + room + ' is full');
+      });
 
-	    socket.on('join', function (room){
-	      console.log('Another peer made a request to join room ' + room);
-	      console.log('This peer is the initiator of room ' + room + '!');
-	      setChannelReady(true);
-	    });
+      socket.on('join', function (room){
+        console.log('Another peer made a request to join room ' + room);
+        console.log('This peer is the initiator of room ' + room + '!');
+        setChannelReady(true);
+      });
 
-	    socket.on('joined', function(room) {
-	      console.log('joined: ' + room);
-	      setChannelReady(true);
+      socket.on('joined', function(room) {
+        console.log('joined: ' + room);
+        setChannelReady(true);
 
-	    });
+      });
 
-	    socket.on('log', function(array) {
-	      console.log.apply(console, array);
+      socket.on('log', function(array) {
+        console.log.apply(console, array);
         var clinet_num = array[1].split(" ")[4];
 
         if( clinet_num == 0) {
@@ -59,7 +57,7 @@ function Screen(props){
           props.leave();
         }
 
-	    });
+      });
 
       socket.on("bye", () => {
         alert("相機異常!!!");
@@ -69,49 +67,49 @@ function Screen(props){
         socket.emit('join', room);
         console.log('Attempted to join room', room);
       }
-	 }, []);
+   }, []);
 
-	useEffect(async () => {
-	    socket.on('message', async function(message, flag) {
+  useEffect(async () => {
+      socket.on('message', async function(message, flag) {
                     console.log(pc);
         if(room != flag) return;
         if(isChannelReady ==false || pc ==null) return;
-	      console.log('Client received message:', message);
+        console.log('Client received message:', message);
         if (message.type === 'offer') {
           await wait(500);
           pc.setRemoteDescription(new RTCSessionDescription(message
             ));
           doAnswer();
         } 
-	      else if (message.type === 'candidate' ) {
+        else if (message.type === 'candidate' ) {
           await wait(1000);
-	        var candidate = new RTCIceCandidate({
-	          sdpMLineIndex: message.label,
-	          candidate: message.candidate
-	        });
-	        pc.addIceCandidate(candidate);
-	      } 
-	    });
-	},[isChannelReady,pc]);
+          var candidate = new RTCIceCandidate({
+            sdpMLineIndex: message.label,
+            candidate: message.candidate
+          });
+          pc.addIceCandidate(candidate);
+        } 
+      });
+  },[isChannelReady,pc]);
 
-	useEffect(async () => {
-		console.log("effect",isChannelReady);
-		if (isChannelReady == false || pc ==null) return;
-  	remoteVideo = document.querySelector('#remoteVideo');
+  useEffect(async () => {
+    console.log("effect",isChannelReady);
+    if (isChannelReady == false || pc ==null) return;
+    remoteVideo = document.querySelector('#remoteVideo');
     console.log(socket);
     maybeStart();
-	}, [isChannelReady,pc])
+  }, [isChannelReady,pc])
 
-	const wait = (timer) => {
-		return new Promise( resolve => {
-			setTimeout(() =>{
-				resolve();
-			}, timer)
-		});
-	}
-    function sendMessage(message) {
-      console.log('Client sending message: ', message);
-      socket.emit('message', message);
+  const wait = (timer) => {
+    return new Promise( resolve => {
+      setTimeout(() =>{
+        resolve();
+      }, timer)
+    });
+  }
+    function sendMessage(message, room) {
+      console.log('Client sending message: ', message, room);
+      socket.emit('message', message, room);
     }
 
     function maybeStart() {
@@ -174,7 +172,7 @@ function Screen(props){
           label: event.candidate.sdpMLineIndex,
           id: event.candidate.sdpMid,
           candidate: event.candidate.candidate
-        });
+        }, room);
       } else {
         console.log('End of candidates.');
       }
@@ -195,14 +193,14 @@ function Screen(props){
     function setLocalAndSendMessage(sessionDescription) {
       pc.setLocalDescription(sessionDescription);
       console.log('setLocalAndSendMessage sending message', sessionDescription);
-      sendMessage(sessionDescription);
+      sendMessage(sessionDescription,room);
     }
 
     function onCreateSessionDescriptionError(error) {
       console.log('Failed to create session description: ' + error.toString());
     }
-	return (
-		<video id="remoteVideo" autoPlay mute="true"> </video>
-	);
+  return (
+    <video id="remoteVideo" autoPlay mute="true"> </video>
+  );
 }
 export default Screen;
