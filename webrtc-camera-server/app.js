@@ -1,33 +1,37 @@
 
 const signal_server_url = "http://192.168.10.115:3333/";
-const socket = io.connect( signal_server_url);
-
-var isStart =false;
+const socket = io.connect(signal_server_url);
 const pcConfig = {
-  'iceServers': [{
-    'urls': 'stun:stun.l.google.com:19302'
-  },
-          {
-            'urls': 'turn:18.191.253.152:3478',
-            'username': 'alex',
-            'credential': 'abcdefg'
-        }
-        ]
+  'iceServers': [
+    {
+      'urls': 'stun:stun.l.google.com:19302'
+    },
+    {
+      'urls': 'turn:18.191.253.152:3478',
+      'username': 'alex',
+      'credential': 'abcdefg'
+    }
+  ]
 };
+
+let isStart = false;
 let peerConnection = [];
+
 const wait = (timer) => {
   return new Promise( resolve => {
     setTimeout(() =>{
       resolve();
     }, timer)
   });
-}
+};
+
 window.onbeforeunload = function(e) {
   socket.emit("bye");
 };
+
 const handleIceCandidate = (event) => {
   console.log('icecandidate event: ', event);
-  var room = event.target.room;
+  let room = event.target.room;
   if (event.candidate) {
     sendMessage({
       type: 'candidate',
@@ -39,6 +43,7 @@ const handleIceCandidate = (event) => {
     console.log('End of candidates.');
   }
 }
+
 const handleRemoteStreamRemoved = (event) => {
     console.log('Remote stream removed. Event: ', event);
 }
@@ -47,6 +52,7 @@ const sendMessage = (message, room) => {
   console.log('Client sending message: ', message, room);
   socket.emit('message', message, room);
 }
+
 const doCall = async (room) => {
   await wait(100);
   console.log('Sending offer to peer');
@@ -62,11 +68,14 @@ const doCall = async (room) => {
 const handleCreateOfferError  = (event) => {
   console.log('createOffer() error: ', event);
 }
+
 const onCreateSessionDescriptionError = (error) => {
   console.log('Failed to create session description: ' + error.toString());
 }
+
 const handleRemoteHangup = () => {
 }
+
 socket.on("hello", (message) => {
   console.log("Hi, "+ message);
 })
@@ -102,7 +111,7 @@ socket.on('message', async function(message, room) {
       peerConnection[room].setRemoteDescription(new RTCSessionDescription(message));
   } 
   else if (message.type === 'candidate' && isStart) {
-    var candidate = new RTCIceCandidate({
+    let candidate = new RTCIceCandidate({
       sdpMLineIndex: message.label,
       candidate: message.candidate
     });
@@ -112,7 +121,7 @@ socket.on('message', async function(message, room) {
 });
 
 
-var Devices = navigator.mediaDevices.enumerateDevices();
+let Devices = navigator.mediaDevices.enumerateDevices();
 
 console.log(Devices);
 Promise.all([Devices]).then(devices => {
@@ -128,7 +137,7 @@ Promise.all([Devices]).then(devices => {
       })
       .then(stream => {
         console.log('Adding local stream.');
-        var device_str = "."+element.deviceId.substring(0,7);
+        let device_str = "."+element.deviceId.substring(0,7);
         peerConnection[device_str] = new RTCPeerConnection(pcConfig);
         peerConnection[device_str].onicecandidate = handleIceCandidate;
         peerConnection[device_str].addStream(stream);

@@ -1,81 +1,96 @@
 import React, {useState, useContext, useCallback, useEffect} from 'react';
 import {SocketContext} from './context/socket';
-
 function Screen(props) {
   const socket = useContext(SocketContext);
   const [isChannelReady,setChannelReady] = useState(false);
-  const [isStarted, setIsStarted] = useState(false);
   const [pc ,setPc] = useState(null);
   let room = props.room; 
+  let isStarted = false;
   let remoteStream;
+  let turnReady;
   let remoteVideo;
-  
+  let pcConfig = {
+    'iceServers': [{
+      'urls': 'stun:stun.l.google.com:19302'
+    },
+            {
+              'urls': 'turn:18.191.253.152:3478',
+              'username': 'alex',
+              'credential': 'abcdefg'
+          }
+          ]
+  };
+  // Set up audio and video regardless of what devices are present.
+  let sdpConstraints = {
+    offerToReceiveAudio: true,
+    offerToReceiveVideo: true
+  };
   useEffect(() => {
-    setPc(new RTCPeerConnection);
-    socket.on('full', function() {
-      console.log('Room ' + room + ' is full');
-    });
+      setPc(new RTCPeerConnection);
+      socket.on('full', function() {
+        console.log('Room ' + room + ' is full');
+      });
 
-    socket.on('join', function (room){
-      console.log('Another peer made a request to join room ' + room);
-      console.log('This peer is the initiator of room ' + room + '!');
-      setChannelReady(true);
-    });
+      socket.on('join', function (room){
+        console.log('Another peer made a request to join room ' + room);
+        console.log('This peer is the initiator of room ' + room + '!');
+        setChannelReady(true);
+      });
 
-    socket.on('joined', function(room) {
-      console.log('joined: ' + room);
-      setChannelReady(true);
+      socket.on('joined', function(room) {
+        console.log('joined: ' + room);
+        setChannelReady(true);
 
-    });
+      });
 
-    socket.on('log', function(array) {
-      console.log.apply(console, array);
-      let clinet_num = array[1].split(" ")[4];
+      socket.on('log', function(array) {
+        console.log.apply(console, array);
+        let clinet_num = array[1].split(" ")[4];
 
-      if( clinet_num == 0) {
+        if( clinet_num == 0) {
+          alert("相機異常!!!");
+          props.leave();
+        }
+
+        if( clinet_num == 2){
+          alert("遊戲進行中 !!!");
+          props.leave();
+        }
+
+      });
+
+      socket.on("bye", () => {
         alert("相機異常!!!");
-        props.leave();
+        handleRemoteHangup();
+      })
+      if (room !== '') {
+        socket.emit('join', room);
+        console.log('Attempted to join room', room);
       }
-
-      if( clinet_num == 2){
-        alert("遊戲進行中 !!!");
-        props.leave();
-      }
-
-    });
-
-    socket.on("bye", () => {
-      alert("相機異常!!!");
-      handleRemoteHangup();
-    })
-    if (room !== '') {
-      socket.emit('join', room);
-      console.log('Attempted to join room', room);
-    }
    }, []);
 
   useEffect(async () => {
-    socket.on('message', async function(message, flag) {
-                  console.log(pc);
-      if(room != flag) return;
-      if(isChannelReady ==false || pc ==null) return;
-      console.log('Client received message:', message);
-      if (message.type === 'offer') {
-        await wait(500);
-        pc.setRemoteDescription(new RTCSessionDescription(message
-          ));
-        doAnswer();
-      } 
-      else if (message.type === 'candidate' ) {
-        await wait(1000);
-        let candidate = new RTCIceCandidate({
-          sdpMLineIndex: message.label,
-          candidate: message.candidate
-        });
-        pc.addIceCandidate(candidate);
-      } 
-    });
-  }, [isChannelReady,pc]);
+      socket.on('message', async function(message, flag) {
+                    console.log(pc);
+        if(room != flag) return;
+        if(isChannelReady ==false || pc ==null) return;
+        console.log('Client received message:', message);
+        if (message.type === 'offer') {
+          await wait(500);
+          pc.setRemoteDescription(new RTCSessionDescription(message
+            ));
+          doAnswer();
+        } 
+        else if (message.type === 'candidate' ) {
+          await wait(1000);
+          let candidate = new RTCIceCandidate({
+            sdpMLineIndex: message.label,
+            candidate: message.candidate
+          });
+          pc.addIceCandidate(candidate);
+        } 
+      });
+  },[isChannelReady,pc]);
 
   useEffect(async () => {
     console.log("effect",isChannelReady);
@@ -92,7 +107,6 @@ function Screen(props) {
       }, timer)
     });
   }
-
   function sendMessage(message, room) {
     console.log('Client sending message: ', message, room);
     socket.emit('message', message, room);
@@ -101,7 +115,7 @@ function Screen(props) {
   function maybeStart() {
     console.log('>>>>>> creating peer connection');
     createPeerConnection();
-    setIsStarted(true);
+    isStarted =true;
   }
 
 
