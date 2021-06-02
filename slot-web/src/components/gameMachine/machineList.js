@@ -34,13 +34,22 @@ const machineList = [
   {camera: 13, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
 ];
 
-export default function MachineList() {
+export default function MachineList(props) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3} style={{ padding: 10 }}>
-        {machineList.map(({camera, title, magnification, subHeader, descreption, machineIcon, buttonName}) => 
+        {props.egmList.length > 0 ? 
+        props.egmList.map(({
+          camera, 
+          title, 
+          magnification, 
+          subHeader, 
+          descreption, 
+          machineIcon, 
+          buttonName,
+        }) => 
           <Grid item xs={12} sm={4} md={3} className={classes.grid}>
             <MachineItem 
               camera={camera}
@@ -52,7 +61,8 @@ export default function MachineList() {
               buttonName={'開始玩'}
             />
           </Grid>
-        )}
+        )
+        : null}
         <WolfGame/>
       </Grid>
     </div>
