@@ -4,9 +4,9 @@ import { SocketContext, socket } from './context/socket';
 // Components
 import Home from './pages/Home';
 import Game from './pages/Game';
-import Auth from './pages/Auth';
+// import Auth from './pages/Auth';
 import GameStart from './pages/GameStart';
-import LoadingScreen from './pages/LoadingScreen';
+// import LoadingScreen from './pages/LoadingScreen';
 
 // Style
 import './App.css';

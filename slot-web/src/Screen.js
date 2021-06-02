@@ -1,30 +1,30 @@
 import React, {useState, useContext, useCallback, useEffect} from 'react';
 import {SocketContext} from './context/socket';
-function Screen(props){
+function Screen(props) {
   const socket = useContext(SocketContext);
   const [isChannelReady,setChannelReady] = useState(false);
-  var isStarted = false;
-  var remoteStream;
-  var turnReady;
-  var remoteVideo;
-    var pcConfig = {
-      'iceServers': [{
-        'urls': 'stun:stun.l.google.com:19302'
-      },
-              {
-                'urls': 'turn:18.191.253.152:3478',
-                'username': 'alex',
-                'credential': 'abcdefg'
-            }
-            ]
-    };
-    // Set up audio and video regardless of what devices are present.
-    var sdpConstraints = {
-      offerToReceiveAudio: true,
-      offerToReceiveVideo: true
-    };
-  var room = props.room;
-  const [pc ,setPc] = useState(null); 
+  const [pc ,setPc] = useState(null);
+  let room = props.room; 
+  let isStarted = false;
+  let remoteStream;
+  let turnReady;
+  let remoteVideo;
+  let pcConfig = {
+    'iceServers': [{
+      'urls': 'stun:stun.l.google.com:19302'
+    },
+            {
+              'urls': 'turn:18.191.253.152:3478',
+              'username': 'alex',
+              'credential': 'abcdefg'
+          }
+          ]
+  };
+  // Set up audio and video regardless of what devices are present.
+  let sdpConstraints = {
+    offerToReceiveAudio: true,
+    offerToReceiveVideo: true
+  };
   useEffect(() => {
       setPc(new RTCPeerConnection);
       socket.on('full', function() {
@@ -45,7 +45,7 @@ function Screen(props){
 
       socket.on('log', function(array) {
         console.log.apply(console, array);
-        var clinet_num = array[1].split(" ")[4];
+        let clinet_num = array[1].split(" ")[4];
 
         if( clinet_num == 0) {
           alert("相機異常!!!");
@@ -83,7 +83,7 @@ function Screen(props){
         } 
         else if (message.type === 'candidate' ) {
           await wait(1000);
-          var candidate = new RTCIceCandidate({
+          let candidate = new RTCIceCandidate({
             sdpMLineIndex: message.label,
             candidate: message.candidate
           });
@@ -107,100 +107,102 @@ function Screen(props){
       }, timer)
     });
   }
-    function sendMessage(message, room) {
-      console.log('Client sending message: ', message, room);
-      socket.emit('message', message, room);
+  function sendMessage(message, room) {
+    console.log('Client sending message: ', message, room);
+    socket.emit('message', message, room);
+  }
+
+  function maybeStart() {
+    console.log('>>>>>> creating peer connection');
+    createPeerConnection();
+    isStarted =true;
+  }
+
+
+  function handleRemoteStreamAdded(event) {
+    console.log('Remote stream added.');
+    remoteStream = event.stream;
+    remoteVideo.srcObject = remoteStream;
+  }
+
+  function handleRemoteStreamRemoved(event) {
+    console.log('Remote stream removed. Event: ', event);
+  }
+
+  function hangup() {
+    console.log('Hanging up.');
+    stop();
+  }
+
+  function handleRemoteHangup() {
+    console.log('Session terminated.');
+    stop();
+  }
+
+  function stop() {
+    setChannelReady(false);
+    socket.emit("leave", room);
+    props.leave();
+    // socket.removeAllListeners();
+
+  }
+  window.onbeforeunload = function() {
+      ;  
+  };
+  /////////////////////////////////////////////////////////
+
+  async function createPeerConnection() {
+    try {
+      // pc.onicecandidate = handleIceCandidate;
+      pc.onaddstream = handleRemoteStreamAdded;
+      pc.onremovestream = handleRemoteStreamRemoved;
+    } catch (e) {
+      console.log('Failed to create PeerConnection, exception: ' + e.message);
+      alert('Cannot create RTCPeerConnection object.');
+      if(pc == null) maybeStart();
+      return;
     }
+  }
 
-    function maybeStart() {
-      console.log('>>>>>> creating peer connection');
-      createPeerConnection();
-      isStarted =true;
+  function handleIceCandidate(event) {
+    console.log('icecandidate event: ', event);
+    if (event.candidate) {
+      sendMessage({
+        type: 'candidate',
+        label: event.candidate.sdpMLineIndex,
+        id: event.candidate.sdpMid,
+        candidate: event.candidate.candidate
+      }, room);
+    } else {
+      console.log('End of candidates.');
     }
+  }
 
+  function handleCreateOfferError(event) {
+    console.log('createOffer() error: ', event);
+  }
 
-    function handleRemoteStreamAdded(event) {
-      console.log('Remote stream added.');
-      remoteStream = event.stream;
-      remoteVideo.srcObject = remoteStream;
-    }
+  function doAnswer() {
+    console.log('Sending answer to peer.');
+    pc.createAnswer().then(
+      setLocalAndSendMessage,
+      onCreateSessionDescriptionError
+    );
+  }
 
-    function handleRemoteStreamRemoved(event) {
-      console.log('Remote stream removed. Event: ', event);
-    }
+  function setLocalAndSendMessage(sessionDescription) {
+    pc.setLocalDescription(sessionDescription);
+    console.log('setLocalAndSendMessage sending message', sessionDescription);
+    sendMessage(sessionDescription,room);
+  }
 
-    function hangup() {
-      console.log('Hanging up.');
-      stop();
-    }
+  function onCreateSessionDescriptionError(error) {
+    console.log('Failed to create session description: ' + error.toString());
+  }
 
-    function handleRemoteHangup() {
-      console.log('Session terminated.');
-      stop();
-    }
-
-    function stop() {
-      setChannelReady(false);
-      socket.emit("leave", room);
-      props.leave();
-      // socket.removeAllListeners();
-
-    }
-    window.onbeforeunload = function() {
-        ;  
-    };
-    /////////////////////////////////////////////////////////
-
-    async function createPeerConnection() {
-      try {
-        // pc.onicecandidate = handleIceCandidate;
-        pc.onaddstream = handleRemoteStreamAdded;
-        pc.onremovestream = handleRemoteStreamRemoved;
-      } catch (e) {
-        console.log('Failed to create PeerConnection, exception: ' + e.message);
-        alert('Cannot create RTCPeerConnection object.');
-        if(pc == null) maybeStart();
-        return;
-      }
-    }
-
-    function handleIceCandidate(event) {
-      console.log('icecandidate event: ', event);
-      if (event.candidate) {
-        sendMessage({
-          type: 'candidate',
-          label: event.candidate.sdpMLineIndex,
-          id: event.candidate.sdpMid,
-          candidate: event.candidate.candidate
-        }, room);
-      } else {
-        console.log('End of candidates.');
-      }
-    }
-
-    function handleCreateOfferError(event) {
-      console.log('createOffer() error: ', event);
-    }
-
-    function doAnswer() {
-      console.log('Sending answer to peer.');
-      pc.createAnswer().then(
-        setLocalAndSendMessage,
-        onCreateSessionDescriptionError
-      );
-    }
-
-    function setLocalAndSendMessage(sessionDescription) {
-      pc.setLocalDescription(sessionDescription);
-      console.log('setLocalAndSendMessage sending message', sessionDescription);
-      sendMessage(sessionDescription,room);
-    }
-
-    function onCreateSessionDescriptionError(error) {
-      console.log('Failed to create session description: ' + error.toString());
-    }
   return (
     <video id="remoteVideo" autoPlay mute="true"> </video>
   );
 }
+
 export default Screen;
