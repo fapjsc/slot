@@ -127,7 +127,7 @@ console.log(Devices);
 Promise.all([Devices]).then(devices => {
   console.log(devices);
   devices[0].forEach( async function(element, index) {
-    if(element.kind === "videoinput"){
+    if(element.kind === "videoinput") {
       navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
@@ -149,7 +149,7 @@ Promise.all([Devices]).then(devices => {
 
       }, element)
       .catch(function(e) {
-          console.log('getUserMedia() error: ' + e.name);
+        console.log('getUserMedia() error: ' + e.name);
       })
     }
   });
