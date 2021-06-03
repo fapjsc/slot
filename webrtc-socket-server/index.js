@@ -20,23 +20,25 @@ io.on('connection', function(socket) {
   socket.on("hello",(message) => {
     console.log(message+ " send message");
     socket.emit("hello", message);
-    // socket.emit("hello", "His ,"+ message+" !!");
   })
-  // convenience function to log server messages on the client
   function log() {
     var array = ['Message from server:'];
     array.push.apply(array, arguments);
     socket.emit('log', array);
   }
 
-  socket.on('message', function(message, room) {
-
+  const convertRoom = (room) => {
     if(!isNaN(parseInt(room))) {
       var room = device_map[parseInt(room)];
     }
     else {
       var room = device_map.indexOf(room);
     }
+    return room ;
+  }
+  socket.on('message', function(message, room) {
+
+    room = convertRoom(room);
     log('Client said: ', message, room);
     // for a real app, would be room-only (not broadcast)
 
@@ -73,20 +75,14 @@ io.on('connection', function(socket) {
     socket.emit("getDeviceId", device_map[parseInt(room)]);
   });
 
-  socket.on('bye', function(){
-    device_map.length = 0;
-    console.log('received bye');
-    socket.broadcast.emit('bye');
+  socket.on('bye', function(device){
+    room = convertRoom(device) ;  
+
+    console.log('received bye from '+ device);
+    socket.broadcast.emit('bye', device);
   });
   socket.on('leave', function(room){
     socket.leave(room);
     console.log("leave room");
   })
 });
-
-const printClientNum = () => {
-      var device_id = device_map[parseInt(room)];
-    var clientsInRoom = io.sockets.adapter.rooms[device_id];
-    var numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
-    log('Room ' + device_id + ' now has ' + numClients + ' client(s)');
-}

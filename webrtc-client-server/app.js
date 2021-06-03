@@ -26,7 +26,9 @@ const wait = (timer) => {
 };
 
 window.onbeforeunload = function(e) {
-  socket.emit("bye");
+   connection_batch.forEach( async function(element, index) {
+      socket.emit("bye", index);
+  });  
 };
 
 const handleIceCandidate = (event) => {
@@ -119,6 +121,10 @@ socket.on('message', async function(message, room) {
   } 
   console.log(peerConnection[room]);
 });
+var batch=0;
+var connection_status = [] ;
+console.log(navigator.mediaDevices.enumerateDevices());
+const updateDevice = () => {
 
 
 let Devices = navigator.mediaDevices.enumerateDevices();
