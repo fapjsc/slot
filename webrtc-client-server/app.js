@@ -1,7 +1,7 @@
 
 const signal_server_url = "http://192.168.10.115:3333/";
 const socket = io.connect(signal_server_url);
-const pcConfig = {
+const pcConfig = {// 使用來設定iceServer,用來當作打通NAT作用。
   'iceServers': [
     {
       'urls': 'stun:stun.l.google.com:19302'
@@ -14,7 +14,6 @@ const pcConfig = {
   ]
 };
 
-let isStart = false;
 let peerConnection = [];
 
 const wait = (timer) => {
