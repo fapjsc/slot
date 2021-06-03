@@ -3,26 +3,19 @@ import {SocketContext} from './context/socket';
 function Screen(props){
 	const socket = useContext(SocketContext);
   const [isChannelReady,setChannelReady] = useState(false);
-  var isStarted = false;
   var remoteStream;
-  var turnReady;
 	var remoteVideo;
-    var pcConfig = {
-      'iceServers': [{
-        'urls': 'stun:stun.l.google.com:19302'
-      },
-              {
-                'urls': 'turn:18.191.253.152:3478',
-                'username': 'alex',
-                'credential': 'abcdefg'
-            }
-            ]
-    };
-    // Set up audio and video regardless of what devices are present.
-    var sdpConstraints = {
-      offerToReceiveAudio: true,
-      offerToReceiveVideo: true
-    };
+  var pcConfig = {
+    'iceServers': [{
+      'urls': 'stun:stun.l.google.com:19302'
+    },
+            {
+              'urls': 'turn:18.191.253.152:3478',
+              'username': 'alex',
+              'credential': 'abcdefg'
+          }
+          ]
+  };
 	var room = props.room;
 	const [pc ,setPc] = useState(null); 
  	useEffect(() => {
@@ -59,7 +52,8 @@ function Screen(props){
 
 	    });
 
-      socket.on("bye", () => {
+      socket.on("bye", (r) => {
+        if(r != room) return;
         alert("相機異常!!!");
         handleRemoteHangup();
       })
@@ -115,7 +109,6 @@ function Screen(props){
     function maybeStart() {
       console.log('>>>>>> creating peer connection');
       createPeerConnection();
-      isStarted =true;
     }
 
 
@@ -143,17 +136,10 @@ function Screen(props){
       setChannelReady(false);
       socket.emit("leave", room);
       props.leave();
-      // socket.removeAllListeners();
-
     }
-    window.onbeforeunload = function() {
-        ;  
-    };
-    /////////////////////////////////////////////////////////
 
     async function createPeerConnection() {
       try {
-        // pc.onicecandidate = handleIceCandidate;
         pc.onaddstream = handleRemoteStreamAdded;
         pc.onremovestream = handleRemoteStreamRemoved;
       } catch (e) {

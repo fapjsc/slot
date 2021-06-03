@@ -1,8 +1,8 @@
 
-const signal_server_url = "http://192.168.10.115:3333/";
+const signal_server_url = "http://localhost:3333/";
 const socket = io.connect( signal_server_url);
 
-var isStart =false;
+//turn server 可能隨時關閉
 const pcConfig = {
   'iceServers': [{
     'urls': 'stun:stun.l.google.com:19302'
@@ -23,7 +23,9 @@ const wait = (timer) => {
   });
 }
 window.onbeforeunload = function(e) {
-  socket.emit("bye");
+   connection_batch.forEach( async function(element, index) {
+      socket.emit("bye", index);
+  });  
 };
 const handleIceCandidate = (event) => {
   console.log('icecandidate event: ', event);
@@ -65,11 +67,6 @@ const handleCreateOfferError  = (event) => {
 const onCreateSessionDescriptionError = (error) => {
   console.log('Failed to create session description: ' + error.toString());
 }
-const handleRemoteHangup = () => {
-}
-socket.on("hello", (message) => {
-  console.log("Hi, "+ message);
-})
 
 socket.on('created', function(room) {
   console.log('Created room ' + room);
@@ -101,7 +98,7 @@ socket.on('message', async function(message, room) {
       console.log(room);
       peerConnection[room].setRemoteDescription(new RTCSessionDescription(message));
   } 
-  else if (message.type === 'candidate' && isStart) {
+  else if (message.type === 'candidate') {
     var candidate = new RTCIceCandidate({
       sdpMLineIndex: message.label,
       candidate: message.candidate
@@ -110,38 +107,59 @@ socket.on('message', async function(message, room) {
   } 
   console.log(peerConnection[room]);
 });
+var batch=0;
+var connection_status = [] ;
+console.log(navigator.mediaDevices.enumerateDevices());
+const updateDevice = () => {
 
-
-var Devices = navigator.mediaDevices.enumerateDevices();
-
-console.log(Devices);
-Promise.all([Devices]).then(devices => {
-  console.log(devices);
-  devices[0].forEach( async function(element, index) {
-    if(element.kind === "videoinput"){
-      navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: {
-          deviceId: element.deviceId,
-          width : 300, height:360
+  Promise.all([navigator.mediaDevices.enumerateDevices()])
+    .then(renderDevice).then(hangUpdevice);
+}
+const hangUpdevice = () => {
+  console.log(connection_status);
+   connection_status.forEach( async function(connected,device) {
+      if(connected == false ) {
+        socket.emit("bye", device);
+        console.log("Interrupt "+ device);
+      }
+  });   
+}
+const renderDevice = (devices) => {
+    return new Promise( async (resolve) => {
+      connection_status.fill(false);
+      devices[0].forEach( async function(element, index) {
+        if(element.kind === "videoinput"){
+          navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: {
+              deviceId: element.deviceId,
+              width : 300, height:360
+            }
+          })
+          .then(stream => {
+            var device_str = "."+element.deviceId;
+            console.log(peerConnection[device_str] );
+            if(peerConnection[device_str] == null) {
+              peerConnection[device_str] = new RTCPeerConnection(pcConfig);
+              peerConnection[device_str].onicecandidate = handleIceCandidate;
+              peerConnection[device_str].room = device_str;
+              socket.emit('create', device_str);
+              console.log('Attempted to create or  join room', device_str);
+            }
+            connection_status[device_str] = true;
+            peerConnection[device_str].addStream(stream);
+          }, element)
+          .catch(function(e) {
+              console.log('getUserMedia() error: ' + e.name);
+          })
         }
-      })
-      .then(stream => {
-        console.log('Adding local stream.');
-        var device_str = "."+element.deviceId.substring(0,7);
-        peerConnection[device_str] = new RTCPeerConnection(pcConfig);
-        peerConnection[device_str].onicecandidate = handleIceCandidate;
-        peerConnection[device_str].addStream(stream);
-        peerConnection[device_str].room = device_str;
-        console.log(peerConnection[device_str]);
-        socket.emit('create', device_str);
-        console.log('Attempted to create or  join room', device_str);
+      });
+      await wait(2000);
+      resolve();
+    });
+}
+updateDevice()
+navigator.mediaDevices.ondevicechange = function(event) {
+  updateDevice();
 
-
-      }, element)
-      .catch(function(e) {
-          console.log('getUserMedia() error: ' + e.name);
-      })
-    }
-  });
-})
+}
