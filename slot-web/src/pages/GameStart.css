@@ -1,5 +1,4 @@
 .backImg {
-  background-size: cover;
 }
 
 .gameTab {
@@ -7,6 +6,12 @@
   display: inline-block;
   top: 370px;
   right: 40px;
+}
+
+.gameDrawer {
+  position: absolute;
+  top: 10px;
+  left: 20px;
 }
 
 .gameTabButton {
@@ -81,25 +86,38 @@
 }
 
 .divPosition {
-  display: inline-block;
   position: relative;
-  text-align: center;
 }
 
-@media screen and (min-width: 767px) {
+@media (min-width: 767px) {
   /* .divPosition Button {
     width: 10%;
     margin: 0 0;
   } */
-  /* .divPosition{width: 0; max-width: 2080px; margin: 0 0;} */
+  /* .divPosition{width: 0; max-width: 1080px; margin: 0 0;} */
   /* .card .machine-state { width: 20%; clear:none } */
 }
 
 @media (max-width: 767px) {
+  /* .backImg {
+    width:50%;
+    max-width: 1080px;
+    margin: 0 0;
+    clear: both;
+  } */
 }
 @media (max-width: 480px) {
+  /* .backImg {
+    width:20%;
+    max-width: 1080px;
+    margin: 0 0;
+  } */
 }
 @media (min-width: 768px) and (max-width: 979px) {
+  /* .buttonPosition {
+    width: 20%;
+    clear: none;
+  } */
 }
 @media (min-width: 980px) {
 }
