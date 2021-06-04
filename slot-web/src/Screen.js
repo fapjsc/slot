@@ -1,194 +1,116 @@
-import React, {useState, useContext, useCallback, useEffect} from 'react';
-import {SocketContext} from './context/socket';
+import { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import io from 'socket.io-client';
 
-function Screen(props) {
-  const socket = useContext(SocketContext);
-  const [isChannelReady,setChannelReady] = useState(false);
-  const [isStarted, setIsStarted] = useState(false);
-  const [pc ,setPc] = useState(null);
-  let room = props.room; 
-  let remoteStream;
-  let remoteVideo;
-  
-  useEffect(() => {
-    setPc(new RTCPeerConnection);
-    socket.on('full', function() {
-      console.log('Room ' + room + ' is full');
-    });
+// peerConnection Options
+const pcConfig = {
+  iceServers: [
+    {
+      urls: 'stun:stun.l.google.com:19302', // 使用來設定iceServer,用來當作打通NAT作用。
+    },
+    {
+      urls: 'turn:18.191.253.152:3478',
+      username: 'alex',
+      credential: 'abcdefg',
+    },
+  ],
+};
+let peerConnection;
+const Viewer = ({ leave }) => {
+  const remoteCamera = useRef();
+  const history = useHistory();
 
-    socket.on('join', function (room){
-      console.log('Another peer made a request to join room ' + room);
-      console.log('This peer is the initiator of room ' + room + '!');
-      setChannelReady(true);
-    });
+  const [socket, setSocket] = useState();
 
-    socket.on('joined', function(room) {
-      console.log('joined: ' + room);
-      setChannelReady(true);
-
-    });
-
-    socket.on('log', function(array) {
-      console.log.apply(console, array);
-      let clinet_num = array[1].split(" ")[4];
-
-      if( clinet_num == 0) {
-        alert("相機異常!!!");
-        props.leave();
-      }
-
-      if( clinet_num == 2){
-        alert("遊戲進行中 !!!");
-        props.leave();
-      }
-
-    });
-
-    socket.on("bye", () => {
-      alert("相機異常!!!");
-      handleRemoteHangup();
-    })
-    if (room !== '') {
-      socket.emit('join', room);
-      console.log('Attempted to join room', room);
-    }
-   }, []);
-
-  useEffect(async () => {
-    socket.on('message', async function(message, flag) {
-                  console.log(pc);
-      if(room != flag) return;
-      if(isChannelReady ==false || pc ==null) return;
-      console.log('Client received message:', message);
-      if (message.type === 'offer') {
-        await wait(500);
-        pc.setRemoteDescription(new RTCSessionDescription(message
-          ));
-        doAnswer();
-      } 
-      else if (message.type === 'candidate' ) {
-        await wait(1000);
-        let candidate = new RTCIceCandidate({
-          sdpMLineIndex: message.label,
-          candidate: message.candidate
+  const handleSocket = () => {
+    const socket = io.connect('https://192.168.10.102:5000');
+    socket.on('offer', (id, description) => {
+      console.log('get offer');
+      peerConnection = new RTCPeerConnection(pcConfig);
+      peerConnection
+        .setRemoteDescription(description)
+        .then(() => peerConnection.createAnswer())
+        .then(sdp => peerConnection.setLocalDescription(sdp))
+        .then(() => {
+          socket.emit('answer', id, peerConnection.localDescription);
         });
-        pc.addIceCandidate(candidate);
-      } 
+      peerConnection.ontrack = event => {
+        console.log(event);
+        console.log(event.streams[0]);
+        if (remoteCamera.current.srcObject !== event.streams[0]) {
+          remoteCamera.current.srcObject = event.streams[0];
+          console.log(remoteCamera.current.srcObject);
+        }
+      };
+      peerConnection.onicecandidate = event => {
+        console.log(event);
+        if (event.candidate) {
+          socket.emit('candidate', id, event.candidate);
+        }
+      };
+
+      console.log(peerConnection);
     });
-  }, [isChannelReady,pc]);
 
-  useEffect(async () => {
-    console.log("effect",isChannelReady);
-    if (isChannelReady == false || pc ==null) return;
-    remoteVideo = document.querySelector('#remoteVideo');
-    console.log(socket);
-    maybeStart();
-  }, [isChannelReady,pc])
-
-  const wait = (timer) => {
-    return new Promise( resolve => {
-      setTimeout(() =>{
-        resolve();
-      }, timer)
+    socket.on('candidate', (id, candidate) => {
+      peerConnection.addIceCandidate(new RTCIceCandidate(candidate)).catch(e => console.error(e));
     });
-  }
 
-  function sendMessage(message, room) {
-    console.log('Client sending message: ', message, room);
-    socket.emit('message', message, room);
-  }
+    socket.on('connect', () => {
+      socket.emit('watcher');
+    });
 
-  function maybeStart() {
-    console.log('>>>>>> creating peer connection');
-    createPeerConnection();
-    setIsStarted(true);
-  }
+    socket.on('broadcaster', () => {
+      console.log('broad');
+      socket.emit('watcher');
+    });
 
+    socket.on('disconnect', () => {
+      alert('socket disconnect');
+      history.replace('/home');
+    });
 
-  function handleRemoteStreamAdded(event) {
-    console.log('Remote stream added.');
-    remoteStream = event.stream;
-    remoteVideo.srcObject = remoteStream;
-  }
+    // 監聽 Server 斷線
+    socket.on('disconnectPeer', () => {
+      alert('server or camera disconnect');
+    });
 
-  function handleRemoteStreamRemoved(event) {
-    console.log('Remote stream removed. Event: ', event);
-  }
-
-  function hangup() {
-    console.log('Hanging up.');
-    stop();
-  }
-
-  function handleRemoteHangup() {
-    console.log('Session terminated.');
-    stop();
-  }
-
-  function stop() {
-    setChannelReady(false);
-    socket.emit("leave", room);
-    props.leave();
-    // socket.removeAllListeners();
-
-  }
-  window.onbeforeunload = function() {
-      ;  
+    window.onunload = window.onbeforeunload = () => {
+      socket.close();
+      peerConnection.close();
+    };
+    setSocket(socket);
   };
-  /////////////////////////////////////////////////////////
 
-  async function createPeerConnection() {
-    try {
-      // pc.onicecandidate = handleIceCandidate;
-      pc.onaddstream = handleRemoteStreamAdded;
-      pc.onremovestream = handleRemoteStreamRemoved;
-    } catch (e) {
-      console.log('Failed to create PeerConnection, exception: ' + e.message);
-      alert('Cannot create RTCPeerConnection object.');
-      if(pc == null) maybeStart();
-      return;
-    }
-  }
+  useEffect(() => {
+    handleSocket();
+    return () => {};
+  }, []);
 
-  function handleIceCandidate(event) {
-    console.log('icecandidate event: ', event);
-    if (event.candidate) {
-      sendMessage({
-        type: 'candidate',
-        label: event.candidate.sdpMLineIndex,
-        id: event.candidate.sdpMid,
-        candidate: event.candidate.candidate
-      }, room);
+  useEffect(() => {
+    if (remoteCamera.current.srcObject) {
+      console.log('got remote stream');
     } else {
-      console.log('End of candidates.');
+      console.log('no remote stream');
+      console.log(peerConnection);
     }
-  }
-
-  function handleCreateOfferError(event) {
-    console.log('createOffer() error: ', event);
-  }
-
-  function doAnswer() {
-    console.log('Sending answer to peer.');
-    pc.createAnswer().then(
-      setLocalAndSendMessage,
-      onCreateSessionDescriptionError
-    );
-  }
-
-  function setLocalAndSendMessage(sessionDescription) {
-    pc.setLocalDescription(sessionDescription);
-    console.log('setLocalAndSendMessage sending message', sessionDescription);
-    sendMessage(sessionDescription,room);
-  }
-
-  function onCreateSessionDescriptionError(error) {
-    console.log('Failed to create session description: ' + error.toString());
-  }
+  }, [remoteCamera]);
 
   return (
-    <video id="remoteVideo" autoPlay mute="true"> </video>
+    <div style={box}>
+      <h2>Viewer</h2>
+      <video ref={remoteCamera} playsInline autoPlay muted style={{ width: 300 }} />
+    </div>
   );
-}
+};
 
-export default Screen;
+const box = {
+  width: 300,
+  height: 300,
+  backgroundColor: '#ddd',
+  margin: '60px auto',
+  position: 'relative',
+  textAlign: 'center',
+};
+
+export default Viewer;

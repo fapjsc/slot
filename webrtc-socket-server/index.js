@@ -1,88 +1,86 @@
-'use strict';
+// 'use strict';
 
-var fs = require('fs');
-var cors = require('cors');
-var express = require("express");
-var app = express();
-app.use(cors());
+// var fs = require('fs');
+// var cors = require('cors');
+// var express = require('express');
+// var app = express();
+// app.use(cors());
 
-app.use("/", express.static(__dirname + "/"));
+// app.use('/', express.static(__dirname + '/'));
 
-var server = require("http").Server(app);
+// var server = require('http').Server(app);
 
-var socketIO = require('socket.io')
-server.listen(3333);
+// var socketIO = require('socket.io');
+// server.listen(3333);
 
-var io = socketIO.listen(server);
-var device_map = [];
-io.on('connection', function(socket) {
-  console.log("connected...");
-  socket.on("hello",(message) => {
-    console.log(message+ " send message");
-    socket.emit("hello", message);
-  })
-  function log() {
-    var array = ['Message from server:'];
-    array.push.apply(array, arguments);
-    socket.emit('log', array);
-  }
+// var io = socketIO.listen(server);
+// var device_map = [];
+// io.on('connection', function (socket) {
+//   console.log('connected...');
+//   socket.on('hello', message => {
+//     console.log(message + ' send message');
+//     socket.emit('hello', message);
+//   });
+//   function log() {
+//     var array = ['Message from server:'];
+//     array.push.apply(array, arguments);
+//     socket.emit('log', array);
+//   }
 
-  const convertRoom = (room) => {
-    if(!isNaN(parseInt(room))) {
-      var room = device_map[parseInt(room)];
-    }
-    else {
-      var room = device_map.indexOf(room);
-    }
-    return room ;
-  }
-  socket.on('message', function(message, room) {
+//   const convertRoom = room => {
+//     if (!isNaN(parseInt(room))) {
+//       var room = device_map[parseInt(room)];
+//     } else {
+//       var room = device_map.indexOf(room);
+//     }
+//     return room;
+//   };
+//   socket.on('message', function (message, room) {
+//     room = convertRoom(room);
+//     log('Client said: ', message, room);
+//     // for a real app, would be room-only (not broadcast)
 
-    room = convertRoom(room);
-    log('Client said: ', message, room);
-    // for a real app, would be room-only (not broadcast)
+//     socket.broadcast.emit('message', message, room);
+//   });
 
-    socket.broadcast.emit('message', message, room);
-  });
+//   socket.on('create', device => {
+//     var clientsInRoom = io.sockets.adapter.rooms[device];
+//     var numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
+//     log('Room ' + device + ' now has ' + numClients + ' client(s)');
+//     socket.join(device);
+//     log('Client ID ' + socket.id + ' created room ' + device);
+//     socket.emit('created', device);
+//     device_map.push(device);
+//   });
 
-  socket.on('create', (device) => {
-      var clientsInRoom = io.sockets.adapter.rooms[device];
-      var numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
-      log('Room ' + device + ' now has ' + numClients + ' client(s)');
-      socket.join(device);
-      log('Client ID ' + socket.id + ' created room ' + device);
-      socket.emit('created', device);
-      device_map.push(device);
-  });
+//   socket.on('join', function (room) {
+//     log('Received request to create or join room ' + room);
+//     var device_id = device_map[parseInt(room)];
+//     var clientsInRoom = io.sockets.adapter.rooms[device_id];
+//     var numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
+//     log('Room ' + device_id + ' now has ' + numClients + ' client(s)');
+//     if (numClients === 1) {
+//       log('Client ID ' + socket.id + ' joined room ' + device_id);
+//       io.sockets.in(device_id).emit('join', device_id);
+//       socket.join(device_id);
+//       socket.emit('joined', room);
+//     } else if (numClients > 1) {
+//       // max two clients
+//       socket.emit('full', room);
+//     }
+//   });
+//   socket.on('getDeviceId', room => {
+//     socket.emit('getDeviceId', device_map[parseInt(room)]);
+//   });
 
-  socket.on('join', function(room) {
-    log('Received request to create or join room ' + room);
-    var device_id = device_map[parseInt(room)];
-    var clientsInRoom = io.sockets.adapter.rooms[device_id];
-    var numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
-    log('Room ' + device_id + ' now has ' + numClients + ' client(s)');
-    if (numClients === 1) {
-      log('Client ID ' + socket.id + ' joined room ' + device_id);
-      io.sockets.in(device_id).emit('join', device_id);
-      socket.join(device_id);
-      socket.emit('joined', room);
-    } 
-    else if(numClients > 1 ){ // max two clients
-      socket.emit('full', room);
-    }
-  });
-  socket.on("getDeviceId",(room) => {
-    socket.emit("getDeviceId", device_map[parseInt(room)]);
-  });
+//   socket.on('bye', function (device) {
+//     room = convertRoom(device);
 
-  socket.on('bye', function(device){
-    room = convertRoom(device) ;  
-
-    console.log('received bye from '+ device);
-    socket.broadcast.emit('bye', device);
-  });
-  socket.on('leave', function(room){
-    socket.leave(room);
-    console.log("leave room");
-  })
-});
+//     console.log('received bye from ' + device);
+//     socket.broadcast.emit('bye', device);
+//   });
+//   socket.on('leave', function (room) {
+//     socket.leave(room);
+//     console.log('leave room');
+//   });
+// });

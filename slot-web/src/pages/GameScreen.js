@@ -1,19 +1,30 @@
-import React from 'react';
+import { useHistory } from 'react-router-dom';
+import Screen from '../Screen';
 
-const machineItem = () => {
+const GameScreen = () => {
+  // Router Props
+  const history = useHistory();
+
+  const leave = () => {
+    window.confirm('確定離開嗎?');
+    history.replace('/home');
+  };
+
   return (
     <div className="App">
       <div className="App-background">
-        <p>Testing Ver.1.0</p>
+        {/* <p>{camera}</p> */}
         <div style={styles.slotBackground}>
           <img src={'/banner-wolf.png'} />
-          <div style={styles.screen}></div>
+          <div style={styles.screen}>
+            <Screen leave={leave} />
+          </div>
           <div style={styles.buttonTable}>
-            <button style={styles.buttonMax} onClick={() => alert('hihihihi')}>
-              Max
-            </button>
-            <button style={styles.buttonSpin} onClick={() => alert('hihihihi')}>
-              Spin
+            <button style={styles.buttonMax}>Max</button>
+            <button style={styles.buttonSpin}>Spin</button>
+            <button style={styles.buttonOpen}>開分</button>
+            <button style={styles.buttonLeave} onClick={leave}>
+              離開
             </button>
           </div>
           <div style={styles.details}></div>
@@ -60,6 +71,16 @@ const styles = {
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
+  buttonOpen: {
+    width: 80,
+    height: 50,
+    background: 'lightgreen',
+    color: 'lightred',
+    fontSize: 20,
+    // display: 'block',
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+  },
   details: {
     width: '100%',
     height: 160,
@@ -67,4 +88,4 @@ const styles = {
   },
 };
 
-export default machineItem;
+export default GameScreen;

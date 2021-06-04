@@ -47,6 +47,7 @@ const LoadingScreen = () => {
   useEffect(() => {
     try {
       playerLandingApi();
+      // history.replace('/home');
     } catch (error) {
       alert(error);
     }
@@ -78,26 +79,26 @@ const LoadingScreen = () => {
       // history.replace({
       //   pathname: '/home',
       //   state: {  // location state
-      //     data: responseProcessed, 
+      //     data: responseProcessed,
       //   },
       // });
     }
-  }
+  };
 
   return (
     <div className={classes.root}>
-      {isLoaded ?
-      <Paper className={classes.paper}>
-        <Box m={4}>
-          <LinearProgress />
+      {isLoaded ? (
+        <Paper className={classes.paper}>
+          <Box m={4}>
+            <LinearProgress />
+          </Box>
+          <Box>Loading...</Box>
+        </Paper>
+      ) : (
+        <Box className={classes.rootList}>
+          <MachineList egmList={egmList} />
         </Box>
-        <Box>Loading...</Box>
-      </Paper>
-      :
-      <Box className={classes.rootList}>
-        <MachineList egmList={egmList}/>
-      </Box>
-      }
+      )}
     </div>
   );
 };

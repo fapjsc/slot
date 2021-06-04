@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: 18,
     color: '#333',
   },
-})); 
+}));
 
 const Home = () => {
   const [egmList, setEgmList] = useState({});
@@ -49,7 +49,7 @@ const Home = () => {
       setIsLoadFailed(true);
     }, 15000);
     try {
-      playerLandingApi();
+      // playerLandingApi();
     } catch (error) {
       alert(error);
     }
@@ -72,18 +72,19 @@ const Home = () => {
     });
     let responseProcessed = await response.json();
     console.log(responseProcessed); // 顯示取得回傳資料
-    if (responseProcessed.code > 100000000) { // code 超過 100000000 為問題回傳
+    if (responseProcessed.code > 100000000) {
+      // code 超過 100000000 為問題回傳
       alert('ERROR!');
     }
-    if (responseProcessed.code < 100000000) { 
+    if (responseProcessed.code < 100000000) {
       setIsLoaded(false);
-      setEgmList(responseProcessed.egmList); 
+      setEgmList(responseProcessed.egmList);
     }
-  }
+  };
 
   return (
     <div className={classes.root}>
-      {loadFailed ?
+      {/* {loadFailed ?
       <Paper className={classes.paper}>
         <Box>Connection Failed.</Box>
       </Paper>
@@ -99,7 +100,11 @@ const Home = () => {
         <Box className={classes.rootList}>
           <MachineList egmList={egmList}/>
         </Box>
-      }
+      } */}
+
+      <Box className={classes.rootList}>
+        <MachineList egmList={egmList} />
+      </Box>
     </div>
   );
 };
