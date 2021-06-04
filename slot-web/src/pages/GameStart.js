@@ -1,23 +1,25 @@
-import './GameStart.css';
-import React, { useState } from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
+import "./GameStart.css";
+import React, { useState, useEffect } from "react";
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import Drawer from "@material-ui/core/Drawer";
+import Button from "@material-ui/core/Button";
+import GameStartMobile from "../components/gameStart/GameStartMobile";
 
 const useStyles = makeStyles({
   root: {
-    display: 'flex',
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-end",
   },
   list: {
     width: 250,
   },
   fullList: {
-    width: 'auto',
+    width: "auto",
   },
 });
 
@@ -26,9 +28,31 @@ const GameStart = () => {
   const [state, setState] = React.useState({
     left: false,
   });
+  const [device, setDevice] = useState(false);
+
+  const handleRWD = () => {
+    if (window.innerWidth < 1000) setDevice(true);
+    else setDevice(false);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleRWD);
+    handleRWD();
+    return () => {
+      window.removeEventListener("resize", handleRWD);
+    };
+  }, []);
+
+  if (device === true)
+    return (
+      <GameStartMobile />
+    );
 
   const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
       return;
     }
 
@@ -38,7 +62,7 @@ const GameStart = () => {
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
-        [classes.fullList]: anchor === 'top' || anchor === 'bottom',
+        [classes.fullList]: anchor === "top" || anchor === "bottom",
       })}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
@@ -47,66 +71,81 @@ const GameStart = () => {
   );
 
   return (
-    <Box style={{ backgroundColor: 'red' }} className={classes.root}>
-      <Box className="divPosition" color="primary.main">
-        <img className="backImg" src={'/barLeft.jpg'} />
-        <div className="gameDrawer">
-          {['設定'].map((anchor) => (
-            <React.Fragment key={anchor}>
-              <Button
-                variant="contained"
-                color="secondary"
-                style={{
-                  fontSize: '1.2rem',
-                  fontWeight: 'bold',
-                  color: 'azure',
-                }}
-                onClick={toggleDrawer(anchor, true)}
-              >
-                {anchor}
-              </Button>
-              <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
-                {list(anchor)}
-              </Drawer>
-            </React.Fragment>
-          ))}
-        </div>
-      </Box>
-      <Box className="divPosition">
-        <img className="backImg" src={'/center.jpg'} />
-        <button className="buttonPosition" type="primary">
-          MAX BET
-        </button>
-        <button className="buttonPosition2" type="primary">
-          結算
-        </button>
-        <button className="buttonPosition3" type="primary">
-          SPIN
-        </button>
-        <button className="buttonPosition4" type="primary">
-          AUTO SPIN
-        </button>
-        <div className="gameTab">
-          <span
-            style={{
-              fontSize: '1.0rem',
-              color: 'white',
-              fontWeight: 'bold',
-              padding: '5px',
-            }}
-          >
-            點數
-          </span>
-          <input />
-          <button className="gameTabButton" type="primary">
-            投入代幣
-          </button>
-        </div>
-      </Box>
-      <Box className="divPosition">
-        <img className="backImg" src={'/barRight.jpg'} />
-      </Box>
-    </Box>
+    <Container fixed>
+        <Box style={{ backgroundColor: "#191c19" }} className={classes.root}>
+          <Box className="divPosition">
+            <img className="backImg-left" src={"/left-top.png"} />
+            <div className="">
+              <img className="backImg-left" src={"/left-bottom.png"} />
+            </div>
+            <div className="gameDrawer">
+              {["設定"].map((anchor) => (
+                <React.Fragment key={anchor}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    style={{
+                      fontSize: "1.2rem",
+                      fontWeight: "bold",
+                      color: "azure",
+                    }}
+                    onClick={toggleDrawer(anchor, true)}
+                  >
+                    {anchor}
+                  </Button>
+                  <Drawer
+                    anchor={anchor}
+                    open={state[anchor]}
+                    onClose={toggleDrawer(anchor, false)}
+                  >
+                    {list(anchor)}
+                  </Drawer>
+                </React.Fragment>
+              ))}
+            </div>
+          </Box>
+          <Box className="divPosition">
+            <img className="backImg_Center" src={"/center.jpg"} />
+            <div className="tt">
+              <img className="backImg" src={"/center_bottom.jpg"} />
+              <button className="buttonPosition" type="primary">
+                MAX BET
+              </button>
+              <button className="buttonPosition2" type="primary">
+                結算
+              </button>
+              <button className="buttonPosition3" type="primary">
+                SPIN
+              </button>
+              <button className="buttonPosition4" type="primary">
+                AUTO SPIN
+              </button>
+              <div className="gameTab">
+                <span
+                  style={{
+                    fontSize: "1.0rem",
+                    color: "white",
+                    fontWeight: "bold",
+                    padding: "5px",
+                  }}
+                >
+                  點數
+                </span>
+                <input />
+                <button className="gameTabButton" type="primary">
+                  投入代幣
+                </button>
+              </div>
+            </div>
+          </Box>
+          <Box className="divPosition">
+            <img className="backImg-right" src={"/right-top.png"} />
+            <div className="tt">
+              <img className="backImg-right" src={"/right-bottom.png"} />
+            </div>
+          </Box>
+        </Box>
+    </Container>
   );
 };
 
