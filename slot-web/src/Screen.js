@@ -33,6 +33,10 @@ function Screen(props){
 	    socket.on('full', function() {
 	      console.log('Room ' + room + ' is full');
 	    });
+        socket.on('reconnect', async () => {
+          await wait(5000);
+          socket.emit("join", room);
+        });     
       /*
       用途:
         監聽頻道其他人加入

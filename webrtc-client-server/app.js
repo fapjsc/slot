@@ -1,6 +1,4 @@
-//設定socket 
-const signal_server_url = "http://220.135.67.240:3333/";
-const socket = io.connect( signal_server_url);
+
 
 //turn server 可能隨時關閉，設定iceServer
 const pcConfig = {
@@ -41,8 +39,8 @@ const wait = (timer) => {
 */
 
 window.onbeforeunload = function(e) {
-    device_status.forEach( async function(element, index) {
-        socket.emit("bye", index);
+    Object.entries(device_status).forEach(([device]) => {
+        socket.emit("bye", device);
     });  
 };
 /*
@@ -135,6 +133,17 @@ const onCreateSessionDescriptionError = (error) => {
 }
 /*
 用途:
+  signaling server重啟後頻道狀態更新
+運作:
+  重新加入camera end 到他自己的頻道
+  會先等待signaling server 同步 agent server 的map
+*/
+  socket.on("reconnect", async () => {
+    await wait(1000);
+    updateDevice();
+  })
+/*
+用途:
   確認頻道房間建立
 參數 : 
   room : 頻道名稱
@@ -205,10 +214,9 @@ socket.on('message', async function(message, room) {
         });
         peerConnection[room].addIceCandidate(candidate);
     } 
-    console.log(peerConnection[room]);
+  console.log(peerConnection[room]);
 });
 var device_status = [] ;
-console.log(navigator.mediaDevices.enumerateDevices());
 /*
 用途:
   取得新增相機和刪除相機，與signaling server device_map 同步
@@ -218,11 +226,15 @@ console.log(navigator.mediaDevices.enumerateDevices());
   - navigator.mediaDevices.enumerateDevices()
   - renderDevice 
   - hangUpDevice 
+問題:
+  無法確保hangUpDevice 在renderDevice完全更新device_status後做
 */
 const updateDevice = () => {
-
+  console.log(navigator.mediaDevices.enumerateDevices());
   Promise.all([navigator.mediaDevices.enumerateDevices()])
-    .then(renderDevice).then(hangUpDevice);
+    .then(fillStatus)
+    .then(renderDevice)
+    .then(hangUpDevice);
 }
 /*
 用途:
@@ -232,14 +244,25 @@ const updateDevice = () => {
   前個步驟更新完device_status後，找出device_status值為false
   的索引值，告知signaling server 
 */
-const hangUpDevice = () => {
-  console.log(device_status);
-   device_status.forEach( async function(connected,device) {
-      if(connected == false ) {
-        socket.emit("bye", "."+device);
+const hangUpDevice = (status) => {
+  console.log(status);
+   Object.entries(status).map( ([device, value]) => {
+      if(value == false ) {
+        socket.emit("bye", device);
         console.log("Interrupt "+ device);
       }
   });   
+}
+const fillStatus = (device) => {
+    return new Promise(async resolve => {
+      Object.entries(device_status).map( function([index, value]) {
+        device_status[index] = false;
+      });
+      await wait(1000);
+      console.log(device_status);
+        console.log("devices_status OK");
+      resolve(device);
+    })
 }
 /*
 用途:
@@ -257,7 +280,7 @@ const hangUpDevice = () => {
 */
 const renderDevice = (devices) => {
     return new Promise( async (resolve) => {
-        device_status.fill(false);
+        var device_str;
         devices[0].forEach( async function(element, index) {
         if(element.kind === "videoinput"){
             navigator.mediaDevices.getUserMedia({
@@ -268,27 +291,30 @@ const renderDevice = (devices) => {
                 }
             })
             .then(stream => {
-                var device_str = "."+element.deviceId;
+                device_str = "."+element.deviceId;
                 console.log(peerConnection[device_str] );
                 if(peerConnection[device_str] == null) {
                     peerConnection[device_str] = new RTCPeerConnection(pcConfig);
                     peerConnection[device_str].onicecandidate = handleIceCandidate;
-                    peerConnection[device_str].room = device_str;
-                    socket.emit('create', device_str);
-                    console.log('Attempted to create or  join room', device_str);
+                    peerConnection[device_str].room =  device_str;
                 }
-                device_status[device_str] = true;
                 peerConnection[device_str].addStream(stream);
+                device_status[device_str] = true;
+                socket.emit('create', device_str);
+                console.log('Attempted to create or  join room', device_str);
             }, element)
             .catch(function(e) {
                 console.log('getUserMedia() error: ' + e.name);
             })
         }
       });
-      await wait(2000);
-      resolve();
+      await wait(1000);
+      console.log("render OK")
+      resolve(device_status);
     });
 }
+
+
 /*
 用途:
   監聽硬體變更
@@ -301,4 +327,6 @@ navigator.mediaDevices.ondevicechange = function(event) {
     updateDevice();
 
 }
+console.log(socket);
 updateDevice();
+
