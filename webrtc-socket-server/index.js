@@ -15,10 +15,11 @@ var socketIO = require('socket.io')
 server.listen(3333);
 
 var io = socketIO.listen(server);
+//與agent server device map同步
 var device_map = [];
 
 io.on('connection', function(socket) {
-
+    socket.broadcast.emit("recovery");
     console.log("connected...");
     /*
     用途:
@@ -58,13 +59,15 @@ io.on('connection', function(socket) {
       先將房間名稱轉成端點相容形式，
       再進行廣播，透過夾帶參數判斷是否可以接收訊息
     */
-    socket.on('message', function(message, room) {
-
-        room = convertRoom(room);
+    socket.on('message', function(message,room) {
+        var device;
         log('Client said: ', message, room);
-        // for a real app, would be room-only (not broadcast)
+        room = convertRoom(room);
+        //取得頻道名稱
+        if(!isNaN(parseInt(room))) device = device_map[room];
+        else device = room;
 
-        socket.broadcast.emit('message', message, room);
+        io.sockets.in(device).emit('message', message, room);
     });
     /*
     用途:
@@ -74,14 +77,16 @@ io.on('connection', function(socket) {
     運作:
       先將房間建立者加入頻道房間，發送已建立事件，將房間名稱堆疊至device map
     */
-    socket.on('create', (device) => {
+    socket.on('create', async (device) => {
         var clientsInRoom = io.sockets.adapter.rooms[device];
+        console.log(io.sockets.adapter.rooms,clientsInRoom);
         var numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
         log('Room ' + device + ' now has ' + numClients + ' client(s)');
         socket.join(device);
         log('Client ID ' + socket.id + ' created room ' + device);
         socket.emit('created', device);
-        device_map.push(device);
+        if(device_map.indexOf(device) == -1) device_map.push(device);
+        console.log(device_map);
     });
     /*
     用途:
@@ -98,6 +103,7 @@ io.on('connection', function(socket) {
         var device_id = convertRoom(room);
         var clientsInRoom = io.sockets.adapter.rooms[device_id];
         var numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
+        log('Room ' + room + ' now has ' + numClients + ' client(s)');
         if (numClients === 1) {
             log('Client ID ' + socket.id + ' joined room ' + room);
             io.sockets.in(device_id).emit('join', device_id);
@@ -107,6 +113,8 @@ io.on('connection', function(socket) {
         else if(numClients > 1 ){ // max two clients
           socket.emit('full', room);
         }
+        console.log(socket.id);
+        socket.emit("status", numClients);
     });
     /*
     用途:
@@ -114,13 +122,13 @@ io.on('connection', function(socket) {
     參數 : 
       device: 被拔除的相機id
     運作:
-      發送給相同頻道房間的react end告知相機已拔除
+      發送給相同頻道房間的react end
     */
     socket.on('bye', function(device){
-        room = convertRoom(device) ; 
+        var room = convertRoom(device) ; 
         socket.leave(device);
-        console.log('received bye from '+ device);
-        socket.broadcast.emit('bye', room);
+        console.log('received bye from '+ device );
+        socket.broadcast.in(device).emit('bye');
     });
     /*
     用途:
