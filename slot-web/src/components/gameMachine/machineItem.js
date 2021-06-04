@@ -1,9 +1,7 @@
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-
-// Style
-import machineIcon from '../../asset/egzj1ui37v.jpeg';
-import { makeStyles } from '@material-ui/core/styles';
 // import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -16,6 +14,9 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 // import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
+
+// Style
+import machineIcon from '../../asset/egzj1ui37v.jpeg';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function MachineItem(props) {
   const classes = useStyles();
-  const camera = props.camera;
+  const camera = props.machineDetails.mapId;
   let history = useHistory();
   //   const [expanded, setExpanded] = useState(false);
 
@@ -51,8 +52,12 @@ export default function MachineItem(props) {
   //     setExpanded(!expanded);
   //   };
 
+  useEffect(() => {
+    console.log(props.machineDetails);
+  }, []);
+
   function selectMachine() {
-    history.replace("/game/"+camera);
+    history.replace("/game/" + camera);
   }
 
   return (
@@ -82,7 +87,12 @@ export default function MachineItem(props) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-        <Button variant="contained" color="primary" style={{}} onClick={() => selectMachine()}>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          style={{}} 
+          onClick={() => selectMachine()}
+        >
         {props.buttonName ? props.buttonName : '開始玩'}
         </Button>
         {/* <IconButton

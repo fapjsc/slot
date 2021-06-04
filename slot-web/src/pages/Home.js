@@ -45,9 +45,9 @@ const Home = () => {
   const history = useHistory();
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoadFailed(true);
-    }, 15000);
+    // setTimeout(() => {
+    //   setIsLoadFailed(true);
+    // }, 15000);
     try {
       playerLandingApi();
     } catch (error) {
