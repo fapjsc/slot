@@ -8,4 +8,9 @@
 </body>
 </html>
 <script src="/node_modules/socket.io-client/dist/socket.io.js"></script>
+<script type="text/javascript">
+	//設定socket 
+	const signal_server_url = "http://220.135.67.240:3333/";
+	const socket = io.connect( signal_server_url);
+</script>
 <script type="text/javascript" src="./app.js"></script>

@@ -205,7 +205,7 @@ socket.on('message', async function(message, room) {
         });
         peerConnection[room].addIceCandidate(candidate);
     } 
-  console.log(peerConnection[room]);
+    console.log(peerConnection[room]);
 });
 var device_status = [] ;
 console.log(navigator.mediaDevices.enumerateDevices());

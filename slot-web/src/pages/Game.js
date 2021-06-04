@@ -8,8 +8,8 @@ function Game() {
   let history = useHistory();
   let {camera} = useParams();
   var checkConnection = setInterval(() => {
-    if(socket.connected == false){
-      alert("連線錯誤，或socket服務異常");
+    if(window.navigator.onLine == false){
+      alert("已斷線!");
       leave();
       clearInterval(checkConnection);
     }

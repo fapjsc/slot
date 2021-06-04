@@ -61,22 +61,29 @@ function Screen(props){
 	    });
       /*
       用途:
-        監聽signaling server收到的訊息及狀況 
+        監聽signaling server頻道的狀況 
       參數 : 
-        array: signaling server回傳的訊息
+        status :狀態碼
       運作:
-        輸出signaling server傳回的array，從中取得再頻道房間中的人數
         如果是0，沒有camera end，離開遊戲
         如果是2，已經有其他人連，離開遊戲
       */
+        socket.on("status", (status) => {
+
+            if( status == 0) stop("相機異常!!!");
+
+            if( status== 2) stop("遊戲進行中 !!!");
+        })
+      /*
+      用途:
+        監聽signaling server收到的訊息 
+      參數 : 
+        array: signaling server回傳的訊息
+      運作:
+        輸出signaling server傳回的array
+      */
 	    socket.on('log', function(array) {
 	      console.log.apply(console, array);
-        var clinet_num = array[1].split(" ")[4];
-
-        if( clinet_num == 0) stop("相機異常!!!");
-
-        if( clinet_num == 2) stop("遊戲進行中 !!!");
-
 	    });
       /*
       用途:
@@ -87,9 +94,7 @@ function Screen(props){
         當頻道不同，不做任何事
         如果頻道相同，執行handleRemoteHangup離開遊戲
       */
-      socket.on("bye", (r) => {
-        if(r != room) return;
-        alert("相機異常!!!");
+      socket.on("bye", () => {
         handleRemoteHangup();
       })
       if (room !== '') {
@@ -110,9 +115,9 @@ function Screen(props){
         判斷如果型態是offer，將offer設為物件peerConnection 的Remote Description
         如果型態是candidate，使用addIceCandidate 方法將資訊加入peerConnection
       */
-	    socket.on('message', async function(message, flag) {
+	    socket.on('message', async function(message) {
           console.log(peerConnection);
-          if(room != flag) return;
+          // if(room != flag) return;
           if(isChannelReady ==false || peerConnection ==null) return;
   	      console.log('Client received message:', message);
           if (message.type === 'offer') {
@@ -196,7 +201,7 @@ function Screen(props){
   */
   function handleRemoteHangup() {
     console.log('Session terminated.');
-    stop("相機出錯");
+    stop("相機異常!!!");
   }
   /*
   用途:
