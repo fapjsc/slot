@@ -1,17 +1,17 @@
-.gameTab {
+.mobileGameTab {
   position: absolute;
   display: inline-block;
-  top: 40px;
-  right: 40px;
+  top: 60px;
+  right: 130px;
 }
 
-.gameDrawer {
+.mobileGameDrawer {
   position: absolute;
   top: 10px;
   left: 20px;
 }
 
-.gameTabButton {
+.mobileGameTabButton {
   background-color: #042a5f;
   padding: 10px;
   margin: 0 10px;
@@ -23,10 +23,10 @@
   border-radius: 10px;
 }
 
-.buttonPosition {
+.mobileButtonPosition {
   position: absolute;
-  top: 40px;
-  left: 100px;
+  top: 60px;
+  left: 160px;
   background-color: #042a5f;
   padding: 10px;
   margin: 0 10px;
@@ -37,10 +37,10 @@
   border-color: #073370;
   border-radius: 10px;
 }
-.buttonPosition2 {
+.mobileButtonPosition2 {
   position: absolute;
-  top: 120px;
-  left: 100px;
+  top: 150px;
+  left: 160px;
   background-color: #ebdada;
   padding: 10px;
   margin: 0 10px;
@@ -52,10 +52,10 @@
   border-radius: 10px;
 }
 
-.buttonPosition3 {
+.mobileButtonPosition3 {
   position: absolute;
-  top: 120px;
-  right: 120px;
+  top: 150px;
+  right: 220px;
   background-color: #0d6349;
   padding: 10px;
   margin: 0 10px;
@@ -67,10 +67,10 @@
   border-radius: 50%;
 }
 
-.buttonPosition4 {
+.mobileButtonPosition4 {
   position: absolute;
-  top: 120px;
-  right: 200px;
+  top: 150px;
+  right: 300px;
   background-color: #e01313;
   padding: 10px;
   margin: 0 10px;
@@ -82,45 +82,28 @@
   border-radius: 50%;
 }
 
-.divPosition {
+.mobilePosition {
   position: relative;
 }
 
-.backImg_Center {
-  width: 100%;
+.tt {
+  position: relative;
+}
+.mobileBottom {
+  position: relative;
+  display: inline-block;
 }
 
-.box_Center {
-  
+.mobileBackImg-leftTop {
+
 }
 
-@media (max-width: 768px) {
-  /* .backImg {
-    width: fit-content;
-    flex-direction: columns;
-    min-height: auto;
-    min-width: auto;
-    max-height: auto;
-    max-width: 280px;
-  } */
-  .backImg-left {
-    width: 80%;
-  }
-  /* .backImg-right {
-    min-height: auto;
-    min-width: auto;
-    max-height: auto;
-    max-width: 80px;
-  } */
+.mobileBackImg-rightTop {
+  position:absolute;
+	right:36px;
 }
 
-@media (max-width: 480px) {
-  
+.mobileBackImg_Center {
+  width: 850px;
 }
-@media (min-width: 768px) and (max-width: 979px) {
- 
-}
-@media (min-width: 980px) {
-}
-@media (min-width: 1200px) {
-}
+

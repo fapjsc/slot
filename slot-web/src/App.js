@@ -7,6 +7,7 @@ import Game from './pages/Game';
 // import Auth from './pages/Auth';
 import GameStart from './pages/GameStart';
 import GameStartNew from './pages/GameStartNew';
+import GameStartMobile from './components/gameStart/GameStartMobile';
 // import LoadingScreen from './pages/LoadingScreen';
 
 // Style
@@ -31,6 +32,9 @@ function App() {
           </Route>
           <Route path="/gameStart">
             <GameStart />
+          </Route>
+          <Route path="/gameStartMobile">
+            <GameStartMobile />
           </Route>
           {/* <Route path="/auth">
             <Auth />
