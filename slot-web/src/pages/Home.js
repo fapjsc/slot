@@ -45,14 +45,7 @@ const Home = () => {
   const history = useHistory();
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   setIsLoadFailed(true);
-    // }, 15000);
-    try {
-      playerLandingApi();
-    } catch (error) {
-      alert(error);
-    }
+    playerLandingApi();
   }, []);
 
   let playerLandingApi = async () => {
@@ -60,20 +53,17 @@ const Home = () => {
 
     try {
       let responseData = await ApiController().playerLandingApi();
-      if(responseData.ok){
+      console.log('playerLandingApi:', responseData); // 顯示取得回傳資料
+      if (responseData.code > 100000000) { // code 超過 100000000 為問題回傳
+        alert('ERROR!');
+      }
+      if (responseData.code < 100000000) { 
+        setIsLoaded(false);
+        setEgmList(responseData.egmList); 
       }
     } catch (error) {
-      
+      alert('ERROR message: ', error);
     }
-    // let responseProcessed = await Api.apiGet(url);
-    // console.log('playerLandingApi:', responseProcessed); // 顯示取得回傳資料
-    // if (responseProcessed.code > 100000000) { // code 超過 100000000 為問題回傳
-    //   alert('ERROR!');
-    // }
-    // if (responseProcessed.code < 100000000) { 
-    //   setIsLoaded(false);
-    //   setEgmList(responseProcessed.egmList); 
-    // }
   }
 
   return (
