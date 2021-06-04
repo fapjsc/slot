@@ -1,14 +1,12 @@
 // Components
 import MachineItem from './machineItem';
+import MachineItemNew from './machineItemNew';
 // import WolfGame from './WolfGame';
 
 // Style
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-/**
- * 
- */
 const useStyles = makeStyles(theme => ({
 	root: {
 		flexGrow: 1,
@@ -39,18 +37,22 @@ const machineList = [ // 模擬用 機器列表資料
 export default function MachineList(props) {
 	const classes = useStyles();
 
+	function renderMachineList(egmList) {
+		return egmList.map((item, index) => 
+			<Grid item xs={12} sm={4} md={3} className={classes.grid}>
+				<MachineItemNew 
+					index={index}
+					machineDetails={item}
+				/>
+			</Grid>
+		)
+	}
+
 	return (
 		<div className={classes.root}>
 			<Grid container spacing={3} style={{ padding: 10 }}>
 				{props.egmList.length > 0 ? 
-				props.egmList.map((item, index) => 
-					<Grid item xs={12} sm={4} md={3} className={classes.grid}>
-						<MachineItem 
-							index={index}
-							machineDetails={item}
-						/>
-					</Grid>
-				)
+				renderMachineList(props.egmList)
 				: null}
 				{/* <WolfGame/> */}
 			</Grid>

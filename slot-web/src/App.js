@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Game from './pages/Game';
 // import Auth from './pages/Auth';
 import GameStart from './pages/GameStart';
+import GameStartNew from './pages/GameStartNew';
 // import LoadingScreen from './pages/LoadingScreen';
 
 // Style
@@ -24,6 +25,9 @@ function App() {
           </Route> */}
           <Route path="/game/:camera">
             <Game />
+          </Route>
+          <Route path="/gameStartNew">
+            <GameStartNew />
           </Route>
           <Route path="/gameStart">
             <GameStart />
