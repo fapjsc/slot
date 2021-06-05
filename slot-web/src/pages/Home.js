@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
 // Components
 import MachineList from '../components/gameMachine/machineList';
 import ApiController from '../api/apiController';
+
+// Context
+import UserContext from '../context/User/UserContext';
+
 // Style
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
@@ -41,11 +45,16 @@ const Home = () => {
   const [loadFailed, setIsLoadFailed] = useState(false);
   const classes = useStyles();
 
+  // User Context
+  const userContext = useContext(UserContext);
+  const { demoFun, setToken } = userContext;
+
   // Router Props
   const history = useHistory();
 
   useEffect(() => {
     playerLandingApi();
+    demoFun();
   }, []);
 
   let playerLandingApi = async () => {
@@ -79,9 +88,12 @@ const Home = () => {
           <Box>Loading...</Box>
         </Paper>
       ) : (
-        <Box className={classes.rootList}>
-          <MachineList egmList={egmList} />
-        </Box>
+        <>
+          <Box className={classes.rootList}>
+            <MachineList egmList={egmList} />
+          </Box>
+          <button onClick={() => setToken('1234')}>test</button>
+        </>
       )}
     </div>
   );

@@ -1,4 +1,5 @@
 import { useHistory } from 'react-router-dom';
+import { useEffect } from 'react';
 import Screen from '../Screen';
 
 const GameScreen = () => {
@@ -9,6 +10,8 @@ const GameScreen = () => {
     window.confirm('確定離開嗎?');
     history.replace('/home');
   };
+
+  useEffect(() => {}, []);
 
   return (
     <div className="App">
