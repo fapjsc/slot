@@ -4,11 +4,11 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // Components
 import Home from './pages/Home';
 import Game from './pages/Game';
+// import Auth from './pages/Auth';
 import GameStart from './pages/GameStart';
 import GameStartNew from './pages/GameStartNew';
 import GameStartMobile from './components/gameStart/GameStartMobile';
 // import LoadingScreen from './pages/LoadingScreen';
-import GameScreen from './pages/GameScreen'; //測試
 
 // Style
 import './App.css';
@@ -16,22 +16,24 @@ import './App.css';
 function App() {
   return (
     // <SocketContext.Provider value={socket}>
+      <Router>
+        {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
 
-      <Switch>
-        {/* <Route path="/loading">
+        <Switch>
+          {/* <Route path="/loading">
             <LoadingScreen />
           </Route> */}
           <Route path="/game/:camera">
             <Game />
           </Route>
           <Route path="/gameStartNew">
-          </Route>
             <GameStartNew />
+          </Route>
           <Route path="/gameStart">
             <GameStart />
-          <Route path="/gameStartMobile">
           </Route>
+          <Route path="/gameStartMobile">
             <GameStartMobile />
           </Route>
           {/* <Route path="/auth">
@@ -40,8 +42,8 @@ function App() {
           <Route path="/home">
             <Home />
           </Route>
-            <Home />
           <Route path="/">
+            <Home />
           </Route>
         </Switch>
       </Router>
