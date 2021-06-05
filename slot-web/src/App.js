@@ -24,19 +24,23 @@ function App() {
           {/* <Route path="/loading">
             <LoadingScreen />
           </Route> */}
-          <Route path="/game/:camera">
-            <Game />
-          </Route>
-          <Route path="/gameStartNew">
-            <GameStartNew />
-          </Route>
-          <Route path="/gameStart">
-            <GameStart />
-          </Route>
           <Route path="/gameStartMobile">
             <GameStartMobile />
           </Route>
-          {/* <Route path="/auth">
+          </Route>
+            <GameStartNew />
+          <Route path="/gameStartNew">
+        {/* <Route path="/gameScreen">
+          <GameScreen />
+        </Route> */}
+        <Route path="/game/:camera">
+          <GameScreen />
+        </Route>
+        <Route path="/gameStart">
+          <GameStart />
+        </Route>
+
+        {/* <Route path="/auth">
             <Auth />
           </Route> */}
           <Route path="/home">

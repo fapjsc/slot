@@ -37,6 +37,7 @@ const BroadCast = () => {
 
   //獲取所有設備後，將kind為videoinput的物件設為 allDevices
   const getAllDevices = type => {
+    console.log('type:', type);
     // let devices = await navigator.mediaDevices.enumerateDevices();
     // console.log(devices, 'all devices');
     // let filterDevices = [];
@@ -54,6 +55,7 @@ const BroadCast = () => {
       const constraints = { audio: true, video: true };
 
       let onSuccess = stream => {
+        console.log(stream.getTracks().forEach(el => console.log(el)));
         // 確認瀏覽器是否支援
         if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
           console.log('enumerateDevices() not supported.');
@@ -64,6 +66,7 @@ const BroadCast = () => {
         navigator.mediaDevices
           .enumerateDevices()
           .then(devices => {
+            console.log(devices, 'all devices');
             devices.forEach(device => {
               if (device.kind === type) {
                 setAllDevices(allDevices => [...allDevices, device]);

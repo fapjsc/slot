@@ -2,7 +2,6 @@ const express = require('express');
 // const https = require('https');
 const http = require('http');
 const fs = require('fs');
-// const { connect } = require('http2');
 const options = {
   // key: fs.readFileSync('./192.168.10.101-key.pem'),
   // cert: fs.readFileSync('./192.168.10.101.pem'),
