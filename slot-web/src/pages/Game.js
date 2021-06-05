@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import Screen from '../Screen';
 import { SocketContext } from '../context/socket';
 function Game() {
-  // const socket = useContext(SocketContext);
+  const socket = useContext(SocketContext);
   let history = useHistory();
   let { camera } = useParams();
   var checkConnection = setInterval(() => {
