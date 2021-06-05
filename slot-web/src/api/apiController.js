@@ -10,7 +10,6 @@ const ApiController = () => {
 				"mapId": mapId,
 				"egmId": egmId,
 				"egmIP": egmIP,
-				"apiToken" : token
 			};
 			return await Fetch.apiPost('PlayerChooseEgmApi', body, token);
 		},
@@ -23,7 +22,7 @@ const ApiController = () => {
 			};
 			return await Fetch.apiPost('PressSlotApi', body);
 		},
-		pointCashApi: async (cfgId, egmId, egmIP, inOrOut, moneyPoint) => {
+		pointCashApi: async (cfgId, egmId, egmIP, inOrOut, moneyPoint, token) => {
 			let body = {
 				"d": cfgId,
 				"egmId": egmId,
@@ -31,7 +30,7 @@ const ApiController = () => {
 				"inOrOut": inOrOut,
 				"moneyPoint": moneyPoint
 			};
-			return await Fetch.apiPost('PointCashApi', body);
+			return await Fetch.apiPost('PointCashApi', body, token);
 		},
 		playerLeaveApi: async (currentBalance) => {
 			let body = {

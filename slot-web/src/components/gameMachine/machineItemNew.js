@@ -49,7 +49,7 @@ export default function MachineItem(props) {
     console.log('chooseEgm input: ', props.machineDetails);
     console.log('chooseEgm token: ', props.token);
     chooseEgm(props.machineDetails, props.token);
-    history.replace("/game/" + camera);
+    // history.replace("/game/" + camera);
   }
 
   const chooseEgm = async ({mapId, egmId, egmIp}, apiToken) => {
@@ -60,7 +60,7 @@ export default function MachineItem(props) {
         alert(responseData.msg);
       }
       if (responseData.code < 100000000) { 
-
+        history.replace("/gamestart");
       }
     } catch (error) {
       alert('ERROR message: ', error);

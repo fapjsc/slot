@@ -33,7 +33,7 @@ const apiPost = async (targetApi, data, token) => {
         headers: {
             'user-agent': 'Mozilla/4.0 MDN Example',
             'content-type': 'application/json',
-            'apiToken': token,
+            'Authorization': `Bearer ${token}`,
         },
         method: 'POST',
         mode: 'cors',
