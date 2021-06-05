@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 // Components
 import MachineList from '../components/gameMachine/machineList';
-
+import ApiController from '../api/apiController';
 // Style
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
@@ -45,66 +45,44 @@ const Home = () => {
   const history = useHistory();
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoadFailed(true);
-    }, 15000);
-    try {
-      // playerLandingApi();
-    } catch (error) {
-      alert(error);
-    }
+    playerLandingApi();
   }, []);
 
   let playerLandingApi = async () => {
-    let url = 'http://192.168.10.240/PlayerLandingApi?pc=DinoTesting&casino=casino_demo_1&at=1asd1rsdjaufoph29fhi2o';
-
-    let response = await fetch(url, {
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'user-agent': 'Mozilla/4.0 MDN Example',
-        'content-type': 'application/json',
-      },
-      method: 'GET',
-      mode: 'cors',
-      redirect: 'follow',
-      referrer: 'no-referrer',
-    });
-    let responseProcessed = await response.json();
-    console.log(responseProcessed); // 顯示取得回傳資料
-    if (responseProcessed.code > 100000000) {
-      // code 超過 100000000 為問題回傳
-      alert('ERROR!');
-    }
-    if (responseProcessed.code < 100000000) {
-      setIsLoaded(false);
-      setEgmList(responseProcessed.egmList);
+    try {
+      let responseData = await ApiController().playerLandingApi();
+      console.log('playerLandingApi:', responseData); // 顯示取得回傳資料
+      if (responseData.code > 100000000) {
+        // code 超過 100000000 為問題回傳
+        alert('ERROR!');
+      }
+      if (responseData.code < 100000000) {
+        setIsLoaded(false);
+        setEgmList(responseData.egmList);
+      }
+    } catch (error) {
+      alert('ERROR message: ', error);
     }
   };
 
   return (
     <div className={classes.root}>
-      {/* {loadFailed ?
-      <Paper className={classes.paper}>
-        <Box>Connection Failed.</Box>
-      </Paper>
-      :
-      isLoaded ?
+      {loadFailed ? (
+        <Paper className={classes.paper}>
+          <Box>Connection Failed.</Box>
+        </Paper>
+      ) : isLoaded ? (
         <Paper className={classes.paper}>
           <Box m={4}>
             <LinearProgress />
           </Box>
           <Box>Loading...</Box>
         </Paper>
-        :
+      ) : (
         <Box className={classes.rootList}>
-          <MachineList egmList={egmList}/>
+          <MachineList egmList={egmList} />
         </Box>
-      } */}
-
-      <Box className={classes.rootList}>
-        <MachineList egmList={egmList} />
-      </Box>
+      )}
     </div>
   );
 };

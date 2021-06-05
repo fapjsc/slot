@@ -20,15 +20,14 @@ function App() {
         {/* <Route path="/loading">
             <LoadingScreen />
           </Route> */}
+        <Route path="/gameScreen">
+          <GameScreen />
+        </Route>
         <Route path="/game/:camera">
-          <Game />
+          <GameScreen />
         </Route>
         <Route path="/gameStart">
           <GameStart />
-        </Route>
-
-        <Route path="/gameScreen">
-          <GameScreen />
         </Route>
 
         {/* <Route path="/auth">

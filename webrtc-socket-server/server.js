@@ -1,14 +1,15 @@
 const express = require('express');
-const https = require('https');
+// const https = require('https');
+const http = require('http');
 const fs = require('fs');
 // const { connect } = require('http2');
 const options = {
-  key: fs.readFileSync('./192.168.10.102-key.pem'),
-  cert: fs.readFileSync('./192.168.10.102.pem'),
+  // key: fs.readFileSync('./192.168.10.101-key.pem'),
+  // cert: fs.readFileSync('./192.168.10.101.pem'),
 };
 
 const app = express();
-const httpsServer = https.createServer(options, app);
+const httpsServer = http.createServer(options, app);
 
 const io = require('socket.io')(httpsServer, {
   cors: {
@@ -20,6 +21,7 @@ const io = require('socket.io')(httpsServer, {
 let broadcaster;
 
 io.sockets.on('connection', socket => {
+  console.log('connection');
   // Base Event
   socket.on('broadcaster', () => {
     broadcaster = socket.id;

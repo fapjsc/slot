@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState, createRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import NoDevice from './NoDevice';
 
+let userSelectDevice = 'f658f73a8c5e683c11d5b3a736cbcba15350adcf3d403c83b2fae82ed6e475b3'; // for test
+
 // const signal_server_url = 'https://192.168.10.102:5000';
-const socket = io.connect('https://192.168.10.102:5000');
+// const socket = io.connect('http://localhost:5000');
+const socket = io.connect('http://192.168.10.101:5000/');
 
 // peerConnection Options
 const pcConfig = {
@@ -23,44 +26,85 @@ const peerConnections = {};
 
 const BroadCast = () => {
   // Init State
-  const [allDevices, setAllDevices] = useState();
-  const [streamList, setStreamList] = useState([]);
+  const [allDevices, setAllDevices] = useState([]);
   const [currentDevice, setCurrentDevice] = useState();
+  const [NoDevice, setNoDevice] = useState(false);
+  // const [streamList, setStreamList] = useState([]);
 
   // Camera Dom
   const camera = useRef();
-  const camera2 = useRef([]);
+  // const camera2 = useRef([]);
 
   //獲取所有設備後，將kind為videoinput的物件設為 allDevices
-  const getAllDevices = async () => {
-    let devices = await navigator.mediaDevices.enumerateDevices();
-    let filterDevices = [];
-    devices.forEach(el => {
-      if (el.kind === 'videoinput') filterDevices.push(el);
-    });
-    setAllDevices(filterDevices);
+  const getAllDevices = type => {
+    // let devices = await navigator.mediaDevices.enumerateDevices();
+    // console.log(devices, 'all devices');
+    // let filterDevices = [];
+    // devices.forEach(el => {
+    //   if (el.kind === type) {
+    //     filterDevices.push(el);
+    //   }
+    // });
+
+    // console.log(filterDevices, 'filter devices');
+
+    // setAllDevices(filterDevices);
+
+    if (navigator.mediaDevices.getUserMedia) {
+      const constraints = { audio: true, video: true };
+
+      let onSuccess = stream => {
+        // 確認瀏覽器是否支援
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+          console.log('enumerateDevices() not supported.');
+          return false;
+        }
+
+        // Get Devices List .
+        navigator.mediaDevices
+          .enumerateDevices()
+          .then(devices => {
+            devices.forEach(device => {
+              if (device.kind === type) {
+                setAllDevices(allDevices => [...allDevices, device]);
+                console.log(device.label, 'device label');
+              }
+            });
+          })
+          .catch(err => {
+            console.log(err.name + ': ' + err.message);
+          });
+      };
+
+      let onError = err => {
+        console.log(err);
+      };
+
+      navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
+    } else {
+      console.log('getUserMedia not supported on your browser!');
+      alert('瀏覽器不支援');
+    }
   };
 
-  const getAllStream = async () => {
-    allDevices.forEach(async device => {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: {
-          deviceId: device.deviceId,
-          width: 300,
-          height: 300,
-        },
-      });
-
-      setStreamList(streamList => [...streamList, stream]);
-    });
-  };
+  // const getAllStream = async () => {
+  //   allDevices.forEach(async device => {
+  //     const stream = await navigator.mediaDevices.getUserMedia({
+  //       audio: false,
+  //       video: {
+  //         deviceId: device.deviceId,
+  //         width: 300,
+  //         height: 300,
+  //       },
+  //     });
+  //     setStreamList(streamList => [...streamList, stream]);
+  //   });
+  // };
 
   // 獲取使用者選擇的camera, id必須是navigator.mediaDevices.enumerateDevices()裡面的deviceId
   const getCurrentDevice = async id => {
-    const macCam = '30e5aed60d5f2a71ea807bf3841fcbe45647800028fc88fd8221d2a9e455ec7a'; // 測試ID
-    const webCam = 'c5323518eb6a0cf8979032a5f3a4c82749c3de9e2ff0ff981d860ad6038b5808'; // 測試ID
-    let selectDevice = allDevices.filter(el => el.deviceId === webCam);
+    let selectDevice = allDevices.filter(el => el.deviceId === id);
+    console.log(selectDevice, 'user select devices');
     setCurrentDevice(selectDevice);
   };
 
@@ -68,7 +112,7 @@ const BroadCast = () => {
   const getSelectStream = async deviceId => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
+        audio: true,
         video: {
           deviceId: deviceId,
           width: 300,
@@ -84,27 +128,44 @@ const BroadCast = () => {
   };
 
   useEffect(() => {
-    // console.log(camera);
+    console.log(allDevices, '所有的video input');
     if (allDevices) {
-      getCurrentDevice();
+      getCurrentDevice(userSelectDevice);
       // getAllStream();
     } else {
       console.log('no all devices');
+      getAllDevices('videoinput');
     }
 
     // eslint-disable-next-line
   }, [allDevices]);
 
+  // 獲取用戶選擇的設備
   useEffect(() => {
-    if (streamList.length > 0) {
-      console.log(camera2);
-      console.log(camera);
-      streamList.forEach(stream => {});
+    console.log(currentDevice, 'current device');
+
+    if (!currentDevice) return;
+
+    if (!currentDevice.length) return;
+
+    if (currentDevice) {
+      const deviceId = currentDevice[0].deviceId;
+      getSelectStream(deviceId);
+      socket.emit('create', deviceId);
     }
-  }, [streamList]);
+    // eslint-disable-next-line
+  }, [currentDevice]);
+
+  // useEffect(() => {
+  //   if (streamList.length > 0) {
+  //     console.log(camera2);
+  //     console.log(camera);
+  //     streamList.forEach(stream => {});
+  //   }
+  // }, [streamList]);
 
   useEffect(() => {
-    getAllDevices();
+    getAllDevices('videoinput');
     socket.on('connection', () => {
       console.log('connection');
     });
@@ -154,28 +215,23 @@ const BroadCast = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (currentDevice) {
-      const deviceId = currentDevice[0].deviceId;
-      getSelectStream(deviceId);
-      socket.emit('create', deviceId);
-    } else {
-      console.log('no current device');
-    }
-
-    // eslint-disable-next-line
-  }, [currentDevice]);
-
-  return (
-    <>
-      <div style={box}>
-        <video ref={camera} playsInline autoPlay muted />
-      </div>
-      {/* <div style={box}>
-            <video ref={camera2} playsInline autoPlay muted />
-          </div> */}
-    </>
-  );
+  if (NoDevice) {
+    return <h1>no device</h1>;
+  } else {
+    return (
+      <>
+        <div style={box}>
+          <video ref={camera} playsInline autoPlay muted />
+        </div>
+        <div>
+          <button onClick={() => getAllDevices('videoinput')}>refresh</button>
+        </div>
+        {/* <div style={box}>
+              <video ref={camera2} playsInline autoPlay muted />
+            </div> */}
+      </>
+    );
+  }
 
   // if (streamList.length) {
   //   return (
