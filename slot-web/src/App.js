@@ -27,15 +27,15 @@ function App() {
           <Route path="/gameStartMobile">
             <GameStartMobile />
           </Route>
-          </Route>
-            <GameStartNew />
           <Route path="/gameStartNew">
+            <GameStartNew />
+          </Route>
         {/* <Route path="/gameScreen">
           <GameScreen />
         </Route> */}
-        <Route path="/game/:camera">
+        {/* <Route path="/game/:camera">
           <GameScreen />
-        </Route>
+        </Route> */}
         <Route path="/gameStart">
           <GameStart />
         </Route>
