@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { SocketContext, socket } from './context/socket';
+// import { SocketContext, socket } from './context/socket';
 
 // Components
 import Home from './pages/Home';
@@ -15,7 +15,7 @@ import './App.css';
 
 function App() {
   return (
-    <SocketContext.Provider value={socket}>
+    // <SocketContext.Provider value={socket}>
       <Router>
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
@@ -47,7 +47,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
-    </SocketContext.Provider>
+    // </SocketContext.Provider>
   );
 }
 

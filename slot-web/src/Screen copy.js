@@ -1,7 +1,7 @@
 import React, {useState, useContext, useCallback, useEffect} from 'react';
-import {SocketContext} from './context/socket';
+// import {SocketContext} from './context/socket';
 function Screen(props) {
-  const socket = useContext(SocketContext);
+  // const socket = useContext(SocketContext);
   const [isChannelReady,setChannelReady] = useState(false);
   const [pc ,setPc] = useState(null);
   let room = props.room; 

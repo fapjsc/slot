@@ -39,10 +39,11 @@ export default function MachineList(props) {
 
 	function renderMachineList(egmList) {
 		return egmList.map((item, index) => 
-			<Grid item xs={12} sm={4} md={3} className={classes.grid}>
+			<Grid key={index} item xs={12} sm={4} md={3} className={classes.grid}>
 				<MachineItemNew 
 					index={index}
 					machineDetails={item}
+					token={props.token}
 				/>
 			</Grid>
 		)

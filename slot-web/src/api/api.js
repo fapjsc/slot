@@ -24,7 +24,7 @@ const apiGet = async (targetApi) => {
 	return responseProcessed;
 }
 
-const apiPost = async (targetApi, data) => {
+const apiPost = async (targetApi, data, token) => {
 	let url = `${Config.apiUrl}${targetApi}`
     let options = {
         body: JSON.stringify(data),
@@ -33,6 +33,7 @@ const apiPost = async (targetApi, data) => {
         headers: {
             'user-agent': 'Mozilla/4.0 MDN Example',
             'content-type': 'application/json',
+            'apiToken': token,
         },
         method: 'POST',
         mode: 'cors',

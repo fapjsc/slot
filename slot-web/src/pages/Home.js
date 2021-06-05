@@ -37,6 +37,7 @@ const useStyles = makeStyles(theme => ({
 
 const Home = () => {
   const [egmList, setEgmList] = useState({});
+  const [apiToken, setApiToken] = useState();
   const [isLoaded, setIsLoaded] = useState(true);
   const [loadFailed, setIsLoadFailed] = useState(false);
   const classes = useStyles();
@@ -49,20 +50,25 @@ const Home = () => {
   }, []);
 
   let playerLandingApi = async () => {
-    let url = 'PlayerLandingApi?pc=DinoTesting&casino=casino_demo_1&at=1asd1rsdjaufoph29fhi2o';
+    let pc = 'DinoTesting';
+    let casino = 'casino_demo_1';
+    let at = '1asd1rsdjaufoph29fhi2o';
 
     try {
-      let responseData = await ApiController().playerLandingApi();
-      console.log('playerLandingApi:', responseData); // 顯示取得回傳資料
+      let responseData = await ApiController()
+      .playerLandingApi(pc, casino, at);
       if (responseData.code > 100000000) { // code 超過 100000000 為問題回傳
         alert('ERROR!');
+        setIsLoadFailed(true);
       }
       if (responseData.code < 100000000) { 
         setIsLoaded(false);
         setEgmList(responseData.egmList); 
+        setApiToken(responseData.apiToken); 
       }
     } catch (error) {
       alert('ERROR message: ', error);
+      setIsLoadFailed(true);
     }
   }
 
@@ -82,7 +88,7 @@ const Home = () => {
         </Paper>
         :
         <Box className={classes.rootList}>
-          <MachineList egmList={egmList}/>
+          <MachineList egmList={egmList} token={apiToken}/>
         </Box>
       }
     </div>

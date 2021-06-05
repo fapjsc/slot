@@ -46,19 +46,15 @@ export default function MachineItem(props) {
   let history = useHistory();
 
   const selectMachine = () => {
-    console.log(props.machineDetails);
-    chooseEgm(props.machineDetails);
+    console.log('chooseEgm input: ', props.machineDetails);
+    console.log('chooseEgm token: ', props.token);
+    chooseEgm(props.machineDetails, props.token);
     history.replace("/game/" + camera);
   }
 
-  const chooseEgm = async ({mapId, egmId, egmIP}) => {
-    let body = {
-      mapId: mapId,
-      egmId: egmId,
-      egmIP: egmIP,
-    };
+  const chooseEgm = async ({mapId, egmId, egmIp}, apiToken) => {
     try {
-      let responseData = await ApiController().playerChooseEgmApi(body);
+      let responseData = await ApiController().playerChooseEgmApi(mapId, egmId, egmIp, apiToken);
       console.log('chooseEgm:', responseData); // 顯示取得回傳資料
       if (responseData.code > 100000000) { // code 超過 100000000 為問題回傳
         alert(responseData.msg);

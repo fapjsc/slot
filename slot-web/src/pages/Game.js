@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext} from 'react';
 import { useHistory, useParams } from "react-router-dom";
-import Screen from "../Screen";
-import {SocketContext} from '../context/socket';
+// import Screen from "../Screen";
+// import {SocketContext} from '../context/socket';
 function Game() {
-  const socket = useContext(SocketContext);
+  // const socket = useContext(SocketContext);
   let history = useHistory();
   let { camera } = useParams();
   var checkConnection = setInterval(() => {
-    if (socket.connected == false) {
-      alert('連線錯誤，或socket服務異常');
-      leave();
-      clearInterval(checkConnection);
-    }
+    // if (socket.connected == false) {
+    //   alert('連線錯誤，或socket服務異常');
+    //   leave();
+    //   clearInterval(checkConnection);
+    // }
   }, 1000);
   
   useEffect(() => {
@@ -22,8 +22,8 @@ function Game() {
   
   function leave() {
     console.log("leave..");
-    socket.emit("leave", camera);
-    socket.removeAllListeners();
+    // socket.emit("leave", camera);
+    // socket.removeAllListeners();
     history.replace('/home');
   }
 
@@ -79,7 +79,7 @@ function Game() {
         <div style={styles.slotBackground}>
           <img src={'/banner-wolf.png'} />
           <div style={styles.screen}>
-            <Screen room={camera} leave={leave} />
+            {/* <Screen room={camera} leave={leave} /> */}
           </div>
           <div style={styles.buttonTable}>
             <button style={styles.buttonMax} onClick={() => alert('hihihihi')}>
