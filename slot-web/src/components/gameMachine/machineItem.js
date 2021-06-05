@@ -48,16 +48,16 @@ export default function MachineItem(props) {
   let history = useHistory();
   //   const [expanded, setExpanded] = useState(false);
 
-  //   const handleExpandClick = () => {
-  //     setExpanded(!expanded);
-  //   };
+  //   //   const handleExpandClick = () => {
+  //   //     setExpanded(!expanded);
+  //   //   };
 
   useEffect(() => {
     console.log(props.machineDetails);
   }, []);
 
   function selectMachine() {
-    history.replace("/game/" + camera);
+    history.replace('/game/' + camera);
   }
 
   return (
@@ -73,47 +73,20 @@ export default function MachineItem(props) {
         //     <MoreVertIcon />
         //   </IconButton>
         // }
-        title={props.title ? props.title : "麻雀物語2"}
-        subheader={props.subHeader ? props.subHeader : "September 14, 2021"}
+        title={props.title ? props.title : '麻雀物語2'}
+        subheader={props.subHeader ? props.subHeader : 'September 14, 2021'}
       />
-      <CardMedia 
-        className={classes.media} 
-        image={props.machineIcon ? props.machineIcon : machineIcon} 
-        title="Paella dish" 
-      />
+      <CardMedia className={classes.media} image={props.machineIcon ? props.machineIcon : machineIcon} title="Paella dish" />
       <CardContent style={{ height: 90 }}>
         <Typography variant="body2" color="textSecondary" component="p">
           {props.descreption ? props.descreption : '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'}
         </Typography>
       </CardContent>
       <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          style={{}} 
-          onClick={() => selectMachine()}
-        >
-        {props.buttonName ? props.buttonName : '開始玩'}
+        <Button variant="contained" color="primary" style={{}} onClick={() => selectMachine()}>
+          {props.buttonName ? props.buttonName : '開始玩'}
         </Button>
-        {/* <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton> */}
       </CardActions>
-      {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>遊戲總數：2750</Typography>
-          <Typography paragraph>遊戲數：174</Typography>
-          <Typography paragraph>BIG：9</Typography>
-          <Typography>REG：15</Typography>
-        </CardContent>
-      </Collapse> */}
     </Card>
   );
 }

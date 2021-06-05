@@ -46,7 +46,7 @@ export default function MachineItem() {
   let history = useHistory();
 
   const selectMachine = () => {
-    history.replace('/game');
+    history.replace('/gameScreen');
   };
 
   return (
@@ -63,14 +63,14 @@ export default function MachineItem() {
       <CardMedia className={classes.media} image={wolfImg} title="Paella dish" />
       <CardContent style={{ height: 90 }}>
         <Typography variant="body2" color="textSecondary" component="p">
-          機種類型：美國原裝進口
+          機種類型：美國原裝進口...
           <br />
           最大押注:Mexbet 500
           {/* 機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G */}
         </Typography>
       </CardContent>
       <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-        <Button variant="contained" color="primary" onClick={() => selectMachine()}>
+        <Button variant="contained" color="primary" onClick={selectMachine}>
           開始玩
         </Button>
       </CardActions>

@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: 18,
     color: '#333',
   },
-})); 
+}));
 
 const Home = () => {
   const [egmList, setEgmList] = useState({});
@@ -61,7 +61,7 @@ const Home = () => {
         alert('ERROR!');
         setIsLoadFailed(true);
       }
-      if (responseData.code < 100000000) { 
+      if (responseData.code < 100000000) {
         setIsLoaded(false);
         setEgmList(responseData.egmList); 
         setApiToken(responseData.apiToken); 
@@ -70,27 +70,26 @@ const Home = () => {
       alert('ERROR message: ', error);
       setIsLoadFailed(true);
     }
-  }
+  };
 
   return (
     <div className={classes.root}>
-      {loadFailed ?
-      <Paper className={classes.paper}>
-        <Box>Connection Failed.</Box>
-      </Paper>
-      :
-      isLoaded ?
+      {loadFailed ? (
+        <Paper className={classes.paper}>
+          <Box>Connection Failed.</Box>
+        </Paper>
+      ) : isLoaded ? (
         <Paper className={classes.paper}>
           <Box m={4}>
             <LinearProgress />
           </Box>
           <Box>Loading...</Box>
         </Paper>
-        :
+      ) : (
         <Box className={classes.rootList}>
           <MachineList egmList={egmList} token={apiToken}/>
         </Box>
-      }
+      )}
     </div>
   );
 };

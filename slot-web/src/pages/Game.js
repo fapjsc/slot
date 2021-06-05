@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext} from 'react';
-import { useHistory, useParams } from "react-router-dom";
-// import Screen from "../Screen";
-// import {SocketContext} from '../context/socket';
+import React, { useState, useEffect, useContext } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import Screen from '../Screen';
+import { SocketContext } from '../context/socket';
 function Game() {
   // const socket = useContext(SocketContext);
   let history = useHistory();
@@ -13,17 +13,17 @@ function Game() {
     //   clearInterval(checkConnection);
     // }
   }, 1000);
-  
+
   useEffect(() => {
     return () => {
       window.location.reload();
     };
   }, []);
-  
+
   function leave() {
-    console.log("leave..");
-    // socket.emit("leave", camera);
-    // socket.removeAllListeners();
+    console.log('leave..');
+    socket.emit('leave', camera);
+    socket.removeAllListeners();
     history.replace('/home');
   }
 
@@ -45,7 +45,7 @@ function Game() {
       mode: 'cors', // no-cors, cors, *same-origin
       redirect: 'follow', // manual, *follow, error
       referrer: 'no-referrer', // *client, no-referrer
-    }).then((response) => console.log(response)); // 輸出成 json
+    }).then(response => console.log(response)); // 輸出成 json
   }
 
   function openScore() {
@@ -69,7 +69,7 @@ function Game() {
       mode: 'cors',
       redirect: 'follow',
       referrer: 'no-referrer',
-    }).then((response) => console.log(response));
+    }).then(response => console.log(response));
   }
 
   return (
