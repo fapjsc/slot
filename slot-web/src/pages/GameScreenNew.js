@@ -9,7 +9,25 @@ const GameScreen = () => {
 
   const leave = () => {
     window.confirm('確定離開嗎?');
-    history.replace('/home');
+    // history.replace('/home');
+
+
+    try {
+      let responseData = await ApiController()
+      .endGameApi(cfgId, egmId, egmIP, token);
+      if (responseData.code > 100000000) { // code 超過 100000000 為問題回傳
+        alert('ERROR!');
+        setIsLoadFailed(true);
+      }
+      if (responseData.code < 100000000) {
+        setIsLoaded(false);
+        setEgmList(responseData.egmList); 
+        setApiToken(responseData.apiToken); 
+      }
+    } catch (error) {
+      alert('ERROR message: ', error);
+      setIsLoadFailed(true);
+    }
   };
 
   useEffect(() => {}, []);
