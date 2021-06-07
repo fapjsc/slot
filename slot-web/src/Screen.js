@@ -23,7 +23,7 @@ const Viewer = ({ leave }) => {
   const [socket, setSocket] = useState();
 
   const handleSocket = () => {
-    const socket = io.connect('http://192.168.10.101:5000');
+    const socket = io.connect('http://192.168.10.105:5000');
     socket.on('offer', (id, description) => {
       console.log('get offer');
       peerConnection = new RTCPeerConnection(pcConfig);

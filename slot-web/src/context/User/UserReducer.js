@@ -1,11 +1,11 @@
-import { SET_TOKEN } from '../type';
+import { SET_API_TOKEN } from '../type';
 
 const UserReducer = (state, action) => {
   switch (action.type) {
-    case SET_TOKEN:
+    case SET_API_TOKEN:
       return {
         ...state,
-        userToken: action.payload,
+        apiToken: action.payload,
       };
     default:
       return state;

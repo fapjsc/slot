@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
 
 // Components
 import MachineList from '../components/gameMachine/machineList';
@@ -41,21 +40,17 @@ const useStyles = makeStyles(theme => ({
 
 const Home = () => {
   const [egmList, setEgmList] = useState({});
-  const [apiToken, setApiToken] = useState();
   const [isLoaded, setIsLoaded] = useState(true);
   const [loadFailed, setIsLoadFailed] = useState(false);
   const classes = useStyles();
 
   // User Context
   const userContext = useContext(UserContext);
-  const { demoFun, setToken } = userContext;
-
-  // Router Props
-  const history = useHistory();
+  const { apiToken, setApiToken } = userContext;
 
   useEffect(() => {
     playerLandingApi();
-    demoFun();
+    // eslint-disable-next-line
   }, []);
 
   let playerLandingApi = async () => {
@@ -64,16 +59,17 @@ const Home = () => {
     let at = '1asd1rsdjaufoph29fhi2o';
 
     try {
-      let responseData = await ApiController()
-      .playerLandingApi(pc, casino, at);
-      if (responseData.code > 100000000) { // code 超過 100000000 為問題回傳
+      let responseData = await ApiController().playerLandingApi(pc, casino, at);
+      console.log(responseData);
+      if (responseData.code > 100000000) {
+        // code 超過 100000000 為問題回傳
         alert('ERROR!');
         setIsLoadFailed(true);
       }
       if (responseData.code < 100000000) {
         setIsLoaded(false);
-        setEgmList(responseData.egmList); 
-        setApiToken(responseData.apiToken); 
+        setEgmList(responseData.egmList); // In useState
+        setApiToken(responseData.apiToken); // In useContext
       }
     } catch (error) {
       alert('ERROR message: ', error);
@@ -96,7 +92,7 @@ const Home = () => {
         </Paper>
       ) : (
         <Box className={classes.rootList}>
-          <MachineList egmList={egmList} token={apiToken}/>
+          <MachineList egmList={egmList} token={apiToken} />
         </Box>
       )}
     </div>
