@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import NoDevice from './NoDevice';
 
-let userSelectDevice = 'f658f73a8c5e683c11d5b3a736cbcba15350adcf3d403c83b2fae82ed6e475b3'; // for test
+let userSelectDevice = '7e89ee5312876802b7aa93db2b44a7678757a0c54889fda6053431a2ee617b15'; // for test
 
 // const signal_server_url = 'https://192.168.10.102:5000';
 // const socket = io.connect('http://localhost:5000');
-const socket = io.connect('http://192.168.10.101:5000/');
+// const socket = io.connect('http://192.168.10.105:5000/');
+const socket = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
 
 // peerConnection Options
 const pcConfig = {
