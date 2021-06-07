@@ -119,8 +119,8 @@ const BroadCast = () => {
         audio: true,
         video: {
           deviceId: deviceId,
-          width: 300,
-          height: 300,
+          width: 1920,
+          height: 1080,
         },
       });
       // console.log(stream);
@@ -171,9 +171,11 @@ const BroadCast = () => {
   useEffect(() => {
     getAllDevices('videoinput');
     socket.on('connection', () => {
-      console.log('connection');
+      console.log('connection===========');
+      console.log(socket.id);
     });
     socket.on('watcher', id => {
+      console.log('watcher');
       const peerConnection = new RTCPeerConnection(pcConfig);
       peerConnections[id] = peerConnection;
       let stream = camera.current.srcObject;
@@ -203,10 +205,10 @@ const BroadCast = () => {
     });
     // Listen User Leave
     socket.on('leave', () => {
-      alert('user leave');
+      // alert('user leave');
     });
     socket.on('disconnectPeer', id => {
-      alert('user leave');
+      // alert('user leave');
       if (peerConnections[id]) {
         peerConnections[id].close();
         delete peerConnections[id];

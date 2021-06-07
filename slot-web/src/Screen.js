@@ -24,6 +24,28 @@ const Viewer = ({ leave }) => {
 
   const handleSocket = () => {
     const socket = io.connect('http://192.168.10.105:5000');
+
+    setSocket(socket);
+  };
+
+  useEffect(() => {
+    handleSocket();
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on('connect', () => {
+      console.log('connect');
+      socket.emit('watcher');
+    });
+
+    socket.on('broadcaster', () => {
+      console.log('broad');
+      socket.emit('watcher');
+    });
+
     socket.on('offer', (id, description) => {
       console.log('get offer');
       peerConnection = new RTCPeerConnection(pcConfig);
@@ -56,15 +78,6 @@ const Viewer = ({ leave }) => {
       peerConnection.addIceCandidate(new RTCIceCandidate(candidate)).catch(e => console.error(e));
     });
 
-    socket.on('connect', () => {
-      socket.emit('watcher');
-    });
-
-    socket.on('broadcaster', () => {
-      console.log('broad');
-      socket.emit('watcher');
-    });
-
     socket.on('disconnect', () => {
       alert('socket disconnect');
       history.replace('/home');
@@ -79,13 +92,9 @@ const Viewer = ({ leave }) => {
       socket.close();
       peerConnection.close();
     };
-    setSocket(socket);
-  };
 
-  useEffect(() => {
-    handleSocket();
-    return () => {};
-  }, []);
+    // eslint-disable-next-line
+  }, [socket]);
 
   useEffect(() => {
     if (remoteCamera.current.srcObject) {
@@ -98,19 +107,14 @@ const Viewer = ({ leave }) => {
 
   return (
     <div style={box}>
-      <h2>Viewer</h2>
-      <video ref={remoteCamera} playsInline autoPlay muted style={{ width: 300 }} />
+      <video ref={remoteCamera} playsInline autoPlay muted style={{ width: '100%', height: '100%' }} />
     </div>
   );
 };
 
 const box = {
-  width: 300,
-  height: 300,
-  backgroundColor: '#ddd',
-  margin: '60px auto',
-  position: 'relative',
-  textAlign: 'center',
+  width: '100%',
+  height: '100%',
 };
 
 export default Viewer;
