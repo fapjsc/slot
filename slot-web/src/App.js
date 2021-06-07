@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Game from './pages/Game';
 // import Auth from './pages/Auth';
+import GameScreenNew from './pages/GameScreenNew';
 import GameStart from './pages/GameStart';
 import GameStartNew from './pages/GameStartNew';
 import GameStartMobile from './components/gameStart/GameStartMobile';
@@ -33,9 +34,9 @@ function App() {
         {/* <Route path="/gameScreen">
           <GameScreen />
         </Route> */}
-        {/* <Route path="/game/:camera">
-          <GameScreen />
-        </Route> */}
+        <Route path="/game/:camera">
+          <GameScreenNew />
+        </Route>
         <Route path="/gameStart">
           <GameStart />
         </Route>

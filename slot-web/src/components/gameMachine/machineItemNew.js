@@ -60,6 +60,7 @@ export default function MachineItem(props) {
         alert(responseData.msg);
       }
       if (responseData.code < 100000000) { 
+        // history.replace("/gamestart");
         history.replace("/gamestart");
       }
     } catch (error) {

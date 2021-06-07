@@ -32,14 +32,19 @@ const ApiController = () => {
 			};
 			return await Fetch.apiPost('PointCashApi', body, token);
 		},
-		playerLeaveApi: async (currentBalance) => {
+		playerLeaveApi: async (currentBalance, token) => {
 			let body = {
 				"currentBalance": currentBalance
 			};
-			return await Fetch.apiPost('PlayerLeaveApi', body);
+			return await Fetch.apiPost('PlayerLeaveApi', body, token);
 		},
-		endGameApi: async (body) => {
-			return await Fetch.apiPost('EndGameApi', body);
+		endGameApi: async (cfgId, egmId, egmIP, token) => {
+			let body = {
+				"cfgId": cfgId,
+				"egmId": egmId,
+				"egmIP": egmIP
+			};
+			return await Fetch.apiPost('EndGameApi', body, token);
 		},
     }
 	return controller;
