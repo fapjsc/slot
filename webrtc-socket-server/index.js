@@ -17,9 +17,9 @@ server.listen(3333);
 var io = socketIO.listen(server);
 //與agent server device map同步
 var device_map = [];
-
+const axios = require('axios').default;
+const agent_url = "http://192.168.10.240/"
 io.on('connection', function(socket) {
-    socket.broadcast.emit("recovery");
     console.log("connected...");
     /*
     用途:
@@ -85,7 +85,10 @@ io.on('connection', function(socket) {
         socket.join(device);
         log('Client ID ' + socket.id + ' created room ' + device);
         socket.emit('created', device);
-        if(device_map.indexOf(device) == -1) device_map.push(device);
+        if(device_map.indexOf(device) == -1){
+            device_map.push(device);
+            pushAgent(device_map.length -1, device);
+        }
         console.log(device_map);
     });
     /*
@@ -127,6 +130,7 @@ io.on('connection', function(socket) {
     socket.on('bye', function(device){
         var room = convertRoom(device) ; 
         socket.leave(device);
+        rebuildMap(device_map, room);
         console.log('received bye from '+ device );
         socket.broadcast.in(device).emit('bye');
     });
@@ -143,3 +147,21 @@ io.on('connection', function(socket) {
         console.log("leave room");
     })
 });
+const pushAgent = (index, id) => {
+  var request = {
+      "indexIDMaps": [
+      {
+          "cameraIdx": index,
+          "cameraID": id
+      }
+  ]
+  }
+  axios.put(agent_url+'/NotifyCameraApi', request);
+}
+// const mapAgent = (obj_array) => {
+//   var request = {
+//       "indexIDMaps": obj_array
+//   }
+//   axios.put(agent_url+'/NotifyCameraApi', request);
+// }
+

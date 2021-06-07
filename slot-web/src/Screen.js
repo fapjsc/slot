@@ -21,7 +21,7 @@ function Screen(props){
 	var room = props.room;
 	const [peerConnection ,setpeerConnection] = useState(null); 
  	useEffect(() => {
-      setpeerConnection(new RTCPeerConnection);
+      setpeerConnection(new RTCPeerConnection(peerConnectionConfig));
       /*
       用途:
         監聽頻道滿人事件
@@ -119,31 +119,31 @@ function Screen(props){
         判斷如果型態是offer，將offer設為物件peerConnection 的Remote Description
         如果型態是candidate，使用addIceCandidate 方法將資訊加入peerConnection
       */
-	    socket.on('message', async function(message) {
-          console.log(peerConnection);
-          // if(room != flag) return;
-          if(isChannelReady ==false || peerConnection ==null) return;
-  	      console.log('Client received message:', message);
-          if (message.type === 'offer') {
-              await wait(500);
-              peerConnection.setRemoteDescription(new RTCSessionDescription(message
-                ));
-              doAnswer();
-          } 
-  	      else if (message.type === 'candidate' ) {
-              await wait(1000);
-  	          var candidate = new RTCIceCandidate({
-  	              sdpMLineIndex: message.label,
-  	              candidate: message.candidate
-  	           });
-  	          peerConnection.addIceCandidate(candidate);
-  	      } 
-	    });
-      console.log("effect",isChannelReady);
-      if (isChannelReady == false || peerConnection ==null) return;
-      remoteVideo = document.querySelector('#remoteVideo');
-      console.log(socket);
-      createPeerConnection();
+        socket.on('message', async function(message) {
+            console.log(peerConnection);
+            // if(room != flag) return;
+            if(isChannelReady ==false || peerConnection ==null) return;
+                console.log('Client received message:', message);
+            if (message.type === 'offer') {
+                await wait(500);
+                peerConnection.setRemoteDescription(new RTCSessionDescription(message
+            ));
+                doAnswer();
+            } 
+            else if (message.type === 'candidate' ) {
+                await wait(1000);
+                var candidate = new RTCIceCandidate({
+                    sdpMLineIndex: message.label,
+                    candidate: message.candidate
+                });
+                peerConnection.addIceCandidate(candidate);
+            } 
+        });
+        if(isChannelReady ==false || peerConnection ==null) return;
+        console.log("effect",isChannelReady);
+        remoteVideo = document.querySelector('#remoteVideo');
+        console.log(socket);
+        createPeerConnection();
 	},[isChannelReady,peerConnection]);
   /*
   用途:
@@ -273,6 +273,27 @@ function Screen(props){
   function onCreateSessionDescriptionError(error) {
     console.log('Failed to create session description: ' + error.toString()); 
   }
+        setInterval(() => {
+            if(peerConnection == null) return;
+            console.log()
+        }, 3000)
+    var lastBytesReceived = 0;
+    var checkBytesReceived = setInterval(() => {
+        if(peerConnection == null) return;
+        Promise.all([peerConnection.getStats()]).then((stats) => {
+            stats[0].forEach( (element) => {
+                if(element.type == 'inbound-rtp'){
+                    console.log(lastBytesReceived, element.bytesReceived );
+                    if(lastBytesReceived == element.bytesReceived) {
+                        stop("相機異常");
+                    }
+                    lastBytesReceived = element.bytesReceived 
+                }
+                                    // console.log(element);
+                                    // console.log(element);
+            });
+        })
+    }, 3000)  ;
 	return (
 		<video id="remoteVideo" autoPlay mute="true"> </video>
 	);
