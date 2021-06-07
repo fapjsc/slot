@@ -23,12 +23,15 @@ io.sockets.on('connection', socket => {
   console.log('connection');
   // Base Event
   socket.on('broadcaster', () => {
+    console.log('broad caster');
     broadcaster = socket.id;
     socket.emit('broadcaster');
     console.log('broadcaster');
   });
   socket.on('watcher', () => {
+    console.log('watcher', socket.id);
     socket.to(broadcaster).emit('watcher', socket.id);
+    // socket.emit('watcher', socket.id);
   });
 
   socket.on('disconnect', () => {
