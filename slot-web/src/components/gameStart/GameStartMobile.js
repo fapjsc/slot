@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   },
 });
 
-const GameStartMobile = () => {
+const GameStartMobile = (props) => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
@@ -90,13 +90,13 @@ const GameStartMobile = () => {
         <Box className="mobileBottom">
           <img className="mobileBackImg-Bottom" src={"/bottom.jpg"} />
 
-          <button className="mobileButtonPosition" type="primary">
+          <button className="mobileButtonPosition" type="primary" onClick={props.maxBet}>
             MAX BET
           </button>
-          <button className="mobileButtonPosition2" type="primary">
+          <button className="mobileButtonPosition2" type="primary" onClick={props.leave}>
             結算
           </button>
-          <button className="mobileButtonPosition3" type="primary">
+          <button className="mobileButtonPosition3" type="primary" onClick={props.spin}>
             SPIN
           </button>
           <button className="mobileButtonPosition4" type="primary">
@@ -114,7 +114,7 @@ const GameStartMobile = () => {
               點數
             </span>
             <input />
-            <button className="mobileGameTabButton" type="primary">
+            <button className="mobileGameTabButton" type="primary" onClick={props.pointCash}>
               投入代幣
             </button>
           </div>

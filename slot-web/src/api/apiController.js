@@ -13,21 +13,21 @@ const ApiController = () => {
 			};
 			return await Fetch.apiPost('PlayerChooseEgmApi', body, token);
 		},
-		pressSlotApi: async (body) => {
-			let tmp = {
-				"cfgId": 0,
-				"egmId": 0,
-				"egmIP": "string",
-				"buttonNo": 0
-			};
-			return await Fetch.apiPost('PressSlotApi', body);
-		},
-		pointCashApi: async (cfgId, egmId, egmIP, inOrOut, moneyPoint, token) => {
+		pressSlotApi: async (cfgId, egmId, egmIP, buttonNo, token) => {
 			let body = {
-				"d": cfgId,
+				"cfgId": cfgId,
 				"egmId": egmId,
 				"egmIP": egmIP,
-				"inOrOut": inOrOut,
+				"buttonNo": buttonNo
+			};
+			return await Fetch.apiPost('PressSlotApi', body, token);
+		},
+		pointCashApi: async (cfgId, egmId, egmIP, moneyPoint, token) => {
+			let body = {
+				"cfgId": cfgId,
+				"egmId": egmId,
+				"egmIP": egmIP,
+				"inOrOut": 1,
 				"moneyPoint": moneyPoint
 			};
 			return await Fetch.apiPost('PointCashApi', body, token);

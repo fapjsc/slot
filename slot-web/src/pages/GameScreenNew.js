@@ -1,32 +1,33 @@
 import { useHistory } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Screen from '../Screen';
 import ApiController from '../api/apiController';
+import UserContext from '../context/User/UserContext';
 
 const GameScreen = () => {
+  const [configId, setConfigId] = useState();
+  const [egmId, setEgmId] = useState(9);
+  const [egmIP, setEgmIP] = useState('192.168.10.71');
+  // User Context
+  const userContext = useContext(UserContext);
+  const { apiToken } = userContext;
   // Router Props
   const history = useHistory();
 
-  const leave = () => {
-    window.confirm('確定離開嗎?');
+  const leave = async () => {
+    window.confirm('確定離開嗎?', apiToken);
     // history.replace('/home');
-
 
     try {
       let responseData = await ApiController()
-      .endGameApi(cfgId, egmId, egmIP, token);
-      if (responseData.code > 100000000) { // code 超過 100000000 為問題回傳
+      .endGameApi(configId, egmId, egmIP, apiToken);
+      if (responseData.code > 100000000) {
         alert('ERROR!');
-        setIsLoadFailed(true);
       }
       if (responseData.code < 100000000) {
-        setIsLoaded(false);
-        setEgmList(responseData.egmList); 
-        setApiToken(responseData.apiToken); 
       }
     } catch (error) {
       alert('ERROR message: ', error);
-      setIsLoadFailed(true);
     }
   };
 

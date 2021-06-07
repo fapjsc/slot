@@ -1,5 +1,5 @@
 import "./GameStart.css";
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
@@ -8,6 +8,8 @@ import Container from "@material-ui/core/Container";
 import Drawer from "@material-ui/core/Drawer";
 import Button from "@material-ui/core/Button";
 import GameStartMobile from "../components/gameStart/GameStartMobile";
+import ApiController from '../api/apiController';
+import UserContext from '../context/User/UserContext';
 
 const useStyles = makeStyles({
   root: {
@@ -29,6 +31,17 @@ const GameStart = () => {
     left: false,
   });
   const [device, setDevice] = useState(false);
+  const [cashIn, setCashIn] = useState(0);
+  const [configId, setConfigId] = useState(2);
+  const [egmId, setEgmId] = useState(9);
+  const [egmIP, setEgmIP] = useState('192.168.10.71');
+  const [buttonNumber, setButtonNumber] = useState(77);
+  const [buttonText, setButtonText] = useState('SPIN');
+  const [buttonNumber2, setButtonNumber2] = useState(99);
+  const [buttonText2, setButtonText2] = useState('MAX BET');
+  // User Context
+  const userContext = useContext(UserContext);
+  const { apiToken } = userContext;
 
   const handleRWD = () => {
     if (window.innerWidth < 1000) setDevice(true);
@@ -43,10 +56,6 @@ const GameStart = () => {
     };
   }, []);
 
-  if (device === true)
-    return (
-      <GameStartMobile />
-    );
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -57,6 +66,68 @@ const GameStart = () => {
     }
 
     setState({ ...state, [anchor]: open });
+  };
+
+  const leave = async () => {
+    window.confirm('確定離開嗎?', apiToken);
+    // history.replace('/home');
+
+    try {
+      let responseData = await ApiController()
+      .endGameApi(configId, egmId, egmIP, apiToken);
+      if (responseData.code > 100000000) {
+        alert('ERROR!');
+      }
+      if (responseData.code < 100000000) {
+      }
+    } catch (error) {
+      alert('ERROR message: ', error);
+    }
+  };
+
+  const spin = async () => {
+
+    try {
+      let responseData = await ApiController()
+      .pressSlotApi(configId, egmId, egmIP, 77, apiToken);
+      if (responseData.code > 100000000) {
+        alert('ERROR!');
+      }
+      if (responseData.code < 100000000) {
+      }
+    } catch (error) {
+      alert('ERROR message: ', error);
+    }
+  };
+
+  const maxBet = async () => {
+
+    try {
+      let responseData = await ApiController()
+      .pressSlotApi(configId, egmId, egmIP, 99, apiToken);
+      if (responseData.code > 100000000) {
+        alert('ERROR!');
+      }
+      if (responseData.code < 100000000) {
+      }
+    } catch (error) {
+      alert('ERROR message: ', error);
+    }
+  };
+
+  const pointCash = async () => {
+
+    try {
+      let responseData = await ApiController()
+      .pointCashApi(configId, egmId, egmIP, 1000, apiToken);
+      if (responseData.code > 100000000) {
+        alert('ERROR!');
+      }
+      if (responseData.code < 100000000) {
+      }
+    } catch (error) {
+      alert('ERROR message: ', error);
+    }
   };
 
   const list = (anchor) => (
@@ -70,6 +141,15 @@ const GameStart = () => {
     ></div>
   );
 
+  if (device === true)
+    return (
+      <GameStartMobile 
+        leave={leave}
+        spin={spin}
+        maxBet={maxBet}
+        pointCash={pointCash}
+      />
+    );
   return (
     <Container fixed>
         <Box style={{ backgroundColor: "#191c19" }} className={classes.root}>
@@ -111,7 +191,7 @@ const GameStart = () => {
               <button className="buttonPosition" type="primary">
                 MAX BET
               </button>
-              <button className="buttonPosition2" type="primary">
+              <button className="buttonPosition2" type="primary" onClick={leave}>
                 結算
               </button>
               <button className="buttonPosition3" type="primary">
@@ -131,7 +211,7 @@ const GameStart = () => {
                 >
                   點數
                 </span>
-                <input />
+                <input onChange={() => setCashIn()}/>
                 <button className="gameTabButton" type="primary">
                   投入代幣
                 </button>
