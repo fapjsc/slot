@@ -146,6 +146,8 @@ io.on('connection', function(socket) {
         console.log("leave room");
     })
 });
+
+//更新agent server device_map
 const pushAgent = (index, id) => {
   var request = {
       "indexIDMaps": [
@@ -156,6 +158,16 @@ const pushAgent = (index, id) => {
   ]
   }
   axios.put(agent_url+'/NotifyCameraApi', request);
+}
+//從agent server回復 device_map
+const pullAgent = () => {
+  axios.get(agent_url+'/NotifyCameraApi').then(data => {
+    cameras = data.indexIDMaps;
+    if(cameras.cameraIdx != null && cameras.cameraIdx >= 0) {
+      device_map[cameras.cameraIdx] = cameras.cameraIdx  
+    }
+
+  });
 }
 // const mapAgent = (obj_array) => {
 //   var request = {
