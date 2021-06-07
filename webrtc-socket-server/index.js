@@ -130,7 +130,6 @@ io.on('connection', function(socket) {
     socket.on('bye', function(device){
         var room = convertRoom(device) ; 
         socket.leave(device);
-        rebuildMap(device_map, room);
         console.log('received bye from '+ device );
         socket.broadcast.in(device).emit('bye');
     });
