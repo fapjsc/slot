@@ -18,7 +18,8 @@ var io = socketIO.listen(server);
 //與agent server device map同步
 var device_map = [];
 const axios = require('axios').default;
-const agent_url = "http://192.168.10.240/"
+const agent_url = "http://192.168.10.240/";
+
 io.on('connection', function(socket) {
     console.log("connected...");
     /*
@@ -161,12 +162,16 @@ const pushAgent = (index, id) => {
 }
 //從agent server回復 device_map
 const pullAgent = () => {
-  axios.get(agent_url+'/NotifyCameraApi').then(data => {
-    cameras = data.indexIDMaps;
-    if(cameras.cameraIdx != null && cameras.cameraIdx >= 0) {
-      device_map[cameras.cameraIdx] = cameras.cameraIdx  
-    }
+  axios.get(agent_url+'/NotifyCameraApi').then(response => {
+    var cameras = response.data.indexIDMaps;
+    cameras.forEach((value) => {
+      if(value.cameraID != null && value.cameraIdx >= 0) {
+        device_map[value.cameraIdx] = value.cameraID
+        console.log('dfsd');
+      }
 
+    });
+    console.log(device_map);
   });
 }
 // const mapAgent = (obj_array) => {
@@ -175,4 +180,4 @@ const pullAgent = () => {
 //   }
 //   axios.put(agent_url+'/NotifyCameraApi', request);
 // }
-
+pullAgent();
