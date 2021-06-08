@@ -13,6 +13,7 @@ const pcConfig = {
         }
     ]
 };
+
 let peerConnection = [];
 /*
 用途:

@@ -1,9 +1,7 @@
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-
-// Style
-import machineIcon from '../../asset/egzj1ui37v.jpeg';
-import { makeStyles } from '@material-ui/core/styles';
 // import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -16,6 +14,9 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 // import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
+
+// Style
+import machineIcon from '../../asset/egzj1ui37v.jpeg';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,16 +44,20 @@ const useStyles = makeStyles(theme => ({
 
 export default function MachineItem(props) {
   const classes = useStyles();
-  const camera = props.camera;
+  const camera = props.machineDetails.mapId;
   let history = useHistory();
   //   const [expanded, setExpanded] = useState(false);
 
-  //   const handleExpandClick = () => {
-  //     setExpanded(!expanded);
-  //   };
+  //   //   const handleExpandClick = () => {
+  //   //     setExpanded(!expanded);
+  //   //   };
+
+  useEffect(() => {
+    console.log(props.machineDetails);
+  }, []);
 
   function selectMachine() {
-    history.replace("/game/"+camera);
+    history.replace('/game/' + camera);
   }
 
   return (
@@ -60,7 +65,7 @@ export default function MachineItem(props) {
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            X2
+            {props.magnification ? props.magnification : 'X2'}
           </Avatar>
         }
         // action={
@@ -68,38 +73,20 @@ export default function MachineItem(props) {
         //     <MoreVertIcon />
         //   </IconButton>
         // }
-        title="麻雀物語2"
-        subheader="September 14, 2021"
+        title={props.title ? props.title : '麻雀物語2'}
+        subheader={props.subHeader ? props.subHeader : 'September 14, 2021'}
       />
-      <CardMedia className={classes.media} image={machineIcon} title="Paella dish" />
+      <CardMedia className={classes.media} image={props.machineIcon ? props.machineIcon : machineIcon} title="Paella dish" />
       <CardContent style={{ height: 90 }}>
         <Typography variant="body2" color="textSecondary" component="p">
-          機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G
+          {props.descreption ? props.descreption : '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'}
         </Typography>
       </CardContent>
       <CardActions disableSpacing style={{ justifyContent: 'center' }}>
         <Button variant="contained" color="primary" style={{}} onClick={() => selectMachine()}>
-          開始玩
+          {props.buttonName ? props.buttonName : '開始玩'}
         </Button>
-        {/* <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton> */}
       </CardActions>
-      {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>遊戲總數：2750</Typography>
-          <Typography paragraph>遊戲數：174</Typography>
-          <Typography paragraph>BIG：9</Typography>
-          <Typography>REG：15</Typography>
-        </CardContent>
-      </Collapse> */}
     </Card>
   );
 }

@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "WebRTC codelab",
   "dependencies": {
-    "axios": "^0.21.1",
+    "express": "^4.17.1",
     "https-localhost": "^4.6.5",
     "node-static": "^0.7.10",
-    "socket.io": "^2.0.4"
+    "socket.io": "^4.1.2"
   }
 }
