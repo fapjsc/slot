@@ -1,12 +1,16 @@
 import BroadCast from './BroadCast';
+import DeviceMap from './DeviceMap';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Container from 'react-bootstrap/Container';
 
 const App = () => {
   return (
-    <div className="App">
-      <h1>BroadCast</h1>
+    <Container className="App" style={{ maxWidth: 780 }}>
       <BroadCast />
-    </div>
+      <br />
+      <DeviceMap />
+    </Container>
   );
 };
 

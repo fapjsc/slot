@@ -1,18 +1,23 @@
-import "./GameStart.css";
-import React, { useContext, useState, useEffect } from "react";
-import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
-import Drawer from "@material-ui/core/Drawer";
-import Button from "@material-ui/core/Button";
-import GameStartMobile from "../components/gameStart/GameStartMobile";
-import ApiController from '../api/apiController';
-import UserContext from '../context/User/UserContext';
+import React, { useContext, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
+// Style
+import './GameStart.css';
+import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Drawer from '@material-ui/core/Drawer';
+import Button from '@material-ui/core/Button';
+import GameStartMobile from '../components/gameStart/GameStartMobile';
+import ApiController from '../api/apiController';
+
+// Components
 import Screen from '../Screen';
-import centerBg from '../asset/center_bk.jpg';
+// import centerBg from '../asset/center_bk.jpg';
+
+// Context
+import UserContext from '../context/User/UserContext';
 
 const useStyles = makeStyles({
   root: {
@@ -34,7 +39,7 @@ const useStyles = makeStyles({
     top: 12,
     left: 42,
     backgroundColor: '#15161B',
-    width: '87%',
+    width: '90%',
     height: '330px',
   },
 });
@@ -44,42 +49,45 @@ const GameStart = () => {
   const [state, setState] = React.useState({
     left: false,
   });
+
+  const history = useHistory();
+
   const [device, setDevice] = useState(false);
-  const [cashIn, setCashIn] = useState(0);
-  const [configId, setConfigId] = useState(2);
-  const [egmId, setEgmId] = useState(9);
-  const [egmIP, setEgmIP] = useState('192.168.10.71');
-  const [buttonNumber, setButtonNumber] = useState(77);
-  const [buttonText, setButtonText] = useState('SPIN');
-  const [buttonNumber2, setButtonNumber2] = useState(99);
-  const [buttonText2, setButtonText2] = useState('MAX BET');
+  const [cashIn, setCashIn] = useState('');
+  // const [configId, setConfigId] = useState(2);
+  // const [egmId, setEgmId] = useState(9);
+  // const [egmIP, setEgmIP] = useState('192.168.10.71');
+  // const [buttonNumber, setButtonNumber] = useState(77);
+  // const [buttonText, setButtonText] = useState('SPIN');
+  // const [buttonNumber2, setButtonNumber2] = useState(99);
+  // const [buttonText2, setButtonText2] = useState('MAX BET');
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken } = userContext;
+  const { apiToken, selectEgm } = userContext;
+  const { mapId, egmId, egmIp } = selectEgm;
 
   const handleRWD = () => {
     if (window.innerWidth < 1000) setDevice(true);
     else setDevice(false);
   };
 
+  const handleChange = e => {
+    setCashIn(Number(e.target.value));
+  };
+
   useEffect(() => {
     window.addEventListener('resize', handleRWD);
+
     handleRWD();
     return () => {
       window.removeEventListener('resize', handleRWD);
+      leave();
     };
+    // eslint-disable-next-line
   }, []);
 
-  if (device === true)
-    return (
-      <GameStartMobile />
-    );
-
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
+  const toggleDrawer = (anchor, open) => event => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
 
@@ -87,16 +95,19 @@ const GameStart = () => {
   };
 
   const leave = async () => {
-    window.confirm('確定離開嗎?', apiToken);
     // history.replace('/home');
 
+    window.confirm('確定要離開嗎？');
+
     try {
-      let responseData = await ApiController()
-      .endGameApi(configId, egmId, egmIP, apiToken);
+      let responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken);
+      console.log(responseData);
       if (responseData.code > 100000000) {
-        alert('ERROR!');
+        alert(responseData.msg);
       }
-      if (responseData.code < 100000000) {
+
+      if (responseData.code === 6 || responseData.code === 5) {
+        history.replace('/home');
       }
     } catch (error) {
       alert('ERROR message: ', error);
@@ -104,14 +115,14 @@ const GameStart = () => {
   };
 
   const spin = async () => {
-
+    console.log('call spin');
     try {
-      let responseData = await ApiController()
-      .pressSlotApi(configId, egmId, egmIP, 77, apiToken);
+      let responseData = await ApiController().pressSlotApi(mapId, egmId, egmIp, 77, apiToken);
       if (responseData.code > 100000000) {
         alert('ERROR!');
       }
       if (responseData.code < 100000000) {
+        console.log(responseData);
       }
     } catch (error) {
       alert('ERROR message: ', error);
@@ -119,10 +130,8 @@ const GameStart = () => {
   };
 
   const maxBet = async () => {
-
     try {
-      let responseData = await ApiController()
-      .pressSlotApi(configId, egmId, egmIP, 99, apiToken);
+      let responseData = await ApiController().pressSlotApi(mapId, egmId, egmIp, 99, apiToken);
       if (responseData.code > 100000000) {
         alert('ERROR!');
       }
@@ -133,11 +142,10 @@ const GameStart = () => {
     }
   };
 
-  const pointCash = async () => {
-
+  const pointCash = async cash => {
     try {
-      let responseData = await ApiController()
-      .pointCashApi(configId, egmId, egmIP, 1000, apiToken);
+      let responseData = await ApiController().pointCashApi(mapId, egmId, egmIp, cash, apiToken);
+      console.log(responseData);
       if (responseData.code > 100000000) {
         alert('ERROR!');
       }
@@ -148,7 +156,7 @@ const GameStart = () => {
     }
   };
 
-  const list = (anchor) => (
+  const list = anchor => (
     <div
       className={clsx(classes.list, {
         [classes.fullList]: anchor === 'top' || anchor === 'bottom',
@@ -159,95 +167,87 @@ const GameStart = () => {
     ></div>
   );
 
-  if (device === true)
-    return (
-      <GameStartMobile 
-        leave={leave}
-        spin={spin}
-        maxBet={maxBet}
-        pointCash={pointCash}
-      />
-    );
+  if (device === true) return <GameStartMobile leave={leave} spin={spin} maxBet={maxBet} pointCash={pointCash} />;
   return (
     <Container fixed>
-        <Box style={{ backgroundColor: "#191c19" }} className={classes.root}>
-          <Box className="divPosition">
-            <img className="backImg-left" src={'/left-top.png'} />
-            <div className="">
-              <img className="backImg-left" src={'/left-bottom.png'} />
-            </div>
-            <div className="gameDrawer">
-              {['設定'].map(anchor => (
-                <React.Fragment key={anchor}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    style={{
-                      fontSize: '1.2rem',
-                      fontWeight: 'bold',
-                      color: 'azure',
-                    }}
-                    onClick={toggleDrawer(anchor, true)}
-                  >
-                    {anchor}
-                  </Button>
-                  <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
-                    {list(anchor)}
-                  </Drawer>
-                </React.Fragment>
-              ))}
-            </div>
-          </Box>
-          <Box className="divPosition">
-            <div className={classes.screenBox}>
-              <img className="backImg_Center" src={'/center.jpg'} />
-              {/* <img className="backImg_Center" src={centerBg} alt="center bg" /> */}
-              <div className={classes.cameraScreen}>
-                <Screen />
-              </div>
-            </div>
-
-            <div className="tt">
-              <img className="backImg" src={'/center_bottom.jpg'} />
-              <button className="buttonPosition" type="primary">
-                MAX BET
-              </button>
-              <button className="buttonPosition2" type="primary" onClick={leave}>
-                結算
-              </button>
-              <button className="buttonPosition3" type="primary">
-                SPIN
-              </button>
-              <button className="buttonPosition4" type="primary">
-                AUTO SPIN
-              </button>
-              <div className="gameTab">
-                <span
+      <Box style={{ backgroundColor: '#191c19' }} className={classes.root}>
+        <Box className="divPosition">
+          <img className="backImg-left" src={'/left-top.png'} />
+          <div className="">
+            <img className="backImg-left" src={'/left-bottom.png'} />
+          </div>
+          <div className="gameDrawer">
+            {['設定'].map(anchor => (
+              <React.Fragment key={anchor}>
+                <Button
+                  variant="contained"
+                  color="secondary"
                   style={{
-                    fontSize: '1.0rem',
-                    color: 'white',
+                    fontSize: '1.2rem',
                     fontWeight: 'bold',
-                    padding: '5px',
+                    color: 'azure',
                   }}
+                  onClick={toggleDrawer(anchor, true)}
                 >
-                  點數
-                </span>
-                <input onChange={() => setCashIn()}/>
-                <button className="gameTabButton" type="primary">
-                  投入代幣
-                </button>
-              </div>
-            </div>
-          </Box>
-          <Box className="divPosition">
-            <img className="backImg-right" src={'/right-top.png'} />
-            <div className="tt">
-              <img className="backImg-right" src={'/right-bottom.png'} />
-            </div>
-          </Box>
+                  {anchor}
+                </Button>
+                <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
+                  {list(anchor)}
+                </Drawer>
+              </React.Fragment>
+            ))}
+          </div>
         </Box>
-      </Container>
-    );
+        <Box className="divPosition">
+          <div className={classes.screenBox}>
+            <img className="backImg_Center" src={'/center.jpg'} />
+            {/* <img className="backImg_Center" src={centerBg} alt="center bg" /> */}
+            <div className={classes.cameraScreen}>
+              <Screen />
+            </div>
+          </div>
+
+          <div className="tt">
+            <img className="backImg" src={'/center_bottom.jpg'} />
+            <button className="buttonPosition" type="primary" onClick={maxBet}>
+              MAX BET
+            </button>
+            <button className="buttonPosition2" type="primary" onClick={leave}>
+              結算
+            </button>
+            <button className="buttonPosition3" type="primary" onClick={spin}>
+              SPIN
+            </button>
+            <button className="buttonPosition4" type="primary">
+              AUTO SPIN
+            </button>
+            <div className="gameTab">
+              <span
+                style={{
+                  fontSize: '1.0rem',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  padding: '5px',
+                }}
+              >
+                點數
+              </span>
+              <input value={cashIn} onChange={e => handleChange(e)} />
+              <button className="gameTabButton" type="primary" onClick={() => pointCash(cashIn)}>
+                投入代幣
+              </button>
+            </div>
+          </div>
+        </Box>
+        <Box className="divPosition">
+          <img className="backImg-right" src={'/right-top.png'} />
+          <div className="tt">
+            <img className="backImg-right" src={'/right-bottom.png'} />
+          </div>
+        </Box>
+      </Box>
+    </Container>
+  );
 };
 
 export default GameStart;

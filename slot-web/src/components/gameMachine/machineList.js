@@ -35,21 +35,24 @@ const useStyles = makeStyles(theme => ({
 // ];
 
 export default function MachineList(props) {
+  console.log(props.egmList);
   const classes = useStyles();
 
   function renderMachineList(egmList) {
-    return egmList.map((item, index) => (
-      <Grid key={index} item xs={12} sm={4} md={3} className={classes.grid}>
-        <MachineItemNew index={index} machineDetails={item} token={props.token} />
-      </Grid>
-    ));
+    console.log(egmList);
+    return egmList.map((item, index) => {
+      return (
+        <Grid key={index} item xs={12} sm={4} md={3} className={classes.grid}>
+          <MachineItemNew index={index} machineDetails={item} token={props.token} />
+        </Grid>
+      );
+    });
   }
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3} style={{ padding: 10 }}>
         {props.egmList.length > 0 ? renderMachineList(props.egmList) : null}
-        {/* <WolfGame/> */}
       </Grid>
     </div>
   );

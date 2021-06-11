@@ -21,6 +21,7 @@ const apiGet = async targetApi => {
   let response = await fetch(url, options);
   let responseProcessed = await response.json();
   console.log('apiGet calling responseProcessed: ', responseProcessed);
+  console.log(responseProcessed.apiToken);
 
   return responseProcessed;
 };

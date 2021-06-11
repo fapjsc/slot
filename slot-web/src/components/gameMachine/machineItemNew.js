@@ -1,5 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+
+// Context
+import UserContext from '../../context/User/UserContext';
+
+// Style
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -10,6 +15,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
+import wolfImg from '../../asset/wolf.png';
 
 import ApiController from '../../api/apiController';
 
@@ -41,32 +47,47 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function MachineItem(props) {
+  // Styloe
   const classes = useStyles();
+
+  // Props
   const camera = props.machineDetails.mapId;
+
+  // Router Props
   let history = useHistory();
+
+  // User Context
+  const userContext = useContext(UserContext);
+  const { setSelectEgm } = userContext;
 
   const selectMachine = () => {
     console.log('chooseEgm input: ', props.machineDetails);
     console.log('chooseEgm token: ', props.token);
     chooseEgm(props.machineDetails, props.token);
     // history.replace("/game/" + camera);
-  }
+  };
 
-  const chooseEgm = async ({mapId, egmId, egmIp}, apiToken) => {
+  const chooseEgm = async ({ mapId, egmId, egmIp, cameraId }, apiToken) => {
     try {
       let responseData = await ApiController().playerChooseEgmApi(mapId, egmId, egmIp, apiToken);
       console.log('chooseEgm:', responseData); // 顯示取得回傳資料
-      if (responseData.code > 100000000) { // code 超過 100000000 為問題回傳
+      if (responseData.code > 100000000) {
+        // code 超過 100000000 為問題回傳
         alert(responseData.msg);
       }
-      if (responseData.code < 100000000) { 
-        // history.replace("/gamestart");
-        history.replace("/gamestart");
+      if (responseData.code < 100000000) {
+        setSelectEgm({
+          mapId,
+          egmId,
+          egmIp,
+          cameraId,
+        });
+        history.replace('/gameStart');
       }
     } catch (error) {
       alert('ERROR message: ', error);
     }
-  }
+  };
 
   return (
     <Card className={classes.root}>
@@ -76,27 +97,18 @@ export default function MachineItem(props) {
             {props.magnification ? props.magnification : 'X2'}
           </Avatar>
         }
-        title={props.title ? props.title : "麻雀物語2"}
-        subheader={props.subHeader ? props.subHeader : "September 14, 2021"}
+        title={props.title ? props.title : 'ARUZE雄狼'}
+        subheader={props.subHeader ? props.subHeader : 'September 14, 2021'}
       />
-      <CardMedia 
-        className={classes.media} 
-        image={props.machineIcon ? props.machineIcon : machineIcon} 
-        title="Paella dish" 
-      />
+      <CardMedia className={classes.media} image={props.machineIcon ? props.machineIcon : wolfImg} title="Paella dish" />
       <CardContent style={{ height: 90 }}>
         <Typography variant="body2" color="textSecondary" component="p">
           {props.descreption ? props.descreption : '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'}
         </Typography>
       </CardContent>
       <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          style={{}} 
-          onClick={() => selectMachine()}
-        >
-        {props.buttonName ? props.buttonName : '開始玩'}
+        <Button variant="contained" color="primary" style={{}} onClick={() => selectMachine()}>
+          {props.buttonName ? props.buttonName : '開始玩'}
         </Button>
       </CardActions>
     </Card>

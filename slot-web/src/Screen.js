@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import io from 'socket.io-client';
+
+// Context
+import UserContext from './context/User/UserContext';
 
 // peerConnection Options
 const pcConfig = {
@@ -16,38 +19,61 @@ const pcConfig = {
   ],
 };
 let peerConnection;
-const Viewer = ({ leave }) => {
+
+let usbHd = '7324b1d00ac5e2592e3f26e14bee3b40be63ea5f0a56058bdc8d0f8df505941f';
+let macCamera = '0378feddb77dbd905379c76187e8ff3d69ecc1dbd7da3f75cbb3df19a0127dae';
+let usbCam = '78b0a66f8b0eda11f77a3666e32e02017800affd94ea78e104ceebae4d4dbcd6';
+let capture = '7e89ee5312876802b7aa93db2b44a7678757a0c54889fda6053431a2ee617b15';
+
+const Viewer = () => {
   const remoteCamera = useRef();
   const history = useHistory();
 
   const [socket, setSocket] = useState();
 
-  const handleSocket = () => {
-    const socket = io.connect('http://192.168.10.105:5000');
+  // User Context
+  const userContext = useContext(UserContext);
+  const { selectEgm } = userContext;
 
-    setSocket(socket);
+  const handleSocket = () => {
+    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
+
+    setSocket(socketConnect);
+  };
+
+  const videoPlay = () => {
+    console.log(remoteCamera);
+    remoteCamera.current.play();
   };
 
   useEffect(() => {
     handleSocket();
-    return () => {};
+
+    return () => {
+      console.log(socket);
+      if (socket) {
+        socket.close();
+      }
+    };
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (!socket) return;
 
-    socket.on('connect', () => {
-      console.log('connect');
-      socket.emit('watcher');
+    socket.on('connection', () => {
+      console.log('connection', socket.id);
+      // socket.emit('watcher');
+      socket.emit('remoteUserSelectDevice', usbHd);
     });
 
     socket.on('broadcaster', () => {
-      console.log('broad');
-      socket.emit('watcher');
+      console.log('broadcaster');
+      // socket.emit('watcher');
     });
 
     socket.on('offer', (id, description) => {
-      console.log('get offer');
+      console.log('get offer', id);
       peerConnection = new RTCPeerConnection(pcConfig);
       peerConnection
         .setRemoteDescription(description)
@@ -57,17 +83,26 @@ const Viewer = ({ leave }) => {
           socket.emit('answer', id, peerConnection.localDescription);
         });
       peerConnection.ontrack = event => {
-        console.log(event);
-        console.log(event.streams[0]);
+        console.log(remoteCamera);
+        if (!remoteCamera.current) return;
         if (remoteCamera.current.srcObject !== event.streams[0]) {
           remoteCamera.current.srcObject = event.streams[0];
-          console.log(remoteCamera.current.srcObject);
+          console.log(remoteCamera.current.srcObject.getTracks());
         }
       };
+
+      // 當找到自己的candiDate後，發送給server，包含自己的socket id
       peerConnection.onicecandidate = event => {
-        console.log(event);
         if (event.candidate) {
           socket.emit('candidate', id, event.candidate);
+          console.log('candiDate', event.candidate.candidate);
+        }
+      };
+
+      peerConnection.onconnectionstatechange = event => {
+        console.log(event.currentTarget.iceConnectionState);
+        if (event.currentTarget.iceConnectionState === 'disconnected') {
+          socket.emit('remoteUserSelectDevice', usbHd);
         }
       };
 
@@ -83,11 +118,6 @@ const Viewer = ({ leave }) => {
       history.replace('/home');
     });
 
-    // 監聽 Server 斷線
-    socket.on('disconnectPeer', () => {
-      alert('server or camera disconnect');
-    });
-
     window.onunload = window.onbeforeunload = () => {
       socket.close();
       peerConnection.close();
@@ -101,13 +131,12 @@ const Viewer = ({ leave }) => {
       console.log('got remote stream');
     } else {
       console.log('no remote stream');
-      console.log(peerConnection);
     }
   }, [remoteCamera]);
 
   return (
     <div style={box}>
-      <video ref={remoteCamera} playsInline autoPlay muted style={{ width: '100%', height: '100%' }} />
+      <video onClick={videoPlay} ref={remoteCamera} autoPlay playsInline style={{ width: '100%' }} />
     </div>
   );
 };

@@ -21,42 +21,44 @@ let broadcaster;
 
 io.sockets.on('connection', socket => {
   console.log('connection');
+  socket.emit('connection');
   // Base Event
   socket.on('broadcaster', () => {
-    console.log('broad caster');
     broadcaster = socket.id;
     socket.emit('broadcaster');
-    console.log('broadcaster');
+    console.log('broadcaster', broadcaster);
   });
-  socket.on('watcher', () => {
-    console.log('watcher', socket.id);
-    socket.to(broadcaster).emit('watcher', socket.id);
-    // socket.emit('watcher', socket.id);
+  // socket.on('watcher', deviceId => {
+  //   console.log('watcher', socket.id, deviceId);
+  //   socket.to(broadcaster).emit('watcher', socket.id, deviceId);
+  // });
+
+  socket.on('remoteUserSelectDevice', deviceId => {
+    console.log('remoteUserSelectDevice', socket.id, deviceId);
+    socket.to(broadcaster).emit('remoteUserSelectDevice', socket.id, deviceId);
   });
 
   socket.on('disconnect', () => {
     console.log('disconnect=====');
     console.log(broadcaster);
-    socket.to(broadcaster).emit('disconnectPeer', socket.id);
   });
 
   socket.on('leave', () => {
     socket.emit('user leave');
-    console.log('user leave');
   });
 
   // WebRTC Event
   socket.on('offer', (id, message) => {
-    console.log('offer');
-    socket.to(id).emit('offer', socket.id, message);
+    console.log('52', id, socket.id);
+    // 發送camera web 的本地描述給client
+    socket.to(id).emit('offer', socket.id, message); // id是client端的socketID, socket.id是camera web第一次建立連線的socketID, message是session
   });
   socket.on('answer', (id, message) => {
-    console.log('answer');
     socket.to(id).emit('answer', socket.id, message);
   });
   socket.on('candidate', (id, message) => {
-    console.log('candidate');
     socket.to(id).emit('candidate', socket.id, message);
+    console.log(id, socket.id, '61');
   });
 });
 

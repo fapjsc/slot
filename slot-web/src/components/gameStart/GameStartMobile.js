@@ -1,17 +1,13 @@
+import React, { useState, useEffect } from 'react';
+
+// Style
 import './GameStartMobile.css';
-import React, { useState } from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-
-import Screen from '../../Screen';
-
 import Background from '../../asset/bg.png';
+
+// Components
+import Screen from '../../Screen';
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +23,7 @@ const useStyles = makeStyles({
     backgroundRepeat: 'no-repeat',
   },
   buttonBox: {
-    backgroundColor: '#15161B',
+    backgroundColor: '#ddd',
     width: '100%',
     paddingTop: '30px',
     paddingBottom: '30px',
@@ -42,6 +38,7 @@ const useStyles = makeStyles({
     fontWeight: 'bold 5px',
     borderColor: '#073370',
     borderRadius: '10px',
+    marginRight: 'auto',
   },
   pointText: {
     fontSize: '.8rem',
@@ -108,11 +105,13 @@ const useStyles = makeStyles({
   },
 });
 
-const GameStartMobile = (props) => {
+const GameStartMobile = props => {
   const classes = useStyles();
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     left: false,
   });
+
+  const [cashIn, setCashIn] = useState('');
 
   const toggleDrawer = (anchor, open) => event => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -122,6 +121,18 @@ const GameStartMobile = (props) => {
     setState({ ...state, [anchor]: open });
   };
 
+  const handleChange = e => {
+    setCashIn(Number(e.target.value));
+  };
+
+  useEffect(() => {
+    return () => {
+      props.leave();
+    };
+
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <Box className={classes.root}>
       <Box className={classes.machine}></Box>
@@ -129,23 +140,22 @@ const GameStartMobile = (props) => {
       <Box className={classes.screenBox}>
         <Screen />
       </Box>
-
       <Box className={classes.buttonBox}>
-        <Box>
+        <Box style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
           <button className={classes.maxButton} type="primary">
-          {/* <button className="mobileButtonPosition" type="primary" onClick={props.maxBet}> */}
+            {/* <button className="mobileButtonPosition" type="primary" onClick={props.maxBet}> */}
             MAX BET
           </button>
           <span className={classes.pointText}>點數</span>
-          <input />
-          <button className={classes.slotButton} type="primary">
+          <input value={cashIn} onChange={e => handleChange(e)} style={{ width: 100 }} />
+          <button className={classes.slotButton} type="primary" onClick={() => props.pointCash(cashIn)}>
             投幣
           </button>
         </Box>
 
         <Box className={classes.bottomBox}>
-          <button className={classes.accountButton} type="primary">
-          {/* <button className="mobileButtonPosition2" type="primary" onClick={props.leave}> */}
+          <button className={classes.accountButton} type="primary" onClick={props.leave}>
+            {/* <button className="mobileButtonPosition2" type="primary" onClick={props.leave}> */}
             結算
           </button>
 
@@ -153,8 +163,8 @@ const GameStartMobile = (props) => {
             AUTO SPIN
           </button>
 
-          <button className={classes.spinButton} type="primary">
-          {/* <button className="mobileButtonPosition3" type="primary" onClick={props.spin}> */}
+          <button className={classes.spinButton} type="primary" onClick={props.spin}>
+            {/* <button className="mobileButtonPosition3" type="primary" onClick={props.spin}> */}
             SPIN
           </button>
         </Box>
@@ -184,7 +194,7 @@ const GameStartMobile = (props) => {
             投入代幣
           </button>
         </div> */}
-            {/* <button className="mobileGameTabButton" type="primary" onClick={props.pointCash}> */}
+        {/* <button className="mobileGameTabButton" type="primary" onClick={props.pointCash}> */}
       </Box>
     </Box>
   );

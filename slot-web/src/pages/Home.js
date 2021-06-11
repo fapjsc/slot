@@ -39,17 +39,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Home = () => {
-  const [egmList, setEgmList] = useState({});
+  // const [egmList, setEgmList] = useState({});
   const [isLoaded, setIsLoaded] = useState(true);
   const [loadFailed, setIsLoadFailed] = useState(false);
   const classes = useStyles();
 
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, setApiToken } = userContext;
+  const { apiToken, setApiToken, setEgmList, egmList } = userContext;
 
   useEffect(() => {
     playerLandingApi();
+
     // eslint-disable-next-line
   }, []);
 
@@ -90,11 +91,11 @@ const Home = () => {
           </Box>
           <Box>Loading...</Box>
         </Paper>
-      ) : (
+      ) : egmList ? (
         <Box className={classes.rootList}>
           <MachineList egmList={egmList} token={apiToken} />
         </Box>
-      )}
+      ) : null}
     </div>
   );
 };
