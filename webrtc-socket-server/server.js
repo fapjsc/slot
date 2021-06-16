@@ -43,8 +43,8 @@ io.sockets.on('connection', socket => {
     console.log(broadcaster);
   });
 
-  socket.on('leave', () => {
-    socket.emit('user leave');
+  socket.on('cameraErr', clientSocketId => {
+    socket.to(clientSocketId).emit('cameraErr');
   });
 
   // WebRTC Event

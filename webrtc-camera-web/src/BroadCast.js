@@ -16,6 +16,7 @@ import Button from 'react-bootstrap/Button';
 // const socket = io.connect('http://localhost:5000');
 // const socket = io.connect('http://192.168.10.105:5000/');
 const socket = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
+// const socket = io.connect('http://localhost:5000');
 
 // peerConnection Options
 const pcConfig = {
@@ -40,16 +41,17 @@ const BroadCast = () => {
   const [noDevice, setNoDevice] = useState(false);
   const [currentDevice, setCurrentDevice] = useState();
   const [flag, setFlag] = useState('');
-  const [egmList, setEgmList] = useState([]);
+  // const [egmList, setEgmList] = useState([]);
   const [selectEgm, setSelectEgm] = useState('');
+  const [egmIp, setEgmIp] = useState('');
 
   // Device Context
   const deviceContext = useContext(DeviceContext);
-  const { setDeviceMap } = deviceContext;
+  const { setDeviceMap, getEgmList, egmList } = deviceContext;
 
   // Camera Dom
   const camera = useRef();
-  const sendRemote = useRef();
+  // const sendRemote = useRef();
 
   //獲取所有設備後，將kind為videoinput的物件設為 allDevices
   const getAllDevices = async () => {
@@ -94,31 +96,33 @@ const BroadCast = () => {
     }
   };
 
-  // 遠端使用者選擇egm後，依據對應的device id 獲取camera stream
+  // 遠端使用者選擇egm後，依據對應的device id 獲取並返回camera stream
   const remoteStream = async deviceId => {
-    console.log(allVideo);
-    // let audioId = '9d1bf057e84cf4b795e8d0f054e164641cd2d0b2e1e859b32edb8f87e6e4c174';
-    const videoGroupId = allVideo.filter(el => el.deviceId === deviceId)[0].groupId;
-    console.log(videoGroupId);
+    console.log(deviceId);
+    if (deviceId) {
+      const filterVideo = allVideo.filter(el => el.deviceId === deviceId)[0];
 
-    const audioId = allAudio.filter(el => el.groupId === videoGroupId)[0].deviceId;
-    console.log(audioId);
+      if (!filterVideo) {
+        alert('找不到camera id');
+        return;
+      }
+      console.log(filterVideo.groupId);
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          deviceId: audioId,
-        },
-        video: {
-          deviceId: { exact: deviceId },
-          width: { ideal: 600 },
-          height: { ideal: 600 },
-        },
-      });
-
-      return stream;
-    } catch (error) {
-      console.log(error);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: {
+            deviceId: { exact: deviceId },
+            width: { ideal: 600 },
+            height: { ideal: 600 },
+          },
+        });
+        return stream;
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert('沒有camera id');
     }
   };
 
@@ -140,15 +144,20 @@ const BroadCast = () => {
   };
 
   const handleSelectEgm = e => {
+    const index = e.target.selectedIndex;
+    const optionElement = e.target.childNodes[index];
+    // console.log(optionElement.id);
+    setEgmIp(optionElement.id);
     setSelectEgm(e.target.value);
   };
 
-  const handleDeviceMap = (flag, egm, deviceId, deviceLabel) => {
+  const handleDeviceMap = (flag, egm, cameraId, deviceLabel, egmIp) => {
     const deviceObj = {
       flag,
       egm,
-      deviceId,
+      cameraId,
       deviceLabel,
+      egmIp,
     };
     setDeviceMap(deviceObj);
     cleanDeviceForm();
@@ -160,7 +169,8 @@ const BroadCast = () => {
 
   useEffect(() => {
     getAllDevices();
-    setEgmList([9, 10]);
+    // setEgmList([9, 10]);
+    getEgmList('192.168.10.60');
     navigator.mediaDevices.ondevicechange = event => {
       getAllDevices();
     };
@@ -261,6 +271,7 @@ const BroadCast = () => {
     };
 
     // return () => {};
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -304,11 +315,17 @@ const BroadCast = () => {
           .then(sdp => peerConnection.setLocalDescription(sdp))
           .then(() => {
             socket.emit('offer', socketId, peerConnection.localDescription);
+            navigator.mediaDevices.ondevicechange = event => {
+              console.log(event);
+              socket.emit('cameraErr', socketId);
+            };
+            console.log(peerConnections);
           });
       });
-      console.log(allVideo);
       setNoDevice(false);
     }
+
+    // eslint-disable-next-line
   }, [allVideo]);
 
   return (
@@ -327,16 +344,16 @@ const BroadCast = () => {
             {/* FLAG */}
             <Form.Group as={Row} controlId="flag" className="">
               <Form.Label column sm="2">
-                FLAG
+                IP
               </Form.Label>
               <Col sm="8" className="">
-                <Form.Control readOnly defaultValue={flag} />
+                <Form.Control readOnly defaultValue={egmIp} />
               </Col>
-              <Col sm="2" className="">
+              {/* <Col sm="2" className="">
                 <Button size="sm" onClick={getFlag}>
                   生成
                 </Button>
-              </Col>
+              </Col> */}
             </Form.Group>
 
             {/* EGM */}
@@ -347,11 +364,21 @@ const BroadCast = () => {
               <Col sm="8">
                 <Form.Control as="select" onChange={handleSelectEgm} defaultValue="選擇EGM">
                   <option disabled>選擇EGM</option>
-                  {egmList ? egmList.map(egm => <option key={egm}>{egm}</option>) : <option>找不到EGM</option>}
+                  {egmList ? (
+                    egmList.map(egm => (
+                      <option id={egm.egmIp} key={egm.egmIp}>
+                        {egm.egmId}
+                      </option>
+                    ))
+                  ) : (
+                    <option>找不到EGM</option>
+                  )}
                 </Form.Control>
               </Col>
               <Col sm="2" className="">
-                <Button size="sm">刷新</Button>
+                <Button size="sm" onClick={() => getEgmList('192.168.10.60')}>
+                  刷新
+                </Button>
               </Col>
             </Form.Group>
 
@@ -381,11 +408,11 @@ const BroadCast = () => {
           <Form.Group as={Row} className="">
             <Col sm="10" className="mx-auto text-center">
               <Button
-                disabled={!selectEgm || !currentDevice || !flag}
+                disabled={!selectEgm || !currentDevice}
                 size="lg"
                 className="w-25 p-2"
                 variant="primary"
-                onClick={() => handleDeviceMap(flag, selectEgm, currentDevice.deviceId, currentDevice.label)}
+                onClick={() => handleDeviceMap(flag, +selectEgm, currentDevice.deviceId, currentDevice.label, egmIp)}
               >
                 確定
               </Button>

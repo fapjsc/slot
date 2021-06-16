@@ -20,10 +20,10 @@ const pcConfig = {
 };
 let peerConnection;
 
-let usbHd = '7324b1d00ac5e2592e3f26e14bee3b40be63ea5f0a56058bdc8d0f8df505941f';
-let macCamera = '0378feddb77dbd905379c76187e8ff3d69ecc1dbd7da3f75cbb3df19a0127dae';
-let usbCam = '78b0a66f8b0eda11f77a3666e32e02017800affd94ea78e104ceebae4d4dbcd6';
-let capture = '7e89ee5312876802b7aa93db2b44a7678757a0c54889fda6053431a2ee617b15';
+// let usbHd = '7324b1d00ac5e2592e3f26e14bee3b40be63ea5f0a56058bdc8d0f8df505941f';
+// let macCamera = '0378feddb77dbd905379c76187e8ff3d69ecc1dbd7da3f75cbb3df19a0127dae';
+// let usbCam = '78b0a66f8b0eda11f77a3666e32e02017800affd94ea78e104ceebae4d4dbcd6';
+// let capture = '7e89ee5312876802b7aa93db2b44a7678757a0c54889fda6053431a2ee617b15';
 
 const Viewer = () => {
   const remoteCamera = useRef();
@@ -34,9 +34,12 @@ const Viewer = () => {
   // User Context
   const userContext = useContext(UserContext);
   const { selectEgm } = userContext;
+  console.log(selectEgm.cameraId);
+  let cameraId = selectEgm.cameraId;
 
   const handleSocket = () => {
     const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
+    // const socketConnect = io.connect('http://localhost:5000');
 
     setSocket(socketConnect);
   };
@@ -51,6 +54,7 @@ const Viewer = () => {
 
     return () => {
       console.log(socket);
+
       if (socket) {
         socket.close();
       }
@@ -64,7 +68,7 @@ const Viewer = () => {
     socket.on('connection', () => {
       console.log('connection', socket.id);
       // socket.emit('watcher');
-      socket.emit('remoteUserSelectDevice', usbHd);
+      socket.emit('remoteUserSelectDevice', cameraId);
     });
 
     socket.on('broadcaster', () => {
@@ -102,7 +106,8 @@ const Viewer = () => {
       peerConnection.onconnectionstatechange = event => {
         console.log(event.currentTarget.iceConnectionState);
         if (event.currentTarget.iceConnectionState === 'disconnected') {
-          socket.emit('remoteUserSelectDevice', usbHd);
+          peerConnection.close();
+          socket.emit('remoteUserSelectDevice', cameraId);
         }
       };
 
@@ -113,8 +118,14 @@ const Viewer = () => {
       peerConnection.addIceCandidate(new RTCIceCandidate(candidate)).catch(e => console.error(e));
     });
 
+    socket.on('cameraErr', () => {
+      alert('device change');
+    });
+
     socket.on('disconnect', () => {
       alert('socket disconnect');
+      peerConnection.close();
+      socket.close();
       history.replace('/home');
     });
 
@@ -136,7 +147,7 @@ const Viewer = () => {
 
   return (
     <div style={box}>
-      <video onClick={videoPlay} ref={remoteCamera} autoPlay playsInline style={{ width: '100%' }} />
+      <video onClick={videoPlay} ref={remoteCamera} autoPlay playsInline controls style={{ width: '100%' }} />
     </div>
   );
 };

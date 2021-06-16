@@ -17,23 +17,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-// const machineList = [ // 模擬用 機器列表資料
-// 	{camera: 0, title: 'Testing', descreption: '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 1, magnification: 'X4', title: 'ARUZE雄狼', subHeader:"June 1, 2021", machineIcon: './banner-wolf.png', descreption: `機種類型：美國原裝進口 ${<br />}最大押注:Mexbet 500`},
-// 	{camera: 2, title: 'Testing', descreption: 'testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 3, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 4, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 5, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 6, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 7, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 8, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 9, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 10, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 11, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 12, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// 	{camera: 13, title: 'Testing', descreption: 'testing...testing...     機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'},
-// ];
-
 export default function MachineList(props) {
   console.log(props.egmList);
   const classes = useStyles();
@@ -53,6 +36,35 @@ export default function MachineList(props) {
     <div className={classes.root}>
       <Grid container spacing={3} style={{ padding: 10 }}>
         {props.egmList.length > 0 ? renderMachineList(props.egmList) : null}
+
+        {/* <Grid item xs={12} sm={4} md={3} className={classes.grid}>
+          <MachineItemNew
+            machineDetails={{
+              cameraId: '7324b1d00ac5e2592e3f26e14bee3b40be63ea5f0a56058bdc8d0f8df505941f',
+              casinoCode: 'casino_demo_1',
+              egmId: 9,
+              egmIp: '192.168.10.71',
+              isEnable: true,
+              mapId: 2,
+            }}
+            token={props.token}
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={4} md={3} className={classes.grid}>
+          <MachineItemNew
+            machineDetails={{
+              cameraId: '78b0a66f8b0eda11f77a3666e32e02017800affd94ea78e104ceebae4d4dbcd6',
+              // cameraId: '97932dfc5dcb2d3011791dd5fad60e865dbd4f77b26628f49371954e1384ceca',
+              casinoCode: 'casino_demo_1',
+              egmId: 12,
+              egmIp: '192.168.10.73',
+              isEnable: true,
+              mapId: 4,
+            }}
+            token={props.token}
+          />
+        </Grid> */}
       </Grid>
     </div>
   );

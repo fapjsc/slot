@@ -50,7 +50,6 @@ const Home = () => {
 
   useEffect(() => {
     playerLandingApi();
-
     // eslint-disable-next-line
   }, []);
 

@@ -126,6 +126,7 @@ const GameStartMobile = props => {
   };
 
   useEffect(() => {
+    console.log(props);
     return () => {
       props.leave();
     };
