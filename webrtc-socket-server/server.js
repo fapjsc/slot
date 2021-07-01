@@ -26,7 +26,7 @@ io.sockets.on('connection', socket => {
   // });
 
   console.log('connection');
-  // socket.emit('connection');
+  socket.emit('connection');
   // Base Event
   socket.on('broadcaster', () => {
     broadcaster = socket.id;
