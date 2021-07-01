@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 // Components
 import Home from './pages/Home';
-import Game from './pages/Game';
+import GamePlay from './pages/GamePlay';
+import TheButton from './components/TheButton';
+// import Game from './pages/Game';
 // import Auth from './pages/Auth';
-import GameScreenNew from './pages/GameScreenNew';
-import GameStart from './pages/GameStart';
-import GameStartNew from './pages/GameStartNew';
-import GameStartMobile from './components/gameStart/GameStartMobile';
+// import GameScreenNew from './pages/GameScreenNew';
+// import GameStart from './pages/GameStart';
+// import GameStartNew from './pages/GameStartNew';
+// import GameStartMobile from './components/gameStart/GameStartMobile';
 // import LoadingScreen from './pages/LoadingScreen';
 
 // Style
@@ -16,43 +18,34 @@ import './App.css';
 
 function App() {
   return (
-    // <SocketContext.Provider value={socket}>
-      <Router>
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-
-        <Switch>
-          {/* <Route path="/loading">
-            <LoadingScreen />
-          </Route> */}
-          <Route path="/gameStartMobile">
-            <GameStartMobile />
-          </Route>
-          <Route path="/gameStartNew">
-            <GameStartNew />
-          </Route>
-        {/* <Route path="/gameScreen">
-          <GameScreen />
+    <Router>
+      <Switch>
+        <Route path="/dev">
+          <GamePlay />
+        </Route>
+        {/* <Route path="/gameStartMobile">
+          <GameStartMobile />
+        </Route>
+        <Route path="/gameStartNew">
+          <GameStartNew />
         </Route> */}
-        <Route path="/game/:camera">
+
+        {/* <Route path="/game/:camera">
           <GameScreenNew />
-        </Route>
+        </Route> */}
         <Route path="/gameStart">
-          <GameStart />
+          <GamePlay />
         </Route>
 
-        {/* <Route path="/auth">
-            <Auth />
-          </Route> */}
-          <Route path="/home">
-            <Home />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Router>
-    // </SocketContext.Provider>
+        <Route path="/home">
+          <Home />
+        </Route>
+
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 

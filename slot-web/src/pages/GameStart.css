@@ -1,4 +1,4 @@
-.gameTab {
+/* .gameTab {
   position: absolute;
   display: inline-block;
   top: 40px;
@@ -103,24 +103,12 @@
     max-height: auto;
     max-width: 280px;
   } */
-  .backImg-left {
-    width: 80%;
-  }
-  /* .backImg-right {
+.backImg-left {
+  width: 80%;
+}
+/* .backImg-right {
     min-height: auto;
     min-width: auto;
     max-height: auto;
     max-width: 80px;
   } */
-}
-
-@media (max-width: 480px) {
-  
-}
-@media (min-width: 768px) and (max-width: 979px) {
- 
-}
-@media (min-width: 980px) {
-}
-@media (min-width: 1200px) {
-}

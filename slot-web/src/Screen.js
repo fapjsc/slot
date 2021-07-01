@@ -20,11 +20,6 @@ const pcConfig = {
 };
 let peerConnection;
 
-// let usbHd = '7324b1d00ac5e2592e3f26e14bee3b40be63ea5f0a56058bdc8d0f8df505941f';
-// let macCamera = '0378feddb77dbd905379c76187e8ff3d69ecc1dbd7da3f75cbb3df19a0127dae';
-// let usbCam = '78b0a66f8b0eda11f77a3666e32e02017800affd94ea78e104ceebae4d4dbcd6';
-// let capture = '7e89ee5312876802b7aa93db2b44a7678757a0c54889fda6053431a2ee617b15';
-
 const Viewer = () => {
   const remoteCamera = useRef();
   const history = useHistory();
@@ -119,14 +114,14 @@ const Viewer = () => {
     });
 
     socket.on('cameraErr', () => {
-      alert('device change');
+      // alert('device change');
     });
 
     socket.on('disconnect', () => {
       alert('socket disconnect');
       peerConnection.close();
       socket.close();
-      history.replace('/home');
+      // history.replace('/home');
     });
 
     window.onunload = window.onbeforeunload = () => {
@@ -145,16 +140,7 @@ const Viewer = () => {
     }
   }, [remoteCamera]);
 
-  return (
-    <div style={box}>
-      <video onClick={videoPlay} ref={remoteCamera} autoPlay playsInline controls style={{ width: '100%' }} />
-    </div>
-  );
-};
-
-const box = {
-  width: '100%',
-  height: '100%',
+  return <video onClick={videoPlay} ref={remoteCamera} autoPlay playsInline controls style={{ width: '100%', height: '100%' }} />;
 };
 
 export default Viewer;

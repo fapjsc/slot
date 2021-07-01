@@ -20,8 +20,13 @@ const io = require('socket.io')(httpsServer, {
 let broadcaster;
 
 io.sockets.on('connection', socket => {
+  // socket.join('room 237', () => {
+  //   let rooms = Objects.keys(socket.rooms);
+  //   console.log(rooms, '-======='); // [ <socket.id>, 'room 237' ]
+  // });
+
   console.log('connection');
-  socket.emit('connection');
+  // socket.emit('connection');
   // Base Event
   socket.on('broadcaster', () => {
     broadcaster = socket.id;

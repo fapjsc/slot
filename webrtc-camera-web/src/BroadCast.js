@@ -103,18 +103,24 @@ const BroadCast = () => {
       const filterVideo = allVideo.filter(el => el.deviceId === deviceId)[0];
 
       if (!filterVideo) {
-        alert('找不到camera id');
+        // alert('找不到camera id');
         return;
       }
       console.log(filterVideo.groupId);
 
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
+          audio: {
+            // groupId: filterVideo.groupId,
+            deviceId: '137d986cdacd90799cc65d3d14ab6eda169c934c557335f973401d311568afb1',
+          },
+          // audio: true,
           video: {
             deviceId: { exact: deviceId },
-            width: { ideal: 600 },
-            height: { ideal: 600 },
+            width: 509, //1280
+            height: 432, //800
+            // width: 1920, //1280
+            // height: 1080, //800
           },
         });
         return stream;
@@ -122,7 +128,7 @@ const BroadCast = () => {
         console.log(error);
       }
     } else {
-      alert('沒有camera id');
+      // alert('沒有camera id..');
     }
   };
 
@@ -139,7 +145,7 @@ const BroadCast = () => {
       getSelectStream(selectedDevice[0].deviceId); // device stream
       setCurrentDevice(selectedDevice[0]); // device info
     } else {
-      alert('沒有設備');
+      // alert('沒有設備');
     }
   };
 
@@ -282,6 +288,7 @@ const BroadCast = () => {
         console.log('remoteUserSelectDevice', socketId, deviceId);
 
         const stream = await remoteStream(deviceId);
+        // const stream = await remoteStream('7324b1d00ac5e2592e3f26e14bee3b40be63ea5f0a56058bdc8d0f8df505941f');
         if (!stream) {
           alert('找不到設備');
           return;

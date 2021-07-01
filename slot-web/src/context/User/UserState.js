@@ -13,6 +13,14 @@ const UserState = props => {
     selectEgm: {},
   };
 
+  // Get Http Header
+  const getHeaders = token => {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `Bearer ${token}`);
+    return headers;
+  };
+
   const setApiToken = token => {
     dispatch({ type: SET_API_TOKEN, payload: token });
   };

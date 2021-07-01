@@ -39,6 +39,7 @@ const ApiController = () => {
       return await Fetch.apiPost('PlayerLeaveApi', body, token);
     },
     endGameApi: async (cfgId, egmId, egmIP, token) => {
+      console.log(cfgId, egmId, egmIP, token);
       let body = {
         cfgId: cfgId,
         egmId: egmId,

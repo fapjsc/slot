@@ -3,6 +3,9 @@ import { useEffect, useState, useContext } from 'react';
 // Components
 import MachineList from '../components/gameMachine/machineList';
 import ApiController from '../api/apiController';
+import Dialog from '../components/UI/Dialog';
+
+import Test from '../components/gameMachine/test';
 
 // Context
 import UserContext from '../context/User/UserContext';
@@ -17,29 +20,34 @@ import backgroundImg from '../asset/5dde4f6dc409c1574850413996.jpg';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    minHeight: '100vh',
-    paddingTop: 80,
-    backgroundImage: `url(${backImg})`,
+    // backgroundImage: `url(${backImg})`,
+    backgroundImage: `url(${backgroundImg})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '100vh',
+    paddingTop: '15rem',
   },
   rootList: {
-    backgroundImage: `url(${backgroundImg})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
+    // backgroundImage: `url(${backgroundImg})`,
     backgroundRepeat: 'no-repeat',
-    minHeight: '110vh',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '100%',
+    paddingBottom: '60vh',
   },
   paper: {
     maxWidth: 450,
     padding: 30,
-    margin: '0 auto',
     textAlign: 'center',
     fontSize: 18,
     color: '#333',
+    margin: 'auto',
+    marginBottom: '100rem',
   },
 }));
 
 const Home = () => {
-  // const [egmList, setEgmList] = useState({});
   const [isLoaded, setIsLoaded] = useState(true);
   const [loadFailed, setIsLoadFailed] = useState(false);
   const classes = useStyles();
@@ -70,6 +78,7 @@ const Home = () => {
         setIsLoaded(false);
         setEgmList(responseData.egmList); // In useState
         setApiToken(responseData.apiToken); // In useContext
+        localStorage.setItem('token', responseData.apiToken);
       }
     } catch (error) {
       alert('ERROR message: ', error);
@@ -78,7 +87,7 @@ const Home = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <Box className={isLoaded ? classes.root : classes.rootList}>
       {loadFailed ? (
         <Paper className={classes.paper}>
           <Box>Connection Failed.</Box>
@@ -91,11 +100,14 @@ const Home = () => {
           <Box>Loading...</Box>
         </Paper>
       ) : egmList ? (
-        <Box className={classes.rootList}>
+        <Box>
+          {/* <Test /> */}
+          <br />
           <MachineList egmList={egmList} token={apiToken} />
+          <Dialog />
         </Box>
       ) : null}
-    </div>
+    </Box>
   );
 };
 
