@@ -1,4 +1,4 @@
-import { useReducer, useContext } from 'react';
+import { useReducer } from 'react';
 import UserReducer from './UserReducer';
 import UserContext from './UserContext';
 import { SET_API_TOKEN, SET_EGM_LIST, SET_SELECT_EGM } from '../type';

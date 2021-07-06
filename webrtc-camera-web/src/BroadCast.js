@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useContext } from 'react';
 import io from 'socket.io-client';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 
 // Context
 import DeviceContext from './context/device/DeviceContext';
@@ -44,7 +44,7 @@ const BroadCast = () => {
 
   // Device Context
   const deviceContext = useContext(DeviceContext);
-  const { setDeviceMap, getEgmList, egmList, setDeviceIsChange, deviceIsChange, deviceMap } = deviceContext;
+  const { setDeviceMap, getEgmList, egmList, setDeviceIsChange, deviceIsChange } = deviceContext;
 
   // Camera Dom
   const camera = useRef();
@@ -130,9 +130,9 @@ const BroadCast = () => {
   };
 
   // 本地隨機產生flag id
-  const getFlag = () => {
-    setFlag(uuidv4());
-  };
+  // const getFlag = () => {
+  //   setFlag(uuidv4());
+  // };
 
   // 本地選擇設備後獲取 stream 以及 device info
   const handleChangeDevice = e => {

@@ -1,6 +1,6 @@
 import BroadCast from './BroadCast';
 import DeviceMap from './DeviceMap';
-import BroadCastDev from './BroadCastDev';
+// import BroadCastDev from './BroadCastDev';
 
 // Style
 import './App.css';

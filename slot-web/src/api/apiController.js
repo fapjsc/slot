@@ -1,9 +1,10 @@
-import Fetch from './api';
+import { apiGet, apiPost, apiPostCasino } from './api';
 
 const ApiController = () => {
   const controller = {
+    //==== Agent Api ====//
     playerLandingApi: async (pc, casino, at) => {
-      return await Fetch.apiGet(`PlayerLandingApi?pc=${pc}&casino=${casino}&at=${at}`);
+      return await apiGet(`PlayerLandingApi?pc=${pc}&casino=${casino}&at=${at}`);
     },
     playerChooseEgmApi: async (mapId, egmId, egmIP, token) => {
       let body = {
@@ -11,7 +12,7 @@ const ApiController = () => {
         egmId: egmId,
         egmIP: egmIP,
       };
-      return await Fetch.apiPost('PlayerChooseEgmApi', body, token);
+      return await apiPost('PlayerChooseEgmApi', body, token);
     },
     pressSlotApi: async (cfgId, egmId, egmIP, buttonNo, token) => {
       let body = {
@@ -20,7 +21,7 @@ const ApiController = () => {
         egmIP: egmIP,
         buttonNo: buttonNo,
       };
-      return await Fetch.apiPost('PressSlotApi', body, token);
+      return await apiPost('PressSlotApi', body, token);
     },
 
     pointCashApi: async (cfgId, egmId, egmIP, moneyPoint, token) => {
@@ -31,14 +32,14 @@ const ApiController = () => {
         inOrOut: 1,
         moneyPoint: moneyPoint,
       };
-      return await Fetch.apiPost('PointCashApi', body, token);
+      return await apiPost('PointCashApi', body, token);
     },
 
     playerLeaveApi: async (currentBalance, token) => {
       let body = {
         currentBalance: currentBalance,
       };
-      return await Fetch.apiPost('PlayerLeaveApi', body, token);
+      return await apiPost('PlayerLeaveApi', body, token);
     },
     endGameApi: async (cfgId, egmId, egmIP, token) => {
       console.log(cfgId, egmId, egmIP, token);
@@ -47,7 +48,7 @@ const ApiController = () => {
         egmId: egmId,
         egmIP: egmIP,
       };
-      return await Fetch.apiPost('EndGameApi', body, token);
+      return await apiPost('EndGameApi', body, token);
     },
 
     //=== Casino Api ===//
@@ -57,7 +58,7 @@ const ApiController = () => {
         Point: moneyPoint,
         CheckSum: Number(checkSum),
       };
-      return await Fetch.apiPostCasino('CashToEgmApi', body, casinoToken);
+      return await apiPostCasino('CashToEgmApi', body, casinoToken);
     },
   };
   return controller;

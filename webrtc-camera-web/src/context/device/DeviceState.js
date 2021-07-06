@@ -1,4 +1,4 @@
-import { useReducer, useContext } from 'react';
+import { useReducer } from 'react';
 import DeviceReducer from './DeviceReducer';
 import DeviceContext from './DeviceContext';
 import { SET_DEVICE_MAP, SET_EGM_LIST, DEVICE_IS_CHANGE } from '../type';

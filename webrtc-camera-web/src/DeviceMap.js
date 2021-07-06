@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-
 import DeviceContext from './context/device/DeviceContext';
 
 // Style
@@ -17,26 +16,24 @@ const DeviceMap = () => {
         <Table striped bordered hover responsive>
           <thead>
             <tr>
+              <th>Egm ID</th>
               <th>Egm IP</th>
               <th>Camera名稱</th>
               <th>Camera ID</th>
               <th>Audio名稱</th>
               <th>Audio ID</th>
-              <th>Egm ID</th>
             </tr>
           </thead>
           <tbody>
             {deviceMap.length
-              ? deviceMap.map(el => (
-                  <tr>
+              ? deviceMap.map((el, index) => (
+                  <tr key={index}>
+                    <td>{el.egm}</td>
                     <td>{el.egmIp}</td>
-                    {/* camera */}
                     <td>{el.deviceLabel}</td>
                     <td>{el.cameraId}</td>
-                    {/* audio */}
                     <td>{el.deviceLabel}</td>
                     <td>{el.audioDeviceId}</td>
-                    <td>{el.egm}</td>
                   </tr>
                 ))
               : null}

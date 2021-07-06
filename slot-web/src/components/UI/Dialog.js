@@ -10,12 +10,13 @@ import styles from './Dialog.module.scss';
 
 export default function ScrollDialog() {
   const [open, setOpen] = React.useState(true);
-  const [scroll, setScroll] = React.useState('paper');
+  const [scroll] = React.useState('paper');
+  // const [scroll, setScroll] = React.useState('paper');
 
-  const handleClickOpen = scrollType => () => {
-    setOpen(true);
-    setScroll(scrollType);
-  };
+  // const handleClickOpen = scrollType => () => {
+  //   setOpen(true);
+  //   setScroll(scrollType);
+  // };
 
   const handleClose = () => {
     setOpen(false);

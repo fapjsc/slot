@@ -1,6 +1,6 @@
 import { apiUrl, apiCasinoUrl } from './config';
 
-const apiGet = async targetApi => {
+export const apiGet = async targetApi => {
   let url = `${apiUrl}${targetApi}`;
   let options = {
     cache: 'no-cache',
@@ -15,8 +15,6 @@ const apiGet = async targetApi => {
     referrer: 'no-referrer',
     insecure: true,
   };
-  //   console.log('apiGet calling url: ', url);
-  //   console.log('apiGet calling options: ', options);
 
   let response = await fetch(url, options);
   let responseProcessed = await response.json();
@@ -26,7 +24,7 @@ const apiGet = async targetApi => {
   return responseProcessed;
 };
 
-const apiPost = async (targetApi, data, token) => {
+export const apiPost = async (targetApi, data, token) => {
   let url = `${apiUrl}${targetApi}`;
   let options = {
     body: JSON.stringify(data),
@@ -53,7 +51,7 @@ const apiPost = async (targetApi, data, token) => {
 };
 
 //=== Casino Api ===//
-const apiPostCasino = async (targetApi, data, token) => {
+export const apiPostCasino = async (targetApi, data, token) => {
   console.log(data);
   let url = `${apiCasinoUrl}${targetApi}`;
   let options = {
@@ -70,8 +68,6 @@ const apiPostCasino = async (targetApi, data, token) => {
     redirect: 'follow',
     referrer: 'no-referrer',
   };
-  // console.log('apiPostCasino calling url: ', url);
-  // console.log('apiPostCasino calling options: ', options);
 
   let response = await fetch(url, options);
   let responseProcessed = await response.json();
@@ -79,5 +75,3 @@ const apiPostCasino = async (targetApi, data, token) => {
 
   return responseProcessed;
 };
-
-export default { apiGet, apiPost, apiPostCasino };

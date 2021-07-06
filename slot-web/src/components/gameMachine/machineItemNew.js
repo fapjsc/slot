@@ -15,7 +15,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
-import styles from './machineIremNew.module.scss';
+// import styles from './machineIremNew.module.scss';
 
 import ApiController from '../../api/apiController';
 

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // Components
 import Home from './pages/Home';
 import GamePlay from './pages/GamePlay';
-import TheButton from './components/TheButton';
+// import TheButton from './components/TheButton';
 // import Game from './pages/Game';
 // import Auth from './pages/Auth';
 // import GameScreenNew from './pages/GameScreenNew';
