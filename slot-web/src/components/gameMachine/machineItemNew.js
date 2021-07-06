@@ -61,10 +61,11 @@ export default function MachineItem(props) {
     chooseEgm(props.machineDetails, props.token);
   };
 
-  const chooseEgm = async ({ mapId, egmId, egmIp, cameraId, picName }, apiToken) => {
+  const chooseEgm = async ({ mapId, egmId, egmIp, cameraId, audioId, picName }, apiToken) => {
     try {
       let responseData = await ApiController().playerChooseEgmApi(mapId, egmId, egmIp, apiToken);
       console.log('chooseEgm:', responseData); // 顯示取得回傳資料
+
       if (responseData.code > 100000000) {
         // code 超過 100000000 為問題回傳
         alert(responseData.msg);
@@ -77,12 +78,14 @@ export default function MachineItem(props) {
           egmIp,
           cameraId,
           picName,
+          audioId,
         });
 
         localStorage.setItem('egmId', Number(egmId));
         localStorage.setItem('egmIp', egmIp);
         localStorage.setItem('mapId', Number(mapId));
         localStorage.setItem('cameraId', cameraId);
+        localStorage.setItem('audioId', audioId);
         localStorage.setItem('picName', picName);
         localStorage.setItem('egmSession', responseData.egmSession);
         localStorage.setItem('checkSum', responseData.checkSum);

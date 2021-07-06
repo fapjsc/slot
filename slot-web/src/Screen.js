@@ -63,6 +63,7 @@ const Viewer = () => {
       console.log('connection', socket.id);
       // socket.emit('watcher');
       socket.emit('remoteUserSelectDevice', cameraId, audioId);
+      console.log(audioId);
     });
 
     // socket.on('broadcaster', () => {

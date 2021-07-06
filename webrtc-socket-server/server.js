@@ -34,7 +34,7 @@ io.sockets.on('connection', socket => {
   // });
 
   socket.on('remoteUserSelectDevice', (deviceId, audioId) => {
-    console.log('remoteUserSelectDevice', socket.id, deviceId);
+    console.log('remoteUserSelectDevice', socket.id, deviceId, audioId);
     socket.to(broadcaster).emit('remoteUserSelectDevice', socket.id, deviceId, audioId);
   });
 

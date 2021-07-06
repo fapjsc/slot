@@ -138,6 +138,7 @@ const GamePlay = () => {
     const egmIp = localStorage.getItem('egmIp');
     const mapId = Number(localStorage.getItem('mapId'));
     const cameraId = localStorage.getItem('cameraId');
+    const audioId = localStorage.getItem('audioId');
     const picName = localStorage.getItem('picName');
     const egmSession = localStorage.getItem('egmSession');
     const checkSum = localStorage.getItem('checkSum');
@@ -146,6 +147,7 @@ const GamePlay = () => {
       egmIp,
       mapId,
       cameraId,
+      audioId,
       picName,
       egmSession,
       checkSum,

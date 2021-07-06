@@ -52,7 +52,7 @@ const BroadCast = () => {
 
   //獲取所有設備後，將kind為videoinput的物件設為 allDevices
   const getAllDevices = async () => {
-    await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+    await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
     let devices = await navigator.mediaDevices.enumerateDevices();
     console.log(devices, 'all devices');
 
@@ -98,6 +98,7 @@ const BroadCast = () => {
   // 遠端使用者選擇egm後，依據對應的device id 獲取並返回camera stream
   const remoteStream = async (cameraId, audioId) => {
     console.log('接收到的device ID', cameraId);
+    console.log('接收到的audio ID', audioId);
     console.log(egmList);
     if (cameraId) {
       //   const filterVideo = await allVideo.filter(el => el.cameraId === cameraId)[0];
