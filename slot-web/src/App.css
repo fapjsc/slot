@@ -1,11 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
-
 * {
   box-sizing: border-box;
 }
 
 html {
-  font-family: 'Noto Sans JP', sans-serif;
 }
 
 body {
@@ -15,4 +12,10 @@ body {
   background-image: url('./asset/5dde4f6dc409c1574850413996.jpg');
   background-size: cover;
   background-position: center;
+}
+
+.MuiDialog-paper {
+  /* background-image: linear-gradient(to top, #09203f 0%, #537895 100%); */
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0.15) 100%), radial-gradient(at top center, rgba(255, 255, 255, 0.4) 0%, rgba(0, 0, 0, 0.4) 120%) #989898;
+  background-blend-mode: multiply, multiply;
 }

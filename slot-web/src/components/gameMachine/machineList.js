@@ -1,7 +1,8 @@
 // Components
 import MachineItemNew from './machineItemNew';
-import TheButton from '../TheButton';
-import Test from '../gameMachine/test';
+
+// Demo
+import BorderAnimation from '../UI/BorderAnimation';
 
 // Style
 import { makeStyles } from '@material-ui/core/styles';
@@ -26,9 +27,9 @@ export default function MachineList(props) {
     return egmList.map((item, index) => {
       return (
         <Grid key={index} item xs={12} sm={4} md={3} className={classes.grid}>
-          <Test>
+          <BorderAnimation>
             <MachineItemNew index={index} title={item.gameName} description={item.gameDesc} picName={item.picName} machineDetails={item} token={props.token} />
-          </Test>
+          </BorderAnimation>
         </Grid>
       );
     });

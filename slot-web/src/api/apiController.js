@@ -22,6 +22,7 @@ const ApiController = () => {
       };
       return await Fetch.apiPost('PressSlotApi', body, token);
     },
+
     pointCashApi: async (cfgId, egmId, egmIP, moneyPoint, token) => {
       let body = {
         cfgId: cfgId,
@@ -32,6 +33,7 @@ const ApiController = () => {
       };
       return await Fetch.apiPost('PointCashApi', body, token);
     },
+
     playerLeaveApi: async (currentBalance, token) => {
       let body = {
         currentBalance: currentBalance,
@@ -46,6 +48,16 @@ const ApiController = () => {
         egmIP: egmIP,
       };
       return await Fetch.apiPost('EndGameApi', body, token);
+    },
+
+    //=== Casino Api ===//
+    pointCashCasinoApi: async (egmSession, checkSum, moneyPoint, casinoToken) => {
+      let body = {
+        EgmSession: egmSession,
+        Point: moneyPoint,
+        CheckSum: Number(checkSum),
+      };
+      return await Fetch.apiPostCasino('CashToEgmApi', body, casinoToken);
     },
   };
   return controller;

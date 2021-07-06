@@ -5,8 +5,6 @@ import MachineList from '../components/gameMachine/machineList';
 import ApiController from '../api/apiController';
 import Dialog from '../components/UI/Dialog';
 
-import Test from '../components/gameMachine/test';
-
 // Context
 import UserContext from '../context/User/UserContext';
 
@@ -15,7 +13,7 @@ import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core';
-import backImg from '../asset/yeQ9yk6EY4.jpg';
+// import backImg from '../asset/yeQ9yk6EY4.jpg';
 import backgroundImg from '../asset/5dde4f6dc409c1574850413996.jpg';
 
 const useStyles = makeStyles(theme => ({
@@ -62,9 +60,9 @@ const Home = () => {
   }, []);
 
   let playerLandingApi = async () => {
-    let pc = 'DinoTesting';
+    let pc = '5566';
     let casino = 'casino_demo_1';
-    let at = '1asd1rsdjaufoph29fhi2o';
+    let at = 'NTU2Nm5vMQ==';
 
     try {
       let responseData = await ApiController().playerLandingApi(pc, casino, at);
@@ -79,6 +77,7 @@ const Home = () => {
         setEgmList(responseData.egmList); // In useState
         setApiToken(responseData.apiToken); // In useContext
         localStorage.setItem('token', responseData.apiToken);
+        localStorage.setItem('casinoToken', responseData.casinoToken);
       }
     } catch (error) {
       alert('ERROR message: ', error);
@@ -104,7 +103,7 @@ const Home = () => {
           {/* <Test /> */}
           <br />
           <MachineList egmList={egmList} token={apiToken} />
-          <Dialog />
+          {!localStorage.getItem('token') && <Dialog />}
         </Box>
       ) : null}
     </Box>

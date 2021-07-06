@@ -70,6 +70,7 @@ export default function MachineItem(props) {
         alert(responseData.msg);
       }
       if (responseData.code < 100000000) {
+        console.log(responseData.egmSession, responseData.checkSum);
         setSelectEgm({
           mapId: Number(mapId),
           egmId: Number(egmId),
@@ -83,6 +84,8 @@ export default function MachineItem(props) {
         localStorage.setItem('mapId', Number(mapId));
         localStorage.setItem('cameraId', cameraId);
         localStorage.setItem('picName', picName);
+        localStorage.setItem('egmSession', responseData.egmSession);
+        localStorage.setItem('checkSum', responseData.checkSum);
         history.replace('/gameStart');
       }
     } catch (error) {

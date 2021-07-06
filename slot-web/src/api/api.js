@@ -1,7 +1,7 @@
-import Config from './config';
+import { apiUrl, apiCasinoUrl } from './config';
 
 const apiGet = async targetApi => {
-  let url = `${Config.apiUrl}${targetApi}`;
+  let url = `${apiUrl}${targetApi}`;
   let options = {
     cache: 'no-cache',
     credentials: 'same-origin',
@@ -27,7 +27,7 @@ const apiGet = async targetApi => {
 };
 
 const apiPost = async (targetApi, data, token) => {
-  let url = `${Config.apiUrl}${targetApi}`;
+  let url = `${apiUrl}${targetApi}`;
   let options = {
     body: JSON.stringify(data),
     cache: 'no-cache',
@@ -52,4 +52,32 @@ const apiPost = async (targetApi, data, token) => {
   return responseProcessed;
 };
 
-export default { apiGet, apiPost };
+//=== Casino Api ===//
+const apiPostCasino = async (targetApi, data, token) => {
+  console.log(data);
+  let url = `${apiCasinoUrl}${targetApi}`;
+  let options = {
+    body: JSON.stringify(data),
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'user-agent': 'Mozilla/4.0 MDN Example',
+      'content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    method: 'POST',
+    mode: 'cors',
+    redirect: 'follow',
+    referrer: 'no-referrer',
+  };
+  // console.log('apiPostCasino calling url: ', url);
+  // console.log('apiPostCasino calling options: ', options);
+
+  let response = await fetch(url, options);
+  let responseProcessed = await response.json();
+  console.log('apiPostCasino calling responseProcessed: ', responseProcessed);
+
+  return responseProcessed;
+};
+
+export default { apiGet, apiPost, apiPostCasino };

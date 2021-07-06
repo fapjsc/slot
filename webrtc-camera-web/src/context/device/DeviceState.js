@@ -1,13 +1,14 @@
 import { useReducer, useContext } from 'react';
 import DeviceReducer from './DeviceReducer';
 import DeviceContext from './DeviceContext';
-import { SET_DEVICE_MAP, SET_EGM_LIST } from '../type';
+import { SET_DEVICE_MAP, SET_EGM_LIST, DEVICE_IS_CHANGE } from '../type';
 
 const DeviceState = props => {
   // Init State
   const initialState = {
     deviceMap: [],
     egmList: [],
+    deviceIsChange: false,
   };
 
   // Get Http Header
@@ -27,7 +28,8 @@ const DeviceState = props => {
         headers,
       });
       const resData = await res.json();
-      // console.log(resData);
+
+      console.log(resData);
       // console.log(resData.mapItems);
       if (resData.code === 13) setEgmList(resData.mapItems);
     } catch (error) {
@@ -54,6 +56,7 @@ const DeviceState = props => {
       });
       const resData = await res.json();
       console.log(resData);
+      setDeviceIsChange(true);
       // console.log(resData.mapItems);
     } catch (error) {
       console.log(error);
@@ -69,6 +72,10 @@ const DeviceState = props => {
     dispatch({ type: SET_DEVICE_MAP, payload: deviceObj });
   };
 
+  const setDeviceIsChange = value => {
+    dispatch({ type: DEVICE_IS_CHANGE, payload: value });
+  };
+
   const [state, dispatch] = useReducer(DeviceReducer, initialState);
 
   return (
@@ -76,6 +83,9 @@ const DeviceState = props => {
       value={{
         deviceMap: state.deviceMap,
         egmList: state.egmList,
+        deviceIsChange: state.deviceIsChange,
+
+        setDeviceIsChange,
         setDeviceMap,
         getEgmList,
         postEgmList,

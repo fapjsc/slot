@@ -7,7 +7,6 @@ import UserContext from '../context/User/UserContext';
 
 // Components
 import Screen from '../Screen';
-import TheButton from '../components/TheButton';
 
 // Style
 import classes from './GamePlay.module.scss';
@@ -27,7 +26,7 @@ const GamePlay = () => {
   // User Context
   const userContext = useContext(UserContext);
   const { apiToken, selectEgm, setApiToken, setSelectEgm } = userContext;
-  const { mapId, egmId, egmIp } = selectEgm;
+  const { mapId, egmId, egmIp, egmSession, checkSum, casinoToken } = selectEgm;
 
   const styles = useStyles();
 
@@ -67,24 +66,24 @@ const GamePlay = () => {
     }
   };
 
-  const beforeUnload = async () => {
-    try {
-      let responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken);
-      console.log(mapId, egmId, egmIp);
-      console.log(responseData);
-      if (responseData.code > 100000000) {
-        alert(responseData.msg);
-        setOpen(false);
-      }
-      if (responseData.code === 6 || responseData.code === 5) {
-        history.replace('/home');
-        setOpen(false);
-      }
-    } catch (error) {
-      alert('ERROR message: ', error);
-      setOpen(false);
-    }
-  };
+  // const beforeUnload = async () => {
+  //   try {
+  //     let responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken);
+  //     console.log(mapId, egmId, egmIp);
+  //     console.log(responseData);
+  //     if (responseData.code > 100000000) {
+  //       alert(responseData.msg);
+  //       setOpen(false);
+  //     }
+  //     if (responseData.code === 6 || responseData.code === 5) {
+  //       history.replace('/home');
+  //       setOpen(false);
+  //     }
+  //   } catch (error) {
+  //     alert('ERROR message: ', error);
+  //     setOpen(false);
+  //   }
+  // };
 
   const spin = async () => {
     console.log('call spin');
@@ -103,7 +102,7 @@ const GamePlay = () => {
 
   const pointCash = async cash => {
     try {
-      let responseData = await ApiController().pointCashApi(mapId, egmId, egmIp, cash, apiToken);
+      let responseData = await ApiController().pointCashCasinoApi(egmSession, checkSum, cash, casinoToken);
       console.log(responseData);
       if (responseData.code > 100000000) {
         alert('ERROR!');
@@ -134,17 +133,23 @@ const GamePlay = () => {
   // UseEffect
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const casinoToken = localStorage.getItem('casinoToken');
     const egmId = Number(localStorage.getItem('egmId'));
     const egmIp = localStorage.getItem('egmIp');
     const mapId = Number(localStorage.getItem('mapId'));
     const cameraId = localStorage.getItem('cameraId');
     const picName = localStorage.getItem('picName');
+    const egmSession = localStorage.getItem('egmSession');
+    const checkSum = localStorage.getItem('checkSum');
     const selectEgm = {
       egmId,
       egmIp,
       mapId,
       cameraId,
       picName,
+      egmSession,
+      checkSum,
+      casinoToken,
     };
     setApiToken(token);
     setSelectEgm(selectEgm);
@@ -168,6 +173,7 @@ const GamePlay = () => {
       {/* Back Drop Loading... */}
       <Backdrop className={styles.backdrop} open={open}>
         <CircularProgress color="inherit" />
+        <p>結算中...</p>
       </Backdrop>
 
       <main className={classes.slotMachine}>

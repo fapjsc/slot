@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import io from 'socket.io-client';
 
 // Context
@@ -22,7 +22,7 @@ let peerConnection;
 
 const Viewer = () => {
   const remoteCamera = useRef();
-  const history = useHistory();
+  // const history = useHistory();
 
   const [socket, setSocket] = useState();
 
@@ -31,6 +31,7 @@ const Viewer = () => {
   const { selectEgm } = userContext;
   console.log(selectEgm.cameraId);
   let cameraId = selectEgm.cameraId;
+  let audioId = selectEgm.audioId;
 
   const handleSocket = () => {
     const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
@@ -48,8 +49,6 @@ const Viewer = () => {
     handleSocket();
 
     return () => {
-      console.log(socket);
-
       if (socket) {
         socket.close();
       }
@@ -63,13 +62,13 @@ const Viewer = () => {
     socket.on('connection', () => {
       console.log('connection', socket.id);
       // socket.emit('watcher');
-      socket.emit('remoteUserSelectDevice', cameraId);
+      socket.emit('remoteUserSelectDevice', cameraId, audioId);
     });
 
-    socket.on('broadcaster', () => {
-      console.log('broadcaster');
-      // socket.emit('watcher');
-    });
+    // socket.on('broadcaster', () => {
+    //   console.log('broadcaster');
+    //   socket.emit('watcher');
+    // });
 
     socket.on('offer', (id, description) => {
       console.log('get offer', id);
@@ -102,7 +101,7 @@ const Viewer = () => {
         console.log(event.currentTarget.iceConnectionState);
         if (event.currentTarget.iceConnectionState === 'disconnected') {
           peerConnection.close();
-          socket.emit('remoteUserSelectDevice', cameraId);
+          socket.emit('remoteUserSelectDevice', cameraId, audioId);
         }
       };
 

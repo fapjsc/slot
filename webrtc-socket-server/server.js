@@ -20,15 +20,10 @@ const io = require('socket.io')(httpsServer, {
 let broadcaster;
 
 io.sockets.on('connection', socket => {
-  // socket.join('room 237', () => {
-  //   let rooms = Objects.keys(socket.rooms);
-  //   console.log(rooms, '-======='); // [ <socket.id>, 'room 237' ]
-  // });
-
   console.log('connection');
   socket.emit('connection');
   // Base Event
-  socket.on('broadcaster', () => {
+  socket.on('join', () => {
     broadcaster = socket.id;
     socket.emit('broadcaster');
     console.log('broadcaster', broadcaster);
@@ -38,9 +33,9 @@ io.sockets.on('connection', socket => {
   //   socket.to(broadcaster).emit('watcher', socket.id, deviceId);
   // });
 
-  socket.on('remoteUserSelectDevice', deviceId => {
+  socket.on('remoteUserSelectDevice', (deviceId, audioId) => {
     console.log('remoteUserSelectDevice', socket.id, deviceId);
-    socket.to(broadcaster).emit('remoteUserSelectDevice', socket.id, deviceId);
+    socket.to(broadcaster).emit('remoteUserSelectDevice', socket.id, deviceId, audioId);
   });
 
   socket.on('disconnect', () => {

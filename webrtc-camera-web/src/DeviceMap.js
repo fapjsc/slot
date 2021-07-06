@@ -17,10 +17,12 @@ const DeviceMap = () => {
         <Table striped bordered hover responsive>
           <thead>
             <tr>
-              <th>IP</th>
-              <th>設備名稱</th>
-              <th>設備 ID</th>
-              <th>EGM</th>
+              <th>Egm IP</th>
+              <th>Camera名稱</th>
+              <th>Camera ID</th>
+              <th>Audio名稱</th>
+              <th>Audio ID</th>
+              <th>Egm ID</th>
             </tr>
           </thead>
           <tbody>
@@ -28,8 +30,12 @@ const DeviceMap = () => {
               ? deviceMap.map(el => (
                   <tr>
                     <td>{el.egmIp}</td>
+                    {/* camera */}
                     <td>{el.deviceLabel}</td>
                     <td>{el.cameraId}</td>
+                    {/* audio */}
+                    <td>{el.deviceLabel}</td>
+                    <td>{el.audioDeviceId}</td>
                     <td>{el.egm}</td>
                   </tr>
                 ))
