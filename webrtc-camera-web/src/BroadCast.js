@@ -52,6 +52,7 @@ const BroadCast = () => {
 
   //獲取所有設備後，將kind為videoinput的物件設為 allDevices
   const getAllDevices = async () => {
+    await navigator.mediaDevices.getUserMedia({audio: true, video: true});
     let devices = await navigator.mediaDevices.enumerateDevices();
     console.log(devices, 'all devices');
 
