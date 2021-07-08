@@ -11,12 +11,12 @@ import GamePlay from './pages/GamePlay';
 // import GameStart from './pages/GameStart';
 // import GameStartNew from './pages/GameStartNew';
 // import GameStartMobile from './components/gameStart/GameStartMobile';
-// import LoadingScreen from './pages/LoadingScreen';
+import LoadingScreen from './pages/LoadingScreen';
 
 // Style
 import './App.css';
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Switch>
@@ -42,11 +42,11 @@ function App() {
         </Route>
 
         <Route path="/">
-          <Home />
+          <LoadingScreen />
         </Route>
       </Switch>
     </Router>
   );
-}
+};
 
 export default App;

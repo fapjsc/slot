@@ -1,55 +1,94 @@
-// import { useEffect } from 'react';
-// import { useHistory } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 
-// // Components
+// Components
+import backgroundImg from '../asset/5dde4f6dc409c1574850413996.jpg';
+import ApiController from '../api/apiController';
 
-// // Style
-// import { makeStyles } from '@material-ui/core/styles';
-// import LinearProgress from '@material-ui/core/LinearProgress';
-
-// import Box from '@material-ui/core/Box';
-// import Paper from '@material-ui/core/Paper';
+// Style
+import { makeStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Box from '@material-ui/core/Box';
+import Paper from '@material-ui/core/Paper';
 // import backImg from '../asset/yeQ9yk6EY4.jpg';
 
-// const useStyles = makeStyles(theme => ({
-//   root: {
-//     minHeight: '100vh',
-//     paddingTop: 80,
-//     backgroundImage: `url(${backImg})`,
-//   },
+const useStyles = makeStyles(theme => ({
+  root: {
+    minHeight: '100vh',
+    paddingTop: 80,
+    backgroundImage: `url(${backgroundImg})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
 
-//   paper: {
-//     maxWidth: 450,
-//     padding: 30,
-//     margin: '0 auto',
-//     textAlign: 'center',
-//     fontSize: 18,
-//     color: '#333',
-//   },
-// }));
+  paper: {
+    maxWidth: 450,
+    padding: 30,
+    margin: '200px auto',
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#333',
+  },
+}));
 
-// const LoadingScreen = () => {
-//   const classes = useStyles();
+const LoadingScreen = () => {
+  const classes = useStyles();
 
-//   // Router Props
-//   const history = useHistory();
+  // InitState
+  const [loadFailed, setIsLoadFailed] = useState(false);
 
-//   useEffect(() => {
-//     setTimeout(() => {
-//       history.replace('/home');
-//     }, 5000);
-//     // eslint-disable-next-line
-//   }, []);
-//   return (
-//     <div className={classes.root}>
-//       <Paper className={classes.paper}>
-//         <Box m={4}>
-//           <LinearProgress />
-//         </Box>
-//         <Box>Loading...</Box>
-//       </Paper>
-//     </div>
-//   );
-// };
+  // Router Props
+  let location = useLocation();
+  let params = new URLSearchParams(location.search);
+  const history = useHistory();
 
-// export default LoadingScreen;
+  let playerLandingApi = async () => {
+    setIsLoadFailed(false);
+    let pc = params.get('player');
+    let casino = params.get('casino');
+    let at = params.get('at');
+
+    localStorage.setItem('pc', pc);
+    localStorage.setItem('casino', casino);
+    localStorage.setItem('at', at);
+
+    try {
+      let responseData = await ApiController().playerLandingApi(pc, casino, at);
+      console.log(responseData);
+      if (responseData.code > 100000000) {
+        // code 超過 100000000 為問題回傳
+        setIsLoadFailed(true);
+      }
+      if (responseData.code < 100000000) {
+        history.replace('/home');
+        localStorage.setItem('token', responseData.apiToken);
+        localStorage.setItem('casinoToken', responseData.casinoToken);
+      }
+    } catch (error) {
+      console.log('ERROR message: ', error);
+    }
+  };
+
+  useEffect(() => {
+    playerLandingApi();
+    // eslint-disable-next-line
+  }, []);
+  return (
+    <div className={classes.root}>
+      {!loadFailed ? (
+        <Paper className={classes.paper}>
+          <Box m={4}>
+            <LinearProgress />
+          </Box>
+          <Box>Loading...</Box>
+        </Paper>
+      ) : (
+        <Paper className={classes.paper}>
+          <Box>Connection Failed.</Box>
+        </Paper>
+      )}
+    </div>
+  );
+};
+
+export default LoadingScreen;

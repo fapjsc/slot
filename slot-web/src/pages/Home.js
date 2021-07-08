@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, Fragment } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // Components
@@ -11,8 +11,6 @@ import UserContext from '../context/User/UserContext';
 
 // Style
 import Box from '@material-ui/core/Box';
-import Paper from '@material-ui/core/Paper';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core';
 // import backImg from '../asset/yeQ9yk6EY4.jpg';
 import backgroundImg from '../asset/5dde4f6dc409c1574850413996.jpg';
@@ -65,11 +63,12 @@ const Home = () => {
   }, []);
 
   let playerLandingApi = async () => {
-    let pc = params.get('player');
-    let casino = params.get('casino');
-    let at = params.get('at');
+    let pc = localStorage.getItem('pc');
+    let casino = localStorage.getItem('casino');
+    let at = localStorage.getItem('at');
 
     try {
+      console.log(pc, casino, at);
       let responseData = await ApiController().playerLandingApi(pc, casino, at);
       console.log(responseData);
       if (responseData.code > 100000000) {
@@ -91,26 +90,13 @@ const Home = () => {
   };
 
   return (
-    <Box className={isLoaded ? classes.root : classes.rootList}>
-      {loadFailed ? (
-        <Paper className={classes.paper}>
-          <Box>Connection Failed.</Box>
-        </Paper>
-      ) : isLoaded ? (
-        <Paper className={classes.paper}>
-          <Box m={4}>
-            <LinearProgress />
-          </Box>
-          <Box>Loading...</Box>
-        </Paper>
-      ) : egmList ? (
-        <Box>
-          {/* <Test /> */}
-          <br />
+    <Box className={classes.rootList}>
+      {egmList && (
+        <Fragment>
           <MachineList egmList={egmList} token={apiToken} />
           {!localStorage.getItem('token') && <Dialog />}
-        </Box>
-      ) : null}
+        </Fragment>
+      )}
     </Box>
   );
 };
