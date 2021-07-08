@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 
 // Components
 import MachineList from '../components/gameMachine/machineList';
@@ -50,6 +51,10 @@ const Home = () => {
   const [loadFailed, setIsLoadFailed] = useState(false);
   const classes = useStyles();
 
+  // Router Props
+  let location = useLocation();
+  let params = new URLSearchParams(location.search);
+
   // User Context
   const userContext = useContext(UserContext);
   const { apiToken, setApiToken, setEgmList, egmList } = userContext;
@@ -60,9 +65,9 @@ const Home = () => {
   }, []);
 
   let playerLandingApi = async () => {
-    let pc = '5566';
-    let casino = 'casino_demo_1';
-    let at = 'NTU2Nm5vMQ==';
+    let pc = params.get('player');
+    let casino = params.get('casino');
+    let at = params.get('at');
 
     try {
       let responseData = await ApiController().playerLandingApi(pc, casino, at);
