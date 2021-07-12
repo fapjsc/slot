@@ -26,7 +26,7 @@ const GamePlay = () => {
   // User Context
   const userContext = useContext(UserContext);
   const { apiToken, selectEgm, setApiToken, setSelectEgm } = userContext;
-  const { mapId, egmId, egmIp, egmSession, checkSum, casinoToken } = selectEgm;
+  const { mapId, egmId, egmIp, egmSession, checkSum, casinoToken, setOnActionEgmList, onActionEgmList } = selectEgm;
 
   const styles = useStyles();
 
@@ -48,8 +48,8 @@ const GamePlay = () => {
       setOpen(true);
 
       try {
-        let responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken);
-        console.log(mapId, egmId, egmIp);
+        let responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken, egmSession);
+        console.log(mapId, egmId, egmIp, egmSession);
         console.log(responseData);
         if (responseData.code > 100000000) {
           alert(responseData.msg);
@@ -156,6 +156,37 @@ const GamePlay = () => {
     setApiToken(token);
     setSelectEgm(selectEgm);
     getImg();
+
+    window.onbeforeunload = function () {
+      var n = window.event.screenX - window.screenLeft;
+      var b = n > document.documentElement.scrollWidth - 20;
+      if (!((b && window.event.clientY < 0) || window.event.altKey)) {
+        //window.event.returnValue = "真的要重新整理頁面麼？";
+        leave();
+      }
+    };
+
+    // window.onbeforeunload = function (event) {
+    //   //使用者點選瀏覽器右上角關閉按鈕或是按alt F4關閉
+    //   if ((event.clientX > document.body.clientWidth && event.clientY < 0) || event.altKey) {
+    //     alert('“點關閉按鈕”');
+    //     leave();
+    //     // document.getElementById(“hiddenForm:hiddenBtn”).click();
+    //     window.event.returnValue = '確定要退出本頁嗎?';
+    //   }
+    //   //使用者點選工作列，右鍵關閉。s或是按alt F4關閉
+    //   else if (event.clientY > document.body.clientHeight || event.altKey) {
+    //     alert('“工作列右擊關閉”');
+    //     leave();
+
+    //     // document.getElementById(“hiddenForm:hiddenBtn”).click();
+    //     window.event.returnValue = '確定要退出本頁嗎?';
+    //   }
+    //   //其他情況為重新整理
+    //   else {
+    //     alert('重新整理頁面');
+    //   }
+    // };
 
     return () => {
       // setSelectEgm({});

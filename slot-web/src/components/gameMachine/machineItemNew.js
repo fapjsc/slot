@@ -50,10 +50,11 @@ export default function MachineItem(props) {
 
   // Init State
   const [imgObj, setImgObj] = useState();
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // User Context
   const userContext = useContext(UserContext);
-  const { setSelectEgm } = userContext;
+  const { setSelectEgm, onActionEgmList } = userContext;
 
   const selectMachine = () => {
     console.log('chooseEgm input: ', props.machineDetails);
@@ -69,6 +70,7 @@ export default function MachineItem(props) {
       if (responseData.code > 100000000) {
         // code 超過 100000000 為問題回傳
         alert(responseData.msg);
+        console.log(responseData.msg);
       }
       if (responseData.code < 100000000) {
         console.log(responseData.egmSession, responseData.checkSum);
@@ -110,8 +112,15 @@ export default function MachineItem(props) {
 
   useEffect(() => {
     getImg();
+
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    const temp = onActionEgmList.find(el => el === props.machineDetails.egmIp);
+    temp ? setIsPlaying(true) : setIsPlaying(false);
+    // eslint-disable-next-line
+  }, [onActionEgmList]);
 
   return (
     <>
@@ -132,11 +141,26 @@ export default function MachineItem(props) {
           </Typography>
         </CardContent>
         <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-          <Button variant="contained" color="primary" style={{}} onClick={() => selectMachine()}>
-            {props.buttonName ? props.buttonName : '開始玩'}
-          </Button>
+          {isPlaying ? (
+            <span style={disableBtnStyle}>
+              <Button disabled style={{ color: '#f2f2f2' }}>
+                遊戲中...
+              </Button>
+            </span>
+          ) : (
+            <Button variant="contained" color="primary" style={{}} onClick={() => selectMachine()}>
+              {props.buttonName ? props.buttonName : '開始玩'}
+            </Button>
+          )}
         </CardActions>
       </Card>
     </>
   );
 }
+
+const disableBtnStyle = {
+  cursor: 'not-allowed',
+  backgroundColor: 'rgb(151, 147, 147)',
+  borderRadius: '3px',
+  padding: 0,
+};

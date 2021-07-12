@@ -1,17 +1,11 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-// import { SocketContext, socket } from './context/socket';
+import { BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
 
-// Components
-import Home from './pages/Home';
-import GamePlay from './pages/GamePlay';
-// import TheButton from './components/TheButton';
-// import Game from './pages/Game';
-// import Auth from './pages/Auth';
-// import GameScreenNew from './pages/GameScreenNew';
-// import GameStart from './pages/GameStart';
-// import GameStartNew from './pages/GameStartNew';
-// import GameStartMobile from './components/gameStart/GameStartMobile';
-import LoadingScreen from './pages/LoadingScreen';
+// Pages
+import { Auth, Home, GamePlay, LoadingScreen } from './pages/';
+
+// Hooks
+import PublicRoute from './hooks/PublicRoute';
+import PrivateRoute from './hooks/PrivateRoute';
 
 // Style
 import './App.css';
@@ -20,30 +14,11 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        <Route path="/dev">
-          <GamePlay />
-        </Route>
-        {/* <Route path="/gameStartMobile">
-          <GameStartMobile />
-        </Route>
-        <Route path="/gameStartNew">
-          <GameStartNew />
-        </Route> */}
-
-        {/* <Route path="/game/:camera">
-          <GameScreenNew />
-        </Route> */}
-        <Route path="/gameStart">
-          <GamePlay />
-        </Route>
-
-        <Route path="/home">
-          <Home />
-        </Route>
-
-        <Route path="/">
-          <LoadingScreen />
-        </Route>
+        <PublicRoute restricted={true} path="/" component={Auth} exact />
+        <PrivateRoute path="/home" component={Home} exact />
+        <PrivateRoute path="/load" component={LoadingScreen} />
+        <PrivateRoute path="/gameStart" component={GamePlay} />
+        <Redirect to="/" />
       </Switch>
     </Router>
   );

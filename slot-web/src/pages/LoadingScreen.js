@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 // Components
 import backgroundImg from '../asset/5dde4f6dc409c1574850413996.jpg';
 import ApiController from '../api/apiController';
+
+// Contest
+import UserContext from '../context/User/UserContext';
 
 // Style
 import { makeStyles } from '@material-ui/core/styles';
@@ -34,6 +37,9 @@ const useStyles = makeStyles(theme => ({
 const LoadingScreen = () => {
   const classes = useStyles();
 
+  // User Context
+  const { setApiToken } = useState(UserContext);
+
   // InitState
   const [loadFailed, setIsLoadFailed] = useState(false);
 
@@ -54,15 +60,14 @@ const LoadingScreen = () => {
 
     try {
       let responseData = await ApiController().playerLandingApi(pc, casino, at);
-      console.log(responseData);
       if (responseData.code > 100000000) {
         // code 超過 100000000 為問題回傳
         setIsLoadFailed(true);
       }
       if (responseData.code < 100000000) {
-        history.replace('/home');
         localStorage.setItem('token', responseData.apiToken);
         localStorage.setItem('casinoToken', responseData.casinoToken);
+        history.replace('/home');
       }
     } catch (error) {
       console.log('ERROR message: ', error);

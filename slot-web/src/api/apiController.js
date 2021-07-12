@@ -6,6 +6,7 @@ const ApiController = () => {
     playerLandingApi: async (pc, casino, at) => {
       return await apiGet(`PlayerLandingApi?pc=${pc}&casino=${casino}&at=${at}`);
     },
+
     playerChooseEgmApi: async (mapId, egmId, egmIP, token) => {
       let body = {
         mapId: mapId,
@@ -14,6 +15,8 @@ const ApiController = () => {
       };
       return await apiPost('PlayerChooseEgmApi', body, token);
     },
+
+    // 投幣
     pressSlotApi: async (cfgId, egmId, egmIP, buttonNo, token) => {
       let body = {
         cfgId: cfgId,
@@ -24,6 +27,7 @@ const ApiController = () => {
       return await apiPost('PressSlotApi', body, token);
     },
 
+    // demo version-1 棄用
     pointCashApi: async (cfgId, egmId, egmIP, moneyPoint, token) => {
       let body = {
         cfgId: cfgId,
@@ -41,12 +45,14 @@ const ApiController = () => {
       };
       return await apiPost('PlayerLeaveApi', body, token);
     },
-    endGameApi: async (cfgId, egmId, egmIP, token) => {
+    endGameApi: async (cfgId, egmId, egmIP, token, egmSession) => {
       console.log(cfgId, egmId, egmIP, token);
+      console.log(egmSession, 'egmSession');
       let body = {
         cfgId: cfgId,
         egmId: egmId,
         egmIP: egmIP,
+        egmSession,
       };
       return await apiPost('EndGameApi', body, token);
     },

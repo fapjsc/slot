@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext, Fragment } from 'react';
-import { useLocation } from 'react-router-dom';
 
 // Components
 import MachineList from '../components/gameMachine/machineList';
@@ -45,56 +44,41 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Home = () => {
-  const [isLoaded, setIsLoaded] = useState(true);
-  const [loadFailed, setIsLoadFailed] = useState(false);
   const classes = useStyles();
-
-  // Router Props
-  let location = useLocation();
-  let params = new URLSearchParams(location.search);
 
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, setApiToken, setEgmList, egmList } = userContext;
+  const { apiToken, setApiToken, setEgmList, egmList, getEgmList, webSocketHandler } = userContext;
 
   useEffect(() => {
-    playerLandingApi();
+    const egmStateWebSocketUri = 'ws://220.135.67.240:8000/stateQuote';
+    webSocketHandler(egmStateWebSocketUri);
+
+    let token = localStorage.getItem('token');
+    setApiToken(token);
+
     // eslint-disable-next-line
   }, []);
 
-  let playerLandingApi = async () => {
-    let pc = localStorage.getItem('pc');
-    let casino = localStorage.getItem('casino');
-    let at = localStorage.getItem('at');
+  useEffect(() => {
+    if (!apiToken) return;
 
-    try {
-      console.log(pc, casino, at);
-      let responseData = await ApiController().playerLandingApi(pc, casino, at);
-      console.log(responseData);
-      if (responseData.code > 100000000) {
-        // code 超過 100000000 為問題回傳
-        alert('ERROR!');
-        setIsLoadFailed(true);
-      }
-      if (responseData.code < 100000000) {
-        setIsLoaded(false);
-        setEgmList(responseData.egmList); // In useState
-        setApiToken(responseData.apiToken); // In useContext
-        localStorage.setItem('token', responseData.apiToken);
-        localStorage.setItem('casinoToken', responseData.casinoToken);
-      }
-    } catch (error) {
-      alert('ERROR message: ', error);
-      setIsLoadFailed(true);
-    }
-  };
+    const data = {
+      pc: localStorage.getItem('pc'),
+      casino: localStorage.getItem('casino'),
+      at: localStorage.getItem('at'),
+    };
+    getEgmList(data);
+
+    // eslint-disable-next-line
+  }, [apiToken]);
 
   return (
     <Box className={classes.rootList}>
+      {!localStorage.getItem('token') && <Dialog />}
       {egmList && (
         <Fragment>
           <MachineList egmList={egmList} token={apiToken} />
-          {!localStorage.getItem('token') && <Dialog />}
         </Fragment>
       )}
     </Box>

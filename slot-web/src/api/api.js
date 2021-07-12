@@ -26,6 +26,8 @@ export const apiGet = async targetApi => {
 
 export const apiPost = async (targetApi, data, token) => {
   let url = `${apiUrl}${targetApi}`;
+  console.log(token);
+
   let options = {
     body: JSON.stringify(data),
     cache: 'no-cache',

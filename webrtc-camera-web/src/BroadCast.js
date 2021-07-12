@@ -417,7 +417,7 @@ const BroadCast = () => {
               <Col sm="8" className="">
                 <Form.Control as="select" onChange={handleChangeDevice} defaultValue="選擇攝影機">
                   <option disabled>選擇攝影機</option>
-                  {allVideo.length ? allVideo.map(el => <option key={el.label}>{el.label}</option>) : <option>找不到設備</option>}
+                  {allVideo.length ? allVideo.map(el => <option key={el.deviceId}>{el.deviceId}</option>) : <option>找不到設備</option>}
                 </Form.Control>
               </Col>
               <Col sm="2" className="">
@@ -435,7 +435,7 @@ const BroadCast = () => {
               <Col sm="8" className="">
                 <Form.Control as="select" onChange={handleChangeDevice} defaultValue="選擇音頻">
                   <option disabled>選擇音頻</option>
-                  {allAudio.length ? allAudio.map(el => <option key={el.label}>{el.label}</option>) : <option>找不到設備</option>}
+                  {allAudio.length ? allAudio.map(el => <option key={el.deviceId}>{el.deviceId}</option>) : <option>找不到設備</option>}
                 </Form.Control>
               </Col>
               <Col sm="2" className="">
