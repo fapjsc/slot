@@ -37,6 +37,7 @@ const GamePlay = () => {
   const [cashIn, setCashIn] = useState('');
   const [open, setOpen] = useState(false);
   const [imgObj, setImgObj] = useState();
+  const [closeWebRtcConnect, setCloseWebRtcConnect] = useState(false);
 
   // Function
   const handleChange = e => {
@@ -46,7 +47,7 @@ const GamePlay = () => {
   const leave = async () => {
     if (window.confirm('確定要離開嗎？')) {
       setOpen(true);
-
+      setCloseWebRtcConnect(true);
       try {
         let responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken, egmSession);
         console.log(mapId, egmId, egmIp, egmSession);
@@ -190,6 +191,8 @@ const GamePlay = () => {
 
     return () => {
       // setSelectEgm({});
+      localStorage.removeItem('egmSession');
+      localStorage.removeItem('checkSum');
     };
 
     // eslint-disable-next-line
@@ -211,7 +214,7 @@ const GamePlay = () => {
       <main className={classes.slotMachine}>
         <div className={classes.slotBanners} style={{ backgroundImage: 'url(' + imgObj + ')' }} />
         <div className={classes.slotScreen}>
-          <Screen />
+          <Screen closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
         </div>
 
         <div className={classes.optionBox}>

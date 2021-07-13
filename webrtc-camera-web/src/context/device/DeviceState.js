@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 import DeviceReducer from './DeviceReducer';
 import DeviceContext from './DeviceContext';
-import { SET_DEVICE_MAP, SET_EGM_LIST, DEVICE_IS_CHANGE } from '../type';
+import { SET_DEVICE_MAP, SET_EGM_LIST, DEVICE_IS_CHANGE, SET_IS_LOADING } from '../type';
 
 const DeviceState = props => {
   // Init State
@@ -9,6 +9,7 @@ const DeviceState = props => {
     deviceMap: [],
     egmList: [],
     deviceIsChange: false,
+    isLoading: false,
   };
 
   // Get Http Header
@@ -20,8 +21,15 @@ const DeviceState = props => {
 
   // Get Egm List
   const getEgmList = async localServer => {
+    setIsLoading(true);
     const headers = getHeaders();
     const apiUrl = `http://220.135.67.240:8000//CameraConfigApi?localSvr=${localServer}`;
+
+    if (!headers || !apiUrl) {
+      setIsLoading(false);
+      console.error('獲取egm list時沒有headers或apiUrl錯誤');
+      return;
+    }
 
     try {
       const res = await fetch(apiUrl, {
@@ -32,8 +40,10 @@ const DeviceState = props => {
       console.log(resData);
       // console.log(resData.mapItems);
       if (resData.code === 13) setEgmList(resData.mapItems);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -63,17 +73,24 @@ const DeviceState = props => {
     }
   };
 
-  // // Set Egm List
+  // Set Egm List
   const setEgmList = egmList => {
     dispatch({ type: SET_EGM_LIST, payload: egmList });
   };
 
+  // Set Device Map
   const setDeviceMap = deviceObj => {
     dispatch({ type: SET_DEVICE_MAP, payload: deviceObj });
   };
 
+  // Device Is Change
   const setDeviceIsChange = value => {
     dispatch({ type: DEVICE_IS_CHANGE, payload: value });
+  };
+
+  // Set Loading State
+  const setIsLoading = value => {
+    dispatch({ type: SET_IS_LOADING, payload: value });
   };
 
   const [state, dispatch] = useReducer(DeviceReducer, initialState);
@@ -84,6 +101,7 @@ const DeviceState = props => {
         deviceMap: state.deviceMap,
         egmList: state.egmList,
         deviceIsChange: state.deviceIsChange,
+        isLoading: state.isLoading,
 
         setDeviceIsChange,
         setDeviceMap,

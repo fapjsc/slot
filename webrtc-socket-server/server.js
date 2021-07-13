@@ -41,6 +41,12 @@ io.sockets.on('connection', socket => {
   socket.on('disconnect', () => {
     console.log('disconnect=====');
     console.log(broadcaster);
+    console.log(socket.id);
+  });
+
+  socket.on('closePeer', id => {
+    console.log('closePeer =====', id);
+    socket.emit('closePeer', id);
   });
 
   socket.on('cameraErr', clientSocketId => {

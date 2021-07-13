@@ -65,20 +65,7 @@ const UserState = props => {
     client.onopen = () => {
       setWsClient(client);
       console.log('websocket client connected');
-      function sendData() {
-        if (client.readyState === client.OPEN) {
-          const data = {
-            messageType: 'message',
-            token: state.apiToken,
-            egmSession: state.selectEgm.egmSession,
-          };
 
-          client.send(data);
-        }
-      }
-
-      sendData();
-      console.log(state.apiToken, state.selectEgm);
       // client.send(
       //   JSON.stringify({
       //     messageType: 'message',
@@ -90,12 +77,24 @@ const UserState = props => {
 
     // 收到server回復
     client.onmessage = message => {
+      if (client.readyState === client.OPEN) {
+        const data = {
+          messageType: 'message',
+          token: localStorage.getItem('token'),
+          egmSession: localStorage.getItem('egmSession'),
+        };
+        console.log(data);
+
+        client.send(JSON.stringify(data));
+      }
+
       // const dataFromServer = JSON.parse(message);
       if (message.data.includes('EgmPlayingState')) {
         const stateList = [];
 
         let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**<<*', '*^*');
         let strArr = str.split('*^*');
+        console.log(str);
         strArr.forEach(el => {
           let obj = {};
           if (el !== '') {

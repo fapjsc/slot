@@ -22,7 +22,6 @@ const App = () => {
           <PrivateRoute path="/home" component={Home} exact />
           <PrivateRoute path="/load" component={LoadingScreen} />
           <PrivateRoute path="/gameStart" component={GamePlay} />
-          <Redirect to="/" />
         </UserState>
       </Switch>
     </Router>

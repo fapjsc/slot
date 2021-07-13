@@ -1,17 +1,18 @@
 import { useContext } from 'react';
-import DeviceContext from './context/device/DeviceContext';
+import DeviceContext from '../context/device/DeviceContext';
 
 // Style
 import Table from 'react-bootstrap/Table';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 
-const DeviceMap = () => {
+const UpdateMap = () => {
   const deviceContext = useContext(DeviceContext);
-  const { deviceMap, postEgmList } = deviceContext;
+  const { egmList, getEgmList, isLoading } = deviceContext;
   return (
     <Card className="shadow-lg p-2 bg-white rounded text-center">
-      <h2 className="text-center my-4">Device Map</h2>
+      <h2 className="text-center my-4">Exists Map</h2>
       <Card.Body>
         <Table striped bordered hover responsive>
           <thead>
@@ -25,26 +26,28 @@ const DeviceMap = () => {
             </tr>
           </thead>
           <tbody>
-            {deviceMap.length
-              ? deviceMap.map((el, index) => (
+            {egmList.length
+              ? egmList.map((el, index) => (
                   <tr key={index}>
-                    <td>{el.egm}</td>
+                    <td>{el.egmId}</td>
                     <td>{el.egmIp}</td>
                     <td>{el.deviceLabel}</td>
                     <td>{el.cameraId}</td>
                     <td>{el.deviceLabel}</td>
-                    <td>{el.audioDeviceId}</td>
+                    <td>{el.audioId}</td>
                   </tr>
                 ))
               : null}
           </tbody>
         </Table>
-        <Button disabled={!deviceMap.length} size="lg" className="w-25 p-2" variant="primary" onClick={() => postEgmList(deviceMap)}>
-          確定
+
+        <Button size="lg" className="w-25 p-2" variant="primary" disabled={isLoading} onClick={() => getEgmList(process.env.REACT_APP_AGENT_SERVER)}>
+          {isLoading && <Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />}
+          {isLoading ? 'Loading…' : '更新'}
         </Button>
       </Card.Body>
     </Card>
   );
 };
 
-export default DeviceMap;
+export default UpdateMap;

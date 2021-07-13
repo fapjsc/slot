@@ -78,6 +78,7 @@ const BroadCast = () => {
 
   // 獲取本地選擇的stream
   const getSelectStream = async deviceId => {
+    console.log(deviceId);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -138,9 +139,11 @@ const BroadCast = () => {
 
   // 本地選擇設備後獲取 stream 以及 device info
   const handleChangeDevice = e => {
+    console.log(e.target.id);
     let cameraId;
     if (e.target.id === 'camera') {
-      const selectCamera = allVideo.filter(device => device.label === e.target.value);
+      const selectCamera = allVideo.filter(device => device.deviceId === e.target.value);
+      console.log(selectCamera, 'select camera');
       if (selectCamera.length === 1) {
         cameraId = selectCamera[0].deviceId;
         getSelectStream(cameraId); // device stream
@@ -151,7 +154,8 @@ const BroadCast = () => {
     }
 
     if (e.target.id === 'audio') {
-      const selectAudio = allAudio.filter(audio => audio.label === e.target.value);
+      const selectAudio = allAudio.filter(audio => audio.deviceId === e.target.value);
+      console.log(selectAudio, 'select audio');
       if (selectAudio.length === 1) {
         setCurrentAudio(selectAudio[0]);
       }
@@ -187,7 +191,7 @@ const BroadCast = () => {
   useEffect(() => {
     getAllDevices();
     // setEgmList([9, 10]);
-    getEgmList('192.168.10.60');
+    getEgmList(process.env.REACT_APP_AGENT_SERVER);
     navigator.mediaDevices.ondevicechange = event => {
       getAllDevices();
     };
@@ -196,79 +200,6 @@ const BroadCast = () => {
       console.log(socket.id);
       socket.emit('join');
     });
-
-    // socket.on('watcher', (socketId, deviceId) => {
-    //   console.log('watcher', socketId, deviceId);
-
-    //   const peerConnection = new RTCPeerConnection(pcConfig);
-    //   peerConnections[socketId] = peerConnection;
-    //   let stream = camera.current.srcObject;
-
-    //   if (!stream) return;
-    //   console.log(stream.getTracks());
-    //   if (!stream) return;
-    //   // 將 stream 和 media track 加到 peerConnection
-    //   stream.getTracks().forEach(track => {
-    //     peerConnection.addTrack(track, stream);
-    //     console.log(track, stream);
-    //   });
-
-    //   // Candidate Event
-    //   peerConnection.onicecandidate = event => {
-    //     console.log(event, '======= onice');
-    //     if (event.candidate) {
-    //       console.log('event.candidate=======', event.candidate);
-    //       socket.emit('candidate', socketId, event.candidate);
-    //     }
-    //   };
-    //   peerConnection
-    //     .createOffer()
-    //     .then(sdp => peerConnection.setLocalDescription(sdp))
-    //     .then(() => {
-    //       socket.emit('offer', socketId, peerConnection.localDescription);
-    //       console.log('offer');
-    //     });
-    // });
-
-    // 遠端User 選擇EGM後觸發
-    // socket.on('remoteUserSelectDevice', async (socketId, deviceId) => {
-    //   console.log('remoteUserSelectDevice', socketId, deviceId);
-
-    //   const stream = await remoteStream(deviceId);
-    //   if (!stream) {
-    //     alert('找不到設備');
-    //     return;
-    //   }
-
-    //   console.log(stream.getTracks());
-
-    //   const peerConnection = new RTCPeerConnection(pcConfig);
-    //   peerConnections[socketId] = peerConnection;
-
-    //   console.log(peerConnections[socketId].iceConnectionState);
-
-    //   console.log(stream.getTracks());
-    //   // 將 stream 和 media track 加到 peerConnection
-    //   stream.getTracks().forEach(track => {
-    //     peerConnection.addTrack(track, stream);
-    //     console.log(track, stream);
-    //   });
-
-    //   // Candidate Event, 當找到本地的candiDate後發送給server，包含自己的socket id
-    //   peerConnection.onicecandidate = event => {
-    //     if (event.candidate) {
-    //       socket.emit('candidate', socketId, event.candidate);
-    //     }
-    //   };
-
-    //   // 創建offer以及設定local description
-    //   peerConnection
-    //     .createOffer()
-    //     .then(sdp => peerConnection.setLocalDescription(sdp))
-    //     .then(() => {
-    //       socket.emit('offer', socketId, peerConnection.localDescription);
-    //     });
-    // });
 
     // 收到answer後設定remote description
     socket.on('answer', (id, description) => {
@@ -282,10 +213,18 @@ const BroadCast = () => {
       peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
     });
 
+    socket.on('closePeer', id => {
+      console.log('closePeer =====', id);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('socket disconnect');
+    });
+
     // 關閉瀏覽器後socket斷線
-    window.onunload = window.onbeforeunload = () => {
-      socket.close();
-    };
+    // window.onunload = window.onbeforeunload = () => {
+    //   socket.close();
+    // };
 
     // return () => {};
     // eslint-disable-next-line
@@ -402,11 +341,11 @@ const BroadCast = () => {
                   )}
                 </Form.Control>
               </Col>
-              <Col sm="2" className="">
+              {/* <Col sm="2" className="">
                 <Button size="sm" onClick={() => getEgmList('192.168.10.60')}>
                   刷新
                 </Button>
-              </Col>
+              </Col> */}
             </Form.Group>
 
             {/* CAMERA */}

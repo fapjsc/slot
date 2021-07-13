@@ -1,7 +1,12 @@
-import { SET_DEVICE_MAP, SET_EGM_LIST, DEVICE_IS_CHANGE } from '../type';
+import { SET_DEVICE_MAP, SET_EGM_LIST, DEVICE_IS_CHANGE, SET_IS_LOADING } from '../type';
 
 const DeviceReducer = (state, action) => {
   switch (action.type) {
+    case SET_IS_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
     case DEVICE_IS_CHANGE:
       return {
         ...state,

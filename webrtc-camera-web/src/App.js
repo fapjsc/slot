@@ -1,5 +1,6 @@
 import BroadCast from './BroadCast';
-import DeviceMap from './DeviceMap';
+import UpdateMap from './deviceMap/UpdateMap';
+import ExistsMap from './deviceMap/ExistsMap';
 // import BroadCastDev from './BroadCastDev';
 
 // Style
@@ -18,7 +19,11 @@ const App = () => {
         <BroadCast />
       </SocketProvider>
       <br />
-      <DeviceMap />
+      <ExistsMap />
+      <br />
+      <br />
+      <br />
+      <UpdateMap />
     </Container>
   );
 };
