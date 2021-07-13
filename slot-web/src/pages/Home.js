@@ -78,14 +78,6 @@ const Home = () => {
     // eslint-disable-next-line
   }, [apiToken]);
 
-  useEffect(() => {
-    if (!wsClient) return;
-
-    // console.log(wsClient);
-
-    // wsClient.send('test');
-  }, [wsClient]);
-
   const handleLogout = () => {
     localStorage.clear();
     history.replace('/');

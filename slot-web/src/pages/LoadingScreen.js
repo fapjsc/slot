@@ -1,15 +1,9 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 // Components
 import backgroundImg from '../asset/5dde4f6dc409c1574850413996.jpg';
 import ApiController from '../api/apiController';
-
-// Api
-import { wsUri } from '../api/config';
-
-// Contest
-import UserContext from '../context/User/UserContext';
 
 // Style
 import { makeStyles } from '@material-ui/core/styles';
@@ -40,9 +34,6 @@ const useStyles = makeStyles(theme => ({
 
 const LoadingScreen = () => {
   const classes = useStyles();
-
-  // User Context
-  const { webSocketHandler } = useContext(UserContext);
 
   // InitState
   const [loadFailed, setIsLoadFailed] = useState(false);
@@ -77,9 +68,9 @@ const LoadingScreen = () => {
     } catch (error) {
       console.log('ERROR message: ', error);
       setIsLoadFailed(true);
-      // alert('Landing error');
+      alert('Landing error');
       localStorage.clear();
-      // history.replace('/');
+      history.replace('/');
     }
   };
 
@@ -91,8 +82,6 @@ const LoadingScreen = () => {
   useEffect(() => {
     playerLandingApi();
 
-    // const egmStateWebSocketUri = `${wsUri}stateQuote`;
-    // webSocketHandler(egmStateWebSocketUri);
     // eslint-disable-next-line
   }, []);
   return (

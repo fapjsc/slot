@@ -52,8 +52,8 @@ const UserState = props => {
     } catch (error) {
       console.log(error);
       alert('無法獲取EGM，請重新登入');
-      // localStorage.clear();
-      // history.replace('/');
+      localStorage.clear();
+      history.replace('/');
     }
   };
 
