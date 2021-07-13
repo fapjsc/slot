@@ -1,7 +1,12 @@
-import { SET_API_TOKEN, SET_EGM_LIST, SET_SELECT_EGM, SET_ON_ACTION_EGM_LIST } from '../type';
+import { SET_API_TOKEN, SET_EGM_LIST, SET_SELECT_EGM, SET_ON_ACTION_EGM_LIST, SET_WS_CLIENT } from '../type';
 
 const UserReducer = (state, action) => {
   switch (action.type) {
+    case SET_WS_CLIENT:
+      return {
+        ...state,
+        wsClient: action.payload,
+      };
     case SET_ON_ACTION_EGM_LIST:
       return {
         ...state,

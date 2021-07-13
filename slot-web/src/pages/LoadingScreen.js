@@ -5,6 +5,9 @@ import { useHistory, useLocation } from 'react-router-dom';
 import backgroundImg from '../asset/5dde4f6dc409c1574850413996.jpg';
 import ApiController from '../api/apiController';
 
+// Api
+import { wsUri } from '../api/config';
+
 // Contest
 import UserContext from '../context/User/UserContext';
 
@@ -12,6 +15,7 @@ import UserContext from '../context/User/UserContext';
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 // import backImg from '../asset/yeQ9yk6EY4.jpg';
 
@@ -38,7 +42,7 @@ const LoadingScreen = () => {
   const classes = useStyles();
 
   // User Context
-  const { setApiToken } = useState(UserContext);
+  const { webSocketHandler } = useContext(UserContext);
 
   // InitState
   const [loadFailed, setIsLoadFailed] = useState(false);
@@ -63,6 +67,7 @@ const LoadingScreen = () => {
       if (responseData.code > 100000000) {
         // code 超過 100000000 為問題回傳
         setIsLoadFailed(true);
+        localStorage.clear();
       }
       if (responseData.code < 100000000) {
         localStorage.setItem('token', responseData.apiToken);
@@ -71,11 +76,23 @@ const LoadingScreen = () => {
       }
     } catch (error) {
       console.log('ERROR message: ', error);
+      setIsLoadFailed(true);
+      // alert('Landing error');
+      localStorage.clear();
+      // history.replace('/');
     }
+  };
+
+  const handleClick = () => {
+    localStorage.clear();
+    history.replace('/');
   };
 
   useEffect(() => {
     playerLandingApi();
+
+    // const egmStateWebSocketUri = `${wsUri}stateQuote`;
+    // webSocketHandler(egmStateWebSocketUri);
     // eslint-disable-next-line
   }, []);
   return (
@@ -89,7 +106,12 @@ const LoadingScreen = () => {
         </Paper>
       ) : (
         <Paper className={classes.paper}>
-          <Box>Connection Failed.</Box>
+          <Box m={4}>Connection Failed.</Box>
+          <Box>
+            <Button onClick={handleClick} variant="contained" color="primary">
+              重新登入
+            </Button>
+          </Box>
         </Paper>
       )}
     </div>

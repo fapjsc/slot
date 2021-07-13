@@ -141,7 +141,7 @@ export default function MachineItem(props) {
           </Typography>
         </CardContent>
         <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-          {isPlaying ? (
+          {isPlaying || props.machineDetails.isPlaying ? (
             <span style={disableBtnStyle}>
               <Button disabled style={{ color: '#f2f2f2' }}>
                 遊戲中...

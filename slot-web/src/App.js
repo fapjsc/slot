@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
 // Pages
 import { Auth, Home, GamePlay, LoadingScreen } from './pages/';
 
+// Context
+import UserState from './context/User/UserState';
+
 // Hooks
 import PublicRoute from './hooks/PublicRoute';
 import PrivateRoute from './hooks/PrivateRoute';
@@ -14,11 +17,13 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        <PublicRoute restricted={true} path="/" component={Auth} exact />
-        <PrivateRoute path="/home" component={Home} exact />
-        <PrivateRoute path="/load" component={LoadingScreen} />
-        <PrivateRoute path="/gameStart" component={GamePlay} />
-        <Redirect to="/" />
+        <UserState>
+          <PublicRoute restricted={true} path="/" component={Auth} exact />
+          <PrivateRoute path="/home" component={Home} exact />
+          <PrivateRoute path="/load" component={LoadingScreen} />
+          <PrivateRoute path="/gameStart" component={GamePlay} />
+          <Redirect to="/" />
+        </UserState>
       </Switch>
     </Router>
   );

@@ -1,12 +1,15 @@
-import { useEffect, useState, useContext, Fragment } from 'react';
+import { useEffect, useContext, Fragment } from 'react';
+import { useHistory } from 'react-router-dom';
 
 // Components
 import MachineList from '../components/gameMachine/machineList';
-import ApiController from '../api/apiController';
 import Dialog from '../components/UI/Dialog';
 
 // Context
 import UserContext from '../context/User/UserContext';
+
+// Api
+import { wsUri } from '../api/config';
 
 // Style
 import Box from '@material-ui/core/Box';
@@ -46,16 +49,18 @@ const useStyles = makeStyles(theme => ({
 const Home = () => {
   const classes = useStyles();
 
+  const history = useHistory();
+
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, setApiToken, setEgmList, egmList, getEgmList, webSocketHandler } = userContext;
+  const { apiToken, setApiToken, egmList, getEgmList, webSocketHandler, wsClient } = userContext;
 
   useEffect(() => {
-    const egmStateWebSocketUri = 'ws://220.135.67.240:8000/stateQuote';
+    const egmStateWebSocketUri = `${wsUri}stateQuote`;
     webSocketHandler(egmStateWebSocketUri);
-
     let token = localStorage.getItem('token');
     setApiToken(token);
+    // console.log(egmList);
 
     // eslint-disable-next-line
   }, []);
@@ -66,12 +71,25 @@ const Home = () => {
     const data = {
       pc: localStorage.getItem('pc'),
       casino: localStorage.getItem('casino'),
-      at: localStorage.getItem('at'),
+      token: localStorage.getItem('token'),
     };
     getEgmList(data);
 
     // eslint-disable-next-line
   }, [apiToken]);
+
+  useEffect(() => {
+    if (!wsClient) return;
+
+    // console.log(wsClient);
+
+    // wsClient.send('test');
+  }, [wsClient]);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    history.replace('/');
+  };
 
   return (
     <Box className={classes.rootList}>
@@ -81,6 +99,8 @@ const Home = () => {
           <MachineList egmList={egmList} token={apiToken} />
         </Fragment>
       )}
+
+      <button onClick={handleLogout}>logout</button>
     </Box>
   );
 };

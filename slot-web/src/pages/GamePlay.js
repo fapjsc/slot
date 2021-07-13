@@ -26,7 +26,7 @@ const GamePlay = () => {
   // User Context
   const userContext = useContext(UserContext);
   const { apiToken, selectEgm, setApiToken, setSelectEgm } = userContext;
-  const { mapId, egmId, egmIp, egmSession, checkSum, casinoToken, setOnActionEgmList, onActionEgmList } = selectEgm;
+  const { mapId, egmId, egmIp, egmSession, checkSum, casinoToken } = selectEgm;
 
   const styles = useStyles();
 
@@ -190,7 +190,6 @@ const GamePlay = () => {
 
     return () => {
       // setSelectEgm({});
-      // setApiToken('');
     };
 
     // eslint-disable-next-line
