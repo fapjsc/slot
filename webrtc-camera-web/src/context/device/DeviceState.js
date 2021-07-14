@@ -66,6 +66,7 @@ const DeviceState = props => {
       });
       const resData = await res.json();
       console.log(resData);
+      if (resData.code === 8) getEgmList(process.env.REACT_APP_AGENT_SERVER);
       setDeviceIsChange(true);
       // console.log(resData.mapItems);
     } catch (error) {

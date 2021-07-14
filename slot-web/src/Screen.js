@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, useContext } from 'react';
-// import { useHistory } from 'react-router-dom';
 import io from 'socket.io-client';
 
 // Context
@@ -20,9 +19,8 @@ const pcConfig = {
 };
 let peerConnection;
 
-const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect }) => {
+const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave }) => {
   const remoteCamera = useRef();
-  // const history = useHistory();
 
   const [socket, setSocket] = useState();
 
@@ -34,8 +32,8 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect }) => {
   let audioId = selectEgm.audioId;
 
   const handleSocket = () => {
-    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
-    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
+    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
+    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
     setSocket(socketConnect);
   };
 
@@ -49,7 +47,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect }) => {
 
     return () => {
       if (socket) {
-        peerConnection.close();
+        // peerConnection.close();
         socket.close();
       }
     };
@@ -62,8 +60,8 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect }) => {
     socket.on('connection', () => {
       console.log('connection', socket.id);
       // socket.emit('watcher');
-      // socket.emit('remoteUserSelectDevice', cameraId, audioId);
-      socket.emit('remoteUserSelectDevice', 'fbeeb7e467a9f690700523a7079e26205fb76d1ddcdef79075b9378602d3f65e', '75a59ed289aa13f5abcf465cc75583efccb2c744fd61e1c24f7c5362540b26dc');
+      socket.emit('remoteUserSelectDevice', cameraId, audioId);
+      // socket.emit('remoteUserSelectDevice', 'fbeeb7e467a9f690700523a7079e26205fb76d1ddcdef79075b9378602d3f65e', '75a59ed289aa13f5abcf465cc75583efccb2c744fd61e1c24f7c5362540b26dc');
       console.log(audioId);
     });
 
@@ -115,7 +113,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect }) => {
     });
 
     socket.on('cameraErr', () => {
-      // alert('device change');
+      leave('Camera Error');
     });
 
     socket.on('disconnect', () => {
@@ -127,7 +125,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect }) => {
 
     window.onunload = window.onbeforeunload = () => {
       socket.close();
-      peerConnection.close();
+      // peerConnection.close();
     };
 
     // eslint-disable-next-line
@@ -138,8 +136,8 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect }) => {
     if (closeWebRtcConnect) {
       socket.emit('closePeer', socket.id);
       // socket.close();
-      peerConnection.close();
-      setCloseWebRtcConnect(false);
+      // peerConnection.close();
+      // setCloseWebRtcConnect(false);
     }
     // eslint-disable-next-line
   }, [closeWebRtcConnect]);

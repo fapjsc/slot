@@ -46,10 +46,11 @@ io.sockets.on('connection', socket => {
 
   socket.on('closePeer', id => {
     console.log('closePeer =====', id);
-    socket.emit('closePeer', id);
+    socket.to(broadcaster).emit('closePeerCon', id);
   });
 
   socket.on('cameraErr', clientSocketId => {
+    console.log(clientSocketId);
     socket.to(clientSocketId).emit('cameraErr');
   });
 

@@ -13,6 +13,7 @@ import { wsUri } from '../api/config';
 
 // Style
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
 // import backImg from '../asset/yeQ9yk6EY4.jpg';
 import backgroundImg from '../asset/5dde4f6dc409c1574850413996.jpg';
@@ -24,8 +25,7 @@ const useStyles = makeStyles(theme => ({
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    height: '100vh',
-    paddingTop: '15rem',
+    height: '100%',
   },
   rootList: {
     // backgroundImage: `url(${backgroundImg})`,
@@ -53,7 +53,7 @@ const Home = () => {
 
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, setApiToken, egmList, getEgmList, webSocketHandler, wsClient } = userContext;
+  const { apiToken, setApiToken, egmList, getEgmList, webSocketHandler, onActionEgmList, egmConnectList, setEgmConnectList } = userContext;
 
   useEffect(() => {
     const egmStateWebSocketUri = `${wsUri}stateQuote`;
@@ -66,6 +66,10 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    console.log(egmConnectList);
+  }, [egmConnectList]);
+
+  useEffect(() => {
     if (!apiToken) return;
 
     const data = {
@@ -76,7 +80,7 @@ const Home = () => {
     getEgmList(data);
 
     // eslint-disable-next-line
-  }, [apiToken]);
+  }, [apiToken, onActionEgmList]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -84,16 +88,22 @@ const Home = () => {
   };
 
   return (
-    <Box className={classes.rootList}>
-      {!localStorage.getItem('token') && <Dialog />}
-      {egmList && (
-        <Fragment>
-          <MachineList egmList={egmList} token={apiToken} />
-        </Fragment>
-      )}
+    <div className={classes.root}>
+      <Box className={classes.rootList}>
+        {!localStorage.getItem('isShow') && <Dialog />}
+        <Box style={{ padding: 20, display: 'flex', justifyContent: 'flex-end' }}>
+          <Button onClick={handleLogout} variant="contained" color="secondary">
+            登出
+          </Button>
+        </Box>
 
-      <button onClick={handleLogout}>logout</button>
-    </Box>
+        {egmList && (
+          <Fragment>
+            <MachineList egmList={egmList} token={apiToken} />
+          </Fragment>
+        )}
+      </Box>
+    </div>
   );
 };
 

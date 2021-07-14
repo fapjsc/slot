@@ -8,10 +8,10 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: black;
+  /* background-color: black;
   background-image: url('./asset/5dde4f6dc409c1574850413996.jpg');
   background-size: cover;
-  background-position: center;
+  background-position: center; */
 }
 
 .MuiDialog-paper {

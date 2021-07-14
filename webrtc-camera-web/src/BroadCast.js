@@ -123,6 +123,8 @@ const BroadCast = () => {
             height: 432, //800
           },
         });
+
+        console.log(stream);
         return stream;
       } catch (error) {
         console.log(error);
@@ -213,8 +215,11 @@ const BroadCast = () => {
       peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
     });
 
-    socket.on('closePeer', id => {
-      console.log('closePeer =====', id);
+    socket.on('closePeerCon', id => {
+      console.log('closePeerCon =====', id);
+      if (!peerConnections[id]) return;
+      peerConnections[id].close();
+      console.log(peerConnections[id], '1234');
     });
 
     socket.on('disconnect', () => {
@@ -242,12 +247,20 @@ const BroadCast = () => {
 
   useEffect(() => {
     if (!allVideo.length) setNoDevice(true);
-    if (allVideo.length) {
+    if (allVideo.length && egmList.length) {
       // 遠端User 選擇EGM後觸發
       socket.on('remoteUserSelectDevice', async (socketId, deviceId, audioId) => {
         console.log('remoteUserSelectDevice', socketId);
         console.log('get audio id', audioId);
         console.log('get camera id', deviceId);
+        // console.log(egmList);
+        // const temp = allVideo.find(el => el.deviceId === deviceId);
+        // console.log(temp);
+        // if (!temp) {
+        //   socket.emit('cameraErr', socketId);
+        //   return;
+        // }
+
         try {
           const stream = await remoteStream(deviceId, audioId);
           console.log(stream.getTracks());
@@ -255,7 +268,7 @@ const BroadCast = () => {
           const peerConnection = new RTCPeerConnection(pcConfig);
           peerConnections[socketId] = peerConnection;
 
-          // console.log(peerConnections[socketId].iceConnectionState);
+          console.log(peerConnections[socketId], 'peer');
 
           console.log(stream);
           console.log(stream.getTracks());
@@ -284,10 +297,15 @@ const BroadCast = () => {
               };
               console.log(peerConnections);
             });
+
+          peerConnection.oniceconnectionstatechange = event => {
+            console.log(event, 'oniceconnectionstatechange');
+          };
         } catch (error) {
           console.warn('fail to get stream', error);
         }
       });
+
       setNoDevice(false);
     }
 

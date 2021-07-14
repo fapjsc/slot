@@ -44,8 +44,8 @@ const GamePlay = () => {
     setCashIn(Number(e.target.value));
   };
 
-  const leave = async () => {
-    if (window.confirm('確定要離開嗎？')) {
+  const leave = async title => {
+    if (window.confirm(title)) {
       setOpen(true);
       setCloseWebRtcConnect(true);
       try {
@@ -66,25 +66,6 @@ const GamePlay = () => {
       }
     }
   };
-
-  // const beforeUnload = async () => {
-  //   try {
-  //     let responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken);
-  //     console.log(mapId, egmId, egmIp);
-  //     console.log(responseData);
-  //     if (responseData.code > 100000000) {
-  //       alert(responseData.msg);
-  //       setOpen(false);
-  //     }
-  //     if (responseData.code === 6 || responseData.code === 5) {
-  //       history.replace('/home');
-  //       setOpen(false);
-  //     }
-  //   } catch (error) {
-  //     alert('ERROR message: ', error);
-  //     setOpen(false);
-  //   }
-  // };
 
   const spin = async () => {
     console.log('call spin');
@@ -131,6 +112,58 @@ const GamePlay = () => {
     }
   };
 
+  // window.onbeforeunload = function (event) {
+  //   return beforeUnload(event);
+  // };
+
+  // const beforeUnload = event => {
+  //   event = event ? event : window.event ? window.event : null;
+  //   var myIE = getBrowser();
+  //   if (myIE === 'IE') {
+  //     // IE
+  //     const cy = event.clientY || event.target.event.clientY;
+  //     const ak = event.altKey || event.target.event.altKey;
+
+  //     if (cy < 0 || ak) {
+  //       return '確定要離開本頁面嗎？';
+  //     }
+  //   } else {
+  //     // Firefox、Chrome
+  //     const nodeName = event.currentTarget.document.activeElement.nodeName;
+  //     if (nodeName !== 'A') {
+  //       history.replace('/home');
+  //       return '確定要離開本頁面嗎？';
+  //     }
+  //   }
+  // };
+
+  /*** * 獲取當前瀏覽器類型 */
+  // const getBrowser = () => {
+  //   const userAgent = navigator.userAgent; //取得瀏覽器的userAgent字符串
+
+  //   const isOpera = userAgent.indexOf('Opera') > -1;
+  //   if (isOpera) {
+  //     //判斷是否Opera瀏覽器
+  //     return 'Opera';
+  //   }
+
+  //   if (userAgent.indexOf('Firefox') > -1) {
+  //     //判斷是否Firefox瀏覽器
+  //     return 'FF';
+  //   }
+  //   if (userAgent.indexOf('Chrome') > -1) {
+  //     return 'Chrome';
+  //   }
+  //   if (userAgent.indexOf('Safari') > -1) {
+  //     //判斷是否Safari瀏覽器
+  //     return 'Safari';
+  //   }
+  //   if (userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1 && !isOpera) {
+  //     //判斷是否IE瀏覽器
+  //     return 'IE';
+  //   }
+  // };
+
   // UseEffect
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -158,37 +191,6 @@ const GamePlay = () => {
     setSelectEgm(selectEgm);
     getImg();
 
-    window.onbeforeunload = function () {
-      var n = window.event.screenX - window.screenLeft;
-      var b = n > document.documentElement.scrollWidth - 20;
-      if (!((b && window.event.clientY < 0) || window.event.altKey)) {
-        //window.event.returnValue = "真的要重新整理頁面麼？";
-        leave();
-      }
-    };
-
-    // window.onbeforeunload = function (event) {
-    //   //使用者點選瀏覽器右上角關閉按鈕或是按alt F4關閉
-    //   if ((event.clientX > document.body.clientWidth && event.clientY < 0) || event.altKey) {
-    //     alert('“點關閉按鈕”');
-    //     leave();
-    //     // document.getElementById(“hiddenForm:hiddenBtn”).click();
-    //     window.event.returnValue = '確定要退出本頁嗎?';
-    //   }
-    //   //使用者點選工作列，右鍵關閉。s或是按alt F4關閉
-    //   else if (event.clientY > document.body.clientHeight || event.altKey) {
-    //     alert('“工作列右擊關閉”');
-    //     leave();
-
-    //     // document.getElementById(“hiddenForm:hiddenBtn”).click();
-    //     window.event.returnValue = '確定要退出本頁嗎?';
-    //   }
-    //   //其他情況為重新整理
-    //   else {
-    //     alert('重新整理頁面');
-    //   }
-    // };
-
     return () => {
       // setSelectEgm({});
       localStorage.removeItem('egmSession');
@@ -214,7 +216,7 @@ const GamePlay = () => {
       <main className={classes.slotMachine}>
         <div className={classes.slotBanners} style={{ backgroundImage: 'url(' + imgObj + ')' }} />
         <div className={classes.slotScreen}>
-          <Screen closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
+          <Screen leave={leave} closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
         </div>
 
         <div className={classes.optionBox}>
@@ -225,7 +227,7 @@ const GamePlay = () => {
             </button>
           </div>
           <div className={classes.btnBox}>
-            <button className={classes.btn} style={accountBtn} onClick={leave}>
+            <button className={classes.btn} style={accountBtn} onClick={() => leave('確定要離開嗎？')}>
               結算
             </button>
             <button className={classes.btn} style={maxBtn} onClick={maxBet}>

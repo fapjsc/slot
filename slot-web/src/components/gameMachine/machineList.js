@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const MachineList = props => {
-  console.log(props.egmList);
+  // console.log(props.egmList);
   const classes = useStyles();
 
   const renderMachineList = props.egmList.map((item, index) => {

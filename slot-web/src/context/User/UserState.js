@@ -7,7 +7,7 @@ import { apiUrl } from '../../api/config';
 
 import { w3cwebsocket as W3CWebsocket } from 'websocket';
 
-import { SET_API_TOKEN, SET_EGM_LIST, SET_SELECT_EGM, SET_ON_ACTION_EGM_LIST, SET_WS_CLIENT } from '../type';
+import { SET_API_TOKEN, SET_EGM_LIST, SET_SELECT_EGM, SET_ON_ACTION_EGM_LIST, SET_WS_CLIENT, SET_EGM_CONNECT_STATE_LIST } from '../type';
 
 const UserState = props => {
   // Router Props
@@ -22,6 +22,7 @@ const UserState = props => {
     selectEgm: {},
     onActionEgmList: [],
     wsClient: null,
+    egmConnectList: [],
   };
 
   // Get Http Header
@@ -34,10 +35,10 @@ const UserState = props => {
 
   // Get Egm List
   const getEgmList = async data => {
-    const { pc, casino, at, token } = data;
-    console.log(pc, casino, at);
+    const { pc, casino, token } = data;
+    // console.log(pc, casino, at);
     const uri = `${apiUrl}EgmApi?pc=${pc}&casino=${casino}&tk=${token}`;
-    console.log(uri);
+    // console.log(uri);
     const headers = getHeaders();
 
     if (!headers) return;
@@ -61,6 +62,8 @@ const UserState = props => {
   const webSocketHandler = uri => {
     const client = new W3CWebsocket(uri);
 
+    let stateArr = [];
+
     // 1.建立連接
     client.onopen = () => {
       setWsClient(client);
@@ -83,18 +86,36 @@ const UserState = props => {
           token: localStorage.getItem('token'),
           egmSession: localStorage.getItem('egmSession'),
         };
-        console.log(data);
+        // console.log(data);
 
         client.send(JSON.stringify(data));
       }
-
       // const dataFromServer = JSON.parse(message);
+
+      // Egm Connect State
+      if (message.data.includes('EgmState')) {
+        let obj = {};
+        let strArr = message.data.split('*|*');
+        obj = {
+          ip: strArr[3],
+          map: strArr[1],
+          id: strArr[2],
+          state: strArr[4],
+        };
+
+        const existsItem = stateArr.findIndex(el => el.ip === obj.ip);
+        if (existsItem === -1) stateArr.push(obj);
+      }
+
+      // console.log(stateArr, 'egm connect success');
+      setEgmConnectList(stateArr);
+
+      // Egm Playing State
       if (message.data.includes('EgmPlayingState')) {
         const stateList = [];
 
         let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**<<*', '*^*');
         let strArr = str.split('*^*');
-        console.log(str);
         strArr.forEach(el => {
           let obj = {};
           if (el !== '') {
@@ -106,6 +127,7 @@ const UserState = props => {
           }
           stateList.push(obj);
         });
+
         if (stateList.length > 0) {
           let arr = [];
           stateList.forEach(el => {
@@ -117,7 +139,7 @@ const UserState = props => {
             }
           });
 
-          console.log(arr);
+          // console.log(arr, 'isPlaying...');
           arr.length > 0 ? setOnActionEgmList(arr) : setOnActionEgmList([]);
           // console.log(props.egmList);
         } else {
@@ -157,6 +179,10 @@ const UserState = props => {
     dispatch({ type: SET_WS_CLIENT, payload: client });
   };
 
+  const setEgmConnectList = egmList => {
+    dispatch({ type: SET_EGM_CONNECT_STATE_LIST, payload: egmList });
+  };
+
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
   return (
@@ -169,6 +195,7 @@ const UserState = props => {
         selectEgm: state.selectEgm,
         onActionEgmList: state.onActionEgmList,
         wsClient: state.wsClient,
+        egmConnectList: state.egmConnectList,
 
         setApiToken,
         setEgmList,
@@ -176,6 +203,7 @@ const UserState = props => {
         getEgmList,
         webSocketHandler,
         setOnActionEgmList,
+        setEgmConnectList,
       }}
     >
       {props.children}

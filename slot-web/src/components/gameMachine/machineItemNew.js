@@ -54,7 +54,7 @@ export default function MachineItem(props) {
 
   // User Context
   const userContext = useContext(UserContext);
-  const { setSelectEgm, onActionEgmList } = userContext;
+  const { setSelectEgm, onActionEgmList, egmConnectList } = userContext;
 
   const selectMachine = () => {
     console.log('chooseEgm input: ', props.machineDetails);

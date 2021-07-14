@@ -22,6 +22,10 @@ export default function ScrollDialog() {
     setOpen(false);
   };
 
+  const handleExit = () => {
+    localStorage.setItem('isShow', true);
+  };
+
   const descriptionElementRef = React.useRef(null);
   React.useEffect(() => {
     if (open) {
@@ -34,7 +38,7 @@ export default function ScrollDialog() {
 
   return (
     <div>
-      <Dialog maxWidth="xm" open={open} onClose={handleClose} scroll={scroll} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
+      <Dialog onExit={handleExit} maxWidth="xm" open={open} onClose={handleClose} scroll={scroll} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
         <DialogTitle id="scroll-dialog-title" className={`${styles.title}`}>
           Title
         </DialogTitle>
