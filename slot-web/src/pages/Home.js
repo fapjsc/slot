@@ -61,7 +61,9 @@ const Home = () => {
     let token = localStorage.getItem('token');
     setApiToken(token);
     // console.log(egmList);
-
+    return () => {
+      wsClient.close();
+    };
     // eslint-disable-next-line
   }, []);
 
