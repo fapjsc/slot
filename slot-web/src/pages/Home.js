@@ -66,7 +66,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    console.log(egmConnectList);
+    // console.log(egmConnectList);
   }, [egmConnectList]);
 
   useEffect(() => {
