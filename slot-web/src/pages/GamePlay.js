@@ -13,6 +13,8 @@ import classes from './GamePlay.module.scss';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import Snackbar from '@material-ui/core/Snackbar';
+import Fade from '@material-ui/core/Fade';
 
 // Material Style
 const useStyles = makeStyles(theme => ({
@@ -38,8 +40,25 @@ const GamePlay = () => {
   const [open, setOpen] = useState(false);
   const [imgObj, setImgObj] = useState();
   const [closeWebRtcConnect, setCloseWebRtcConnect] = useState(false);
+  const [autoPlay, setAutoPlay] = useState(false);
+  const [state, setState] = useState({
+    openSnackbar: true,
+    Transition: Fade,
+  });
 
   // Function
+  const handleClose = () => {
+    setState({
+      ...state,
+      openSnackbar: false,
+    });
+  };
+
+  const handleAutoPlay = () => {
+    setAutoPlay(true);
+    handleClose();
+  };
+
   const handleChange = e => {
     setCashIn(Number(e.target.value));
   };
@@ -219,7 +238,10 @@ const GamePlay = () => {
       <main className={classes.slotMachine}>
         <div className={classes.slotBanners} style={{ backgroundImage: 'url(' + imgObj + ')' }} />
         <div className={classes.slotScreen}>
-          <Screen leave={leave} closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
+          <Screen autoPlay={autoPlay} setAutoPlay={setAutoPlay} leave={leave} closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
+          <div>
+            <Snackbar onClick={handleAutoPlay} open={state.openSnackbar} onClose={handleClose} TransitionComponent={state.Transition} message="點擊後開始播放" key={state.Transition.name} />
+          </div>
         </div>
 
         <div className={classes.optionBox}>

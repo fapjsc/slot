@@ -53,7 +53,7 @@ const Home = () => {
 
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, setApiToken, egmList, getEgmList, webSocketHandler, onActionEgmList, egmConnectList, setEgmConnectList } = userContext;
+  const { apiToken, setApiToken, egmList, getEgmList, webSocketHandler, onActionEgmList, egmConnectList, wsClient } = userContext;
 
   useEffect(() => {
     const egmStateWebSocketUri = `${wsUri}stateQuote`;
@@ -83,6 +83,7 @@ const Home = () => {
   }, [apiToken, onActionEgmList]);
 
   const handleLogout = () => {
+    if (wsClient) wsClient.close();
     localStorage.clear();
     history.replace('/');
   };

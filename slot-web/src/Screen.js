@@ -19,7 +19,7 @@ const pcConfig = {
 };
 let peerConnection;
 
-const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave }) => {
+const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, setAutoPlay }) => {
   const remoteCamera = useRef();
 
   const [socket, setSocket] = useState();
@@ -33,8 +33,8 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave }) => {
   let audioId = selectEgm.audioId;
 
   const handleSocket = () => {
-    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
-    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
+    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
+    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
     setSocket(socketConnect);
   };
 
@@ -54,6 +54,14 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave }) => {
     };
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (autoPlay) {
+      videoPlay()
+      setAutoPlay(false);
+    }
+    // eslint-disable-next-line
+  }, [autoPlay]);
 
   useEffect(() => {
     if (!socket) return;
@@ -151,7 +159,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave }) => {
     }
   }, [remoteCamera]);
 
-  return <video onClick={videoPlay} ref={remoteCamera} autoPlay playsInline controls style={{ width: '100%', height: '100%' }} />;
+  return <video onClick={videoPlay} ref={remoteCamera} autoPlay playsInline style={{ width: '100%', height: '100%' }} />;
 };
 
 export default Viewer;
