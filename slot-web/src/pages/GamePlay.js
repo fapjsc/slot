@@ -52,10 +52,12 @@ const GamePlay = () => {
         let responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken, egmSession);
         console.log(mapId, egmId, egmIp, egmSession);
         console.log(responseData);
+
         if (responseData.code > 100000000) {
           alert(responseData.msg);
           setOpen(false);
         }
+
         if (responseData.code === 6 || responseData.code === 5) {
           history.replace('/home');
           setOpen(false);
@@ -90,6 +92,7 @@ const GamePlay = () => {
         alert('ERROR!');
       }
       if (responseData.code < 100000000) {
+        console.log(responseData);
       }
     } catch (error) {
       alert('ERROR message: ', error);

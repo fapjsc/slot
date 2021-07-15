@@ -68,29 +68,21 @@ const UserState = props => {
     client.onopen = () => {
       setWsClient(client);
       console.log('websocket client connected');
-
-      // client.send(
-      //   JSON.stringify({
-      //     messageType: 'message',
-      //     token: state.apiToken,
-      //     egmSession: state.selectEgm.egmSession,
-      //   })
-      // );
     };
 
     // 收到server回復
     client.onmessage = message => {
+      // const dataFromServer = JSON.parse(message);
       if (client.readyState === client.OPEN) {
         const data = {
           messageType: 'message',
           token: localStorage.getItem('token'),
           egmSession: localStorage.getItem('egmSession'),
         };
-        // console.log(data);
+        console.log(data);
 
         client.send(JSON.stringify(data));
       }
-      // const dataFromServer = JSON.parse(message);
 
       // Egm Connect State
       if (message.data.includes('EgmState')) {

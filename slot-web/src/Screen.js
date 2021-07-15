@@ -32,8 +32,8 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave }) => {
   let audioId = selectEgm.audioId;
 
   const handleSocket = () => {
-    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
-    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
+    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
+    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
     setSocket(socketConnect);
   };
 

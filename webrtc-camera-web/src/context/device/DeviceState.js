@@ -23,7 +23,7 @@ const DeviceState = props => {
   const getEgmList = async localServer => {
     setIsLoading(true);
     const headers = getHeaders();
-    const apiUrl = `http://220.135.67.240:8000//CameraConfigApi?localSvr=${localServer}`;
+    const apiUrl = `${process.env.REACT_APP_MAIN_AGENT}//CameraConfigApi?localSvr=${localServer}`;
 
     if (!headers || !apiUrl) {
       setIsLoading(false);
@@ -50,7 +50,7 @@ const DeviceState = props => {
   // Post Egm
   const postEgmList = async newMap => {
     const headers = getHeaders();
-    const apiUrl = `http://220.135.67.240:8000//CameraConfigApi`;
+    const apiUrl = `${process.env.REACT_APP_MAIN_AGENT}//CameraConfigApi`;
 
     console.log(newMap);
 

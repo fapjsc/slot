@@ -78,7 +78,8 @@ const BroadCast = () => {
 
   // 獲取本地選擇的stream
   const getSelectStream = async deviceId => {
-    console.log(deviceId);
+    console.log(window.stream);
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -100,21 +101,10 @@ const BroadCast = () => {
   const remoteStream = async (cameraId, audioId) => {
     console.log('接收到的device ID', cameraId);
     console.log('接收到的audio ID', audioId);
-    console.log(egmList);
     if (cameraId) {
-      //   const filterVideo = await allVideo.filter(el => el.cameraId === cameraId)[0];
-      //   if (!filterVideo) {
-      //     // alert('找不到camera id');
-      //     console.warn('找不到camera id');
-      //     return;
-      //   }
-      //   console.log(filterVideo.groupId);
-
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: {
-            // groupId: filterVideo.groupId,
-            // deviceId: '137d986cdacd90799cc65d3d14ab6eda169c934c557335f973401d311568afb1',
             deviceId: audioId,
           },
           video: {
@@ -124,13 +114,12 @@ const BroadCast = () => {
           },
         });
 
-        console.log(stream);
         return stream;
       } catch (error) {
         console.log(error);
       }
     } else {
-      // alert('沒有camera id..');
+      console.log('沒有camera id..');
     }
   };
 
@@ -315,7 +304,7 @@ const BroadCast = () => {
   return (
     <Card className="shadow-lg p-3 mb-5 bg-white rounded">
       <h1 className="text-center my-4">BroadCast</h1>
-      {noDevice ? (
+      {false ? (
         <div className="text-center">
           <h1 className="text-center mt-4">no device</h1>
           <Button className="w-25" size="sm" onClick={setAllVideo}>
