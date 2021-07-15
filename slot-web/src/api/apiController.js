@@ -16,14 +16,17 @@ const ApiController = () => {
       return await apiPost('PlayerChooseEgmApi', body, token);
     },
 
-    // 投幣
-    pressSlotApi: async (cfgId, egmId, egmIP, buttonNo, token) => {
+    // 玩遊戲
+    pressSlotApi: async (cfgId, egmId, egmIP, buttonNo, token, egmSession) => {
       let body = {
         cfgId: cfgId,
         egmId: egmId,
         egmIP: egmIP,
         buttonNo: buttonNo,
+        EgmSession: egmSession,
       };
+
+      console.log(body);
       return await apiPost('PressSlotApi', body, token);
     },
 

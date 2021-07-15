@@ -79,7 +79,7 @@ const UserState = props => {
           token: localStorage.getItem('token'),
           egmSession: localStorage.getItem('egmSession'),
         };
-        console.log(data);
+        // console.log(data);
 
         client.send(JSON.stringify(data));
       }

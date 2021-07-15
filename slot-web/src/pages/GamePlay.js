@@ -72,7 +72,7 @@ const GamePlay = () => {
   const spin = async () => {
     console.log('call spin');
     try {
-      let responseData = await ApiController().pressSlotApi(mapId, egmId, egmIp, 77, apiToken);
+      let responseData = await ApiController().pressSlotApi(mapId, egmId, egmIp, 77, apiToken, egmSession);
       if (responseData.code > 100000000) {
         alert('ERROR!');
       }
