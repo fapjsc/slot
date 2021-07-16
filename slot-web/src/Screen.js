@@ -144,8 +144,8 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
     if (!setCloseWebRtcConnect) return;
     if (closeWebRtcConnect) {
       socket.emit('closePeer', socket.id);
-      // socket.close();
-      // peerConnection.close();
+      socket.close();
+      peerConnection.close();
       setCloseWebRtcConnect(false);
     }
     // eslint-disable-next-line
