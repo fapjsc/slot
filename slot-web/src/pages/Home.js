@@ -62,7 +62,7 @@ const Home = () => {
     setApiToken(token);
     // console.log(egmList);
     return () => {
-      wsClient.close();
+      if (wsClient) wsClient.close();
     };
     // eslint-disable-next-line
   }, []);

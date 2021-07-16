@@ -207,6 +207,14 @@ const BroadCast = () => {
     socket.on('closePeerCon', id => {
       console.log('closePeerCon =====', id);
       if (!peerConnections[id]) return;
+      socket.close();
+
+      console.log(peerConnections[id]);
+
+      // peerConnections[id].removeTrack();
+      // const track = stream.getVideoTracks()[0];
+      // const sender = peerConnections[id].addTrack(track, stream);
+      // peerConnections[id].removeTrack(sender);
       peerConnections[id].close();
       console.log(peerConnections[id], '1234');
     });

@@ -57,7 +57,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
 
   useEffect(() => {
     if (autoPlay) {
-      videoPlay()
+      videoPlay();
       setAutoPlay(false);
     }
     // eslint-disable-next-line
@@ -146,7 +146,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
       socket.emit('closePeer', socket.id);
       // socket.close();
       // peerConnection.close();
-      // setCloseWebRtcConnect(false);
+      setCloseWebRtcConnect(false);
     }
     // eslint-disable-next-line
   }, [closeWebRtcConnect]);

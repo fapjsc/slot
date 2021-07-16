@@ -44,7 +44,7 @@ io.sockets.on('connection', socket => {
     console.log(socket.id);
   });
 
-  socket.on('closePeer', id => {
+  socket.on('closePeer', (id, stream) => {
     console.log('closePeer =====', id);
     socket.to(broadcaster).emit('closePeerCon', id);
   });
