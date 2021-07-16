@@ -240,7 +240,7 @@ const GamePlay = () => {
         <div className={classes.slotScreen}>
           <Screen autoPlay={autoPlay} setAutoPlay={setAutoPlay} leave={leave} closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
           <div>
-            <Snackbar onClick={handleAutoPlay} open={state.openSnackbar} onClose={handleClose} TransitionComponent={state.Transition} message="點擊後開始播放" key={state.Transition.name} />
+            <Snackbar onClick={handleAutoPlay} open={state.openSnackbar} onClose={handleClose} TransitionComponent={state.Transition} message="點擊此處後開始播放" key={state.Transition.name} />
           </div>
         </div>
 
