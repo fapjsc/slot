@@ -64,7 +64,6 @@ const UserState = props => {
     const client = new W3CWebsocket(uri);
 
     let stateArr = [];
-    let createArr = [];
 
     // 1.建立連接
     client.onopen = () => {
@@ -107,13 +106,12 @@ const UserState = props => {
         let strArr = message.data.split('*|*');
         obj = {
           ip: strArr[3],
-          map: strArr[1],
-          id: strArr[2],
-          state: strArr[4],
+          map: Number(strArr[1]),
+          id: Number(strArr[2]),
+          state: Number(strArr[4]),
         };
 
-        const existsItem = stateArr.findIndex(el => el.ip === obj.ip);
-        if (existsItem === -1) stateArr.push(obj);
+        setEgmConnectList(obj);
       }
 
       // console.log(stateArr, 'egm connect success');
@@ -188,8 +186,8 @@ const UserState = props => {
     dispatch({ type: SET_WS_CLIENT, payload: client });
   };
 
-  const setEgmConnectList = egmList => {
-    dispatch({ type: SET_EGM_CONNECT_STATE_LIST, payload: egmList });
+  const setEgmConnectList = egmItem => {
+    dispatch({ type: SET_EGM_CONNECT_STATE_LIST, payload: egmItem });
   };
 
   const setEgmCreditList = egmItem => {
@@ -209,6 +207,7 @@ const UserState = props => {
         onActionEgmList: state.onActionEgmList,
         wsClient: state.wsClient,
         egmConnectList: state.egmConnectList,
+        egmCreditList: state.egmCreditList,
 
         setApiToken,
         setEgmList,

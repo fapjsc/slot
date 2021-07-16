@@ -3,18 +3,49 @@ import { SET_API_TOKEN, SET_EGM_LIST, SET_SELECT_EGM, SET_ON_ACTION_EGM_LIST, SE
 const UserReducer = (state, action) => {
   switch (action.type) {
     case SET_EMG_CREDIT_STATE_LIST:
-      // const existingEgmItemIndex = state.egmCreditList.findIndex(item => item.map === action.payload.map);
-      // const existingItem = state.egmConnectList[existingEgmItemIndex];
-      // console.log(existingItem);
+      const { egmCreditList } = state;
+      const existingEgmItemIndex = state.egmCreditList.findIndex(item => item.map === action.payload.map);
+      const existingItem = egmCreditList[existingEgmItemIndex];
+      let updateItems;
+
+      if (existingItem) {
+        const updateItem = {
+          ...existingItem,
+        };
+
+        updateItems = [...egmCreditList];
+        updateItems[existingEgmItemIndex] = updateItem;
+      } else {
+        updateItems = egmCreditList.concat(action.payload);
+      }
       return {
         ...state,
+        egmCreditList: updateItems,
       };
 
+    // Set Egm Connect State
     case SET_EGM_CONNECT_STATE_LIST:
+      const { egmConnectList } = state;
+      const existingEgmConnectIndex = egmConnectList.findIndex(item => item.map === action.payload.map);
+      const existingEgmConnectItem = egmConnectList[existingEgmConnectIndex];
+      let updateEgmConnectList;
+      if (existingEgmConnectItem) {
+        const updateItem = {
+          ...existingEgmConnectItem,
+        };
+
+        updateEgmConnectList = [...egmConnectList];
+        updateEgmConnectList[existingEgmConnectIndex] = updateItem;
+      } else {
+        updateEgmConnectList = egmConnectList.concat(action.payload);
+      }
+
       return {
         ...state,
-        egmConnectList: action.payload,
+        egmConnectList: updateEgmConnectList,
       };
+
+    // Set WS Client
     case SET_WS_CLIENT:
       return {
         ...state,

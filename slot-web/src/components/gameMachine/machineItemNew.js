@@ -51,10 +51,12 @@ export default function MachineItem(props) {
   // Init State
   const [imgObj, setImgObj] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasCredit, setHasCredit] = useState(false);
+  const [isConn, setIsConn] = useState(true);
 
   // User Context
   const userContext = useContext(UserContext);
-  const { setSelectEgm, onActionEgmList, egmConnectList } = userContext;
+  const { setSelectEgm, onActionEgmList, egmCreditList, egmConnectList } = userContext;
 
   const selectMachine = () => {
     console.log('chooseEgm input: ', props.machineDetails);
@@ -127,6 +129,25 @@ export default function MachineItem(props) {
     // eslint-disable-next-line
   }, [onActionEgmList]);
 
+  useEffect(() => {
+    if (!egmCreditList.length) return;
+    const arr = egmCreditList.filter(el => el.credit > 0);
+
+    arr.forEach(el => {
+      if (Number(el.map) === props.machineDetails.mapId) setHasCredit(true);
+    });
+    // eslint-disable-next-line
+  }, [egmCreditList]);
+
+  useEffect(() => {
+    if (!egmConnectList.length) return;
+    const arr = egmConnectList.filter(el => el.state !== 1);
+    arr.forEach(el => {
+      if (el.map === props.machineDetails.mapId) setIsConn(false);
+    });
+    // eslint-disable-next-line
+  }, [egmConnectList]);
+
   return (
     <>
       <Card className={`${classes.root}`}>
@@ -146,10 +167,22 @@ export default function MachineItem(props) {
           </Typography>
         </CardContent>
         <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-          {isPlaying && props.machineDetails.isPlaying ? (
+          {!isConn ? (
+            <span style={disableBtnStyle}>
+              <Button disabled style={{ color: '#f2f2f2' }}>
+                無法連線
+              </Button>
+            </span>
+          ) : isPlaying && props.machineDetails.isPlaying ? (
             <span style={disableBtnStyle}>
               <Button disabled style={{ color: '#f2f2f2' }}>
                 遊戲中...
+              </Button>
+            </span>
+          ) : hasCredit ? (
+            <span style={disableBtnStyle}>
+              <Button disabled style={{ color: '#f2f2f2' }}>
+                結算中...
               </Button>
             </span>
           ) : (
