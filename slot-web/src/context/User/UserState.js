@@ -7,7 +7,7 @@ import { apiUrl } from '../../api/config';
 
 import { w3cwebsocket as W3CWebsocket } from 'websocket';
 
-import { SET_API_TOKEN, SET_EGM_LIST, SET_SELECT_EGM, SET_ON_ACTION_EGM_LIST, SET_WS_CLIENT, SET_EGM_CONNECT_STATE_LIST } from '../type';
+import { SET_API_TOKEN, SET_EGM_LIST, SET_SELECT_EGM, SET_ON_ACTION_EGM_LIST, SET_WS_CLIENT, SET_EGM_CONNECT_STATE_LIST, SET_EMG_CREDIT_STATE_LIST } from '../type';
 
 const UserState = props => {
   // Router Props
@@ -23,6 +23,7 @@ const UserState = props => {
     onActionEgmList: [],
     wsClient: null,
     egmConnectList: [],
+    egmCreditList: [],
   };
 
   // Get Http Header
@@ -63,6 +64,7 @@ const UserState = props => {
     const client = new W3CWebsocket(uri);
 
     let stateArr = [];
+    let createArr = [];
 
     // 1.建立連接
     client.onopen = () => {
@@ -72,6 +74,7 @@ const UserState = props => {
 
     // 收到server回復
     client.onmessage = message => {
+      // console.log(message);
       // const dataFromServer = JSON.parse(message);
       if (client.readyState === client.OPEN) {
         const data = {
@@ -79,9 +82,23 @@ const UserState = props => {
           token: localStorage.getItem('token'),
           egmSession: localStorage.getItem('egmSession'),
         };
-        console.log(data);
+        // console.log(data);
 
         client.send(JSON.stringify(data));
+      }
+
+      // Egm Create State
+      if (message.data.includes('EgmCredit')) {
+        let obj = {};
+        let strArr = message.data.split('*|*');
+        obj = {
+          ip: strArr[3],
+          map: strArr[1],
+          id: strArr[2],
+          credit: strArr[4],
+        };
+
+        setEgmCreditList(obj);
       }
 
       // Egm Connect State
@@ -104,7 +121,7 @@ const UserState = props => {
 
       // Egm Playing State
       if (message.data.includes('EgmPlayingState')) {
-        const stateList = [];
+        let stateList = [];
 
         let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**<<*', '*^*');
         let strArr = str.split('*^*');
@@ -131,7 +148,7 @@ const UserState = props => {
             }
           });
 
-          // console.log(arr, 'isPlaying...');
+          console.log(arr, 'isPlaying...');
           arr.length > 0 ? setOnActionEgmList(arr) : setOnActionEgmList([]);
           // console.log(props.egmList);
         } else {
@@ -173,6 +190,10 @@ const UserState = props => {
 
   const setEgmConnectList = egmList => {
     dispatch({ type: SET_EGM_CONNECT_STATE_LIST, payload: egmList });
+  };
+
+  const setEgmCreditList = egmItem => {
+    dispatch({ type: SET_EMG_CREDIT_STATE_LIST, payload: egmItem });
   };
 
   const [state, dispatch] = useReducer(UserReducer, initialState);

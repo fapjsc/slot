@@ -110,6 +110,11 @@ export default function MachineItem(props) {
     if (images[0]) setImgObj(images[0].default);
   };
 
+  const handlePlayStartClick = () => {
+    setIsPlaying(true);
+    selectMachine();
+  };
+
   useEffect(() => {
     getImg();
 
@@ -141,14 +146,14 @@ export default function MachineItem(props) {
           </Typography>
         </CardContent>
         <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-          {isPlaying || props.machineDetails.isPlaying ? (
+          {isPlaying && props.machineDetails.isPlaying ? (
             <span style={disableBtnStyle}>
               <Button disabled style={{ color: '#f2f2f2' }}>
                 遊戲中...
               </Button>
             </span>
           ) : (
-            <Button variant="contained" color="primary" style={{}} onClick={() => selectMachine()}>
+            <Button variant="contained" color="primary" style={{}} onClick={handlePlayStartClick}>
               {props.buttonName ? props.buttonName : '開始玩'}
             </Button>
           )}
