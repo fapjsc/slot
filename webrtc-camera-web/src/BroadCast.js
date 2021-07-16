@@ -207,7 +207,7 @@ const BroadCast = () => {
     socket.on('closePeerCon', id => {
       console.log('closePeerCon =====', id);
       if (!peerConnections[id]) return;
-      socket.close();
+      // socket.close();
 
       console.log(peerConnections[id]);
 
