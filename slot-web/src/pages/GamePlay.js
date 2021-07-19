@@ -254,7 +254,7 @@ const GamePlay = () => {
 
         <div className={classes.optionBox}>
           <div className={classes.inputBox}>
-            <input type="number" value={cashIn} onChange={handleChange} placeholder="點數" />
+            <input type="number" value={cashIn} onChange={handleChange} placeholder="點數" onWheel={event => event.currentTarget.blur()} />
             {/* <button className={classes.slotButton} onClick={() => pointCash(cashIn)}>
               投幣
             </button> */}
