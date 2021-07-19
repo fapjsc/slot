@@ -19,7 +19,7 @@ const pcConfig = {
 };
 let peerConnection;
 
-const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, setAutoPlay }) => {
+const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, setAutoPlay, setSocketClient }) => {
   const remoteCamera = useRef();
 
   const [socket, setSocket] = useState();
@@ -33,9 +33,10 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
   const webNumber = selectEgm.webNumber;
 
   const handleSocket = () => {
-    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
-    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
+    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
+    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
     setSocket(socketConnect);
+    setSocketClient(socketConnect);
   };
 
   const videoPlay = () => {
@@ -144,12 +145,14 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
 
   useEffect(() => {
     if (!setCloseWebRtcConnect) return;
-    if (closeWebRtcConnect) {
+    if (closeWebRtcConnect && socket && peerConnection) {
       socket.emit('closePeer', socket.id);
+      socket.emit('unsubscribe', webNumber);
       socket.close();
       peerConnection.close();
-      setCloseWebRtcConnect(false);
     }
+    setCloseWebRtcConnect(false);
+
     // eslint-disable-next-line
   }, [closeWebRtcConnect]);
 

@@ -255,6 +255,11 @@ const BroadCast = () => {
       peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
     });
 
+    socket.on('userLeft', socketId => {
+      console.log(`[${socketId}] is leave`);
+      window.location.reload();
+    });
+
     socket.on('closePeerCon', id => {
       console.log('closePeerCon =====', id);
       if (!peerConnections[id]) return;

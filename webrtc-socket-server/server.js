@@ -20,19 +20,27 @@ const io = require('socket.io')(httpsServer, {
 let broadcaster;
 
 io.sockets.on('connection', socket => {
-  console.log('connection', socket.id);
+  console.log(`connection: [${socket.id}]`);
+  console.log(`房間數量：[${socket.rooms.size}]`);
+  for (let [key, value] of socket.rooms.entries()) console.log(`房間名稱：[${value}]`);
 
   socket.on('createRoom', roomId => {
     socket.join(roomId);
     socket.emit('create-room-message', `room: ${roomId} 已經建立`);
-
-    console.log(`${socket.id}建立 room: ${roomId}`);
+    console.log(`房間數量：[${socket.rooms.size}]`);
+    for (let [key, value] of socket.rooms.entries()) console.log(`房間名稱：[${value}]`);
   });
 
   socket.on('joinRoom', (roomId, cameraId, audioId) => {
     socket.join(roomId);
-    console.log(`${socket.id} join Room: ${roomId} Camera: ${cameraId}, Audio: ${audioId}`);
+    console.log(`${socket.id} join Room: [${roomId}] Camera:[ ${cameraId}], Audio: [${audioId}]`);
     io.to(roomId).emit('sendCamera', socket.id, cameraId, audioId);
+  });
+
+  socket.on('unsubscribe', roomId => {
+    console.log(`[${socket.id}] is leave [Room:${roomId}]`);
+    socket.leave(roomId);
+    socket.to(roomId).emit('userLeft', socket.id);
   });
 
   // socket.on('remoteUserSelectDevice', (deviceId, audioId) => {

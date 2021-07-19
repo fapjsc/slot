@@ -43,6 +43,7 @@ const GamePlay = () => {
   const [open, setOpen] = useState(false);
   const [imgObj, setImgObj] = useState();
   const [closeWebRtcConnect, setCloseWebRtcConnect] = useState(false);
+  const [socketClient, setSocketClient] = useState(null);
   const [autoPlay, setAutoPlay] = useState(false);
   const [state, setState] = useState({
     openSnackbar: true,
@@ -70,6 +71,7 @@ const GamePlay = () => {
     console.log('test');
     if (window.confirm(title)) {
       setOpen(true);
+      socketClient.emit('unsubscribe', selectEgm.webNumber);
       setCloseWebRtcConnect(true);
       try {
         let responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken, egmSession);
@@ -246,7 +248,7 @@ const GamePlay = () => {
         <div className={classes.slotBanners} style={{ backgroundImage: 'url(' + imgObj + ')' }} />
 
         <div className={classes.slotScreen}>
-          <Screen autoPlay={autoPlay} setAutoPlay={setAutoPlay} leave={leave} closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
+          <Screen setSocketClient={setSocketClient} autoPlay={autoPlay} setAutoPlay={setAutoPlay} leave={leave} closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
           <div>
             <Snackbar onClick={handleAutoPlay} open={state.openSnackbar} onClose={handleClose} TransitionComponent={state.Transition} message="點擊此處後開使遊戲" key={state.Transition.name} />
           </div>
