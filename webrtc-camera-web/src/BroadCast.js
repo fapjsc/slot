@@ -188,9 +188,9 @@ const BroadCast = () => {
     getAllDevices();
     // setEgmList([9, 10]);
     getEgmList(process.env.REACT_APP_AGENT_SERVER);
-    navigator.mediaDevices.ondevicechange = event => {
-      getAllDevices();
-    };
+    // navigator.mediaDevices.ondevicechange = event => {
+    //   getAllDevices();
+    // };
     socket.on('connect', () => {
       console.log('connection===========');
       console.log(socket.id);
