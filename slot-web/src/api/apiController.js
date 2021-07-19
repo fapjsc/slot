@@ -64,9 +64,11 @@ const ApiController = () => {
     pointCashCasinoApi: async (egmSession, checkSum, moneyPoint, casinoToken) => {
       let body = {
         EgmSession: egmSession,
-        Point: moneyPoint,
+        Point: Number(moneyPoint),
         CheckSum: Number(checkSum),
       };
+
+      console.log(body, 'body');
       return await apiPostCasino('CashToEgmApi', body, casinoToken);
     },
   };

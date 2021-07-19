@@ -55,6 +55,7 @@ export const apiPost = async (targetApi, data, token) => {
 //=== Casino Api ===//
 export const apiPostCasino = async (targetApi, data, token) => {
   console.log(data);
+  console.log(targetApi);
   let url = `${apiCasinoUrl}${targetApi}`;
   let options = {
     body: JSON.stringify(data),
