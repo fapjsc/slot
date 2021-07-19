@@ -25,7 +25,6 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
   const [socket, setSocket] = useState();
 
   // User Context
-
   const userContext = useContext(UserContext);
   const { selectEgm } = userContext;
   let cameraId = selectEgm.cameraId;
