@@ -174,17 +174,31 @@
 
 .btnHandle {
   background: hsl(323, 21%, 16%); /* fallback for old browsers */
-  padding-top: 3%;
-  padding-bottom: 3%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: 80%;
+  padding-top: 2%;
 
   @media only screen and(max-width: 720px) {
-    padding-bottom: 30%;
+  }
+}
+
+.slotBtnBox {
+  @media only screen and(max-width: 480px) {
+    width: 20%;
   }
 }
 
 .btnBox {
   display: flex;
   justify-content: space-around;
+  width: 20%;
+
+  @media only screen and(max-width: 550px) {
+    width: 25%;
+  }
 
   // .btn {
   //   cursor: pointer;

@@ -21,6 +21,7 @@ import ApiController from '../../api/apiController';
 
 // Style
 import machineIcon from '../../asset/egzj1ui37v.jpeg';
+import { TrendingUpRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -133,20 +134,31 @@ export default function MachineItem(props) {
 
   useEffect(() => {
     if (!egmCreditList.length) return;
-    const arr = egmCreditList.filter(el => el.credit > 0);
+    const arr = egmCreditList.filter(el => Number(el.credit) > 0);
 
-    arr.forEach(el => {
-      if (Number(el.map) === props.machineDetails.mapId) setHasCredit(true);
-    });
+    const existingIndex = arr.findIndex(el => Number(el.map) === Number(props.machineDetails.mapId));
+
+    existingIndex !== -1 ? setHasCredit(true) : setHasCredit(false);
+
+    // arr.forEach(el => {
+    //   Number(el.map) === Number(props.machineDetails.mapId) ? setHasCredit(true) : setHasCredit(false);
+    // });
     // eslint-disable-next-line
   }, [egmCreditList]);
 
   useEffect(() => {
     if (!egmConnectList.length) return;
+    // console.log(egmConnectList, 'egm connect list');
+
     const arr = egmConnectList.filter(el => el.state !== 1);
+
+    console.log(egmConnectList, 'arr');
+
     arr.forEach(el => {
-      if (el.map === props.machineDetails.mapId) setIsConn(false);
+      el.map === props.machineDetails.mapId ? setIsConn(false) : setIsConn(true);
     });
+    const existingItem = egmConnectList.findIndex(el => el.map === props.machineDetails.mapId);
+    existingItem === -1 ? setIsConn(false) : setIsConn(TrendingUpRounded);
     // eslint-disable-next-line
   }, [egmConnectList]);
 
@@ -172,7 +184,7 @@ export default function MachineItem(props) {
           {!isConn ? (
             <span style={disableBtnStyle}>
               <Button disabled style={{ color: '#f2f2f2' }}>
-                無法連線
+                連線中...
               </Button>
             </span>
           ) : isPlaying && props.machineDetails.isPlaying ? (

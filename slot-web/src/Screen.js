@@ -28,14 +28,13 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
 
   const userContext = useContext(UserContext);
   const { selectEgm } = userContext;
-  console.log(selectEgm.cameraId);
   let cameraId = selectEgm.cameraId;
   let audioId = selectEgm.audioId;
   const webNumber = selectEgm.webNumber;
 
   const handleSocket = () => {
-    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
-    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
+    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
+    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
     setSocket(socketConnect);
   };
 

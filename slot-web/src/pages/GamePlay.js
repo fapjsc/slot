@@ -108,6 +108,7 @@ const GamePlay = () => {
   };
 
   const pointCash = async cash => {
+    console.log(cash, 'cash');
     try {
       let responseData = await ApiController().pointCashCasinoApi(egmSession, checkSum, cash, casinoToken);
       console.log(responseData);
@@ -257,7 +258,9 @@ const GamePlay = () => {
             {/* <button className={classes.slotButton} onClick={() => pointCash(cashIn)}>
               投幣
             </button> */}
-            <SlotButton />
+            <div className={classes.slotBtnBox} onClick={() => pointCash(cashIn)}>
+              <SlotButton />
+            </div>
           </div>
           {/* <div className={classes.btnBox}>
             <TheButton text="離開" />
@@ -284,11 +287,15 @@ const GamePlay = () => {
       <div className={classes.btnHandle}>
         <div className={classes.btnBox}>
           <TheButton text="AUTO" />
+        </div>
+        <div className={classes.btnBox}>
           <TheButton text="MAX" />
+        </div>
+        <div className={classes.btnBox} onClick={spin}>
           <TheButton text="SPIN" />
         </div>
 
-        <div className={`${classes.btnBox} ${classes.leaveBtnBox}`} onClick={() => leave('確定要離開嗎？')}>
+        <div className={`${classes.leaveBtnBox}`} onClick={() => leave('確定要離開嗎？')}>
           <LeaveButton />
         </div>
       </div>
