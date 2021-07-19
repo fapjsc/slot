@@ -145,10 +145,10 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
   useEffect(() => {
     if (!setCloseWebRtcConnect) return;
     if (closeWebRtcConnect) {
-      // socket.emit('closePeer', socket.id);
-      // socket.close();
-      // peerConnection.close();
-      // setCloseWebRtcConnect(false);
+      socket.emit('closePeer', socket.id);
+      socket.close();
+      peerConnection.close();
+      setCloseWebRtcConnect(false);
     }
     // eslint-disable-next-line
   }, [closeWebRtcConnect]);

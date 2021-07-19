@@ -193,7 +193,8 @@ export default function MachineItem(props) {
                 遊戲中...
               </Button>
             </span>
-          ) : hasCredit ? (
+          ) : // hasCredit
+          false ? (
             <span style={disableBtnStyle}>
               <Button disabled style={{ color: '#f2f2f2' }}>
                 結算中...
