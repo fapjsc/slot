@@ -230,8 +230,7 @@ const BroadCast = () => {
             socket.emit('offer', socketId, peerConnection.localDescription);
             navigator.mediaDevices.ondevicechange = event => {
               console.log(event, 'ondevicechange');
-              console.log(stream);
-              console.log(stream.getTracks());
+              socket.emit('offer', socketId, peerConnection.localDescription);
               // socket.emit('cameraErr', socketId);
             };
             console.log(peerConnections);
