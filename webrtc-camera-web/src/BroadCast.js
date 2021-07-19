@@ -107,8 +107,10 @@ const BroadCast = () => {
           },
           video: {
             deviceId: { exact: cameraId },
-            width: 509, //1280
-            height: 432, //800
+            // width: 509, //1280
+            // height: 432, //800,
+            width: 1018, //1280
+            height: 864, //800
           },
         });
 
@@ -230,7 +232,7 @@ const BroadCast = () => {
             socket.emit('offer', socketId, peerConnection.localDescription);
             navigator.mediaDevices.ondevicechange = event => {
               console.log(event, 'ondevicechange');
-              socket.emit('offer', socketId, peerConnection.localDescription);
+              // socket.emit('offer', socketId, peerConnection.localDescription);
               // socket.emit('cameraErr', socketId);
             };
             console.log(peerConnections);
