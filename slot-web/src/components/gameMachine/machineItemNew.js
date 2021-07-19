@@ -64,7 +64,7 @@ export default function MachineItem(props) {
     chooseEgm(props.machineDetails, props.token);
   };
 
-  const chooseEgm = async ({ mapId, egmId, egmIp, cameraId, audioId, picName }, apiToken) => {
+  const chooseEgm = async ({ mapId, egmId, egmIp, cameraId, audioId, picName, cameraIndex }, apiToken) => {
     try {
       let responseData = await ApiController().playerChooseEgmApi(mapId, egmId, egmIp, apiToken);
       console.log('chooseEgm:', responseData); // 顯示取得回傳資料
@@ -83,6 +83,7 @@ export default function MachineItem(props) {
           cameraId,
           picName,
           audioId,
+          cameraIndex,
         });
 
         localStorage.setItem('egmId', Number(egmId));
@@ -93,6 +94,7 @@ export default function MachineItem(props) {
         localStorage.setItem('picName', picName);
         localStorage.setItem('egmSession', responseData.egmSession);
         localStorage.setItem('checkSum', responseData.checkSum);
+        localStorage.setItem('webNumber', cameraIndex);
         history.replace('/gameStart');
       }
     } catch (error) {

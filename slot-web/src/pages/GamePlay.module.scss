@@ -15,7 +15,7 @@
   position: relative;
   height: 38rem;
   max-width: 50rem;
-  margin: 10rem auto;
+  margin: 10rem auto 0 auto;
   background-size: 100% 100%;
 
   @media only screen and(max-width: 768px) {
@@ -65,36 +65,16 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  bottom: 1%;
+  bottom: 2%;
   left: 15%;
   width: 72%;
-  height: 27%;
+  height: 13%;
 
-  @media only screen and(max-width: 720px) {
-    bottom: 4%;
-    left: 15%;
-    width: 72%;
-    height: 23.5%;
-  }
-
-  // @media only screen and(width: 720px) and(height:1280px) {
-  //   bottom: 2%;
-  //   height: 25%;
-  // }
-
-  // @media only screen and(max-width: 424px) {
-  //   bottom: 0%;
-  //   height: 25%;
-  // }
-
-  // @media only screen and(max-width: 414px) {
-  //   bottom: 1.5%;
-  //   height: 24%;
-  // }
-
-  // @media only screen and(max-width: 320px) {
-  //   bottom: 1.5%;
-  //   height: 25.5%;
+  // @media only screen and(max-width: 720px) {
+  //   bottom: 4%;
+  //   left: 15%;
+  //   width: 72%;
+  //   height: 23.5%;
   // }
 }
 
@@ -107,6 +87,7 @@
     width: 50%;
     padding: 3%;
     background-color: white;
+    border-radius: 50rem;
 
     @media only screen and(max-width: 414px) {
       padding: 1%;
@@ -191,40 +172,59 @@
   }
 }
 
+.btnHandle {
+  background: hsl(323, 21%, 16%); /* fallback for old browsers */
+  padding-top: 3%;
+  padding-bottom: 3%;
+
+  @media only screen and(max-width: 720px) {
+    padding-bottom: 30%;
+  }
+}
+
 .btnBox {
   display: flex;
   justify-content: space-around;
-  width: 100%;
 
-  .btn {
-    cursor: pointer;
-    box-shadow: 0 7px #999;
-    box-shadow: 0 0 #233d35;
-    font-weight: bold;
-    outline: none;
-    font-size: 1.4rem;
-    padding: 15px 10px;
-    border-radius: 50%;
+  // .btn {
+  //   cursor: pointer;
+  //   box-shadow: 0 7px #999;
+  //   box-shadow: 0 0 #233d35;
+  //   font-weight: bold;
+  //   outline: none;
+  //   font-size: 1.4rem;
+  //   padding: 15px 10px;
+  //   border-radius: 50%;
 
-    @media only screen and(width: 424px) and(height: 753px) {
-      padding: 8px;
-      font-size: 1rem;
-    }
+  //   @media only screen and(width: 424px) and(height: 753px) {
+  //     padding: 8px;
+  //     font-size: 1rem;
+  //   }
 
-    @media only screen and(max-width: 500px) {
-      padding: 5px 8px;
-      font-size: 0.5rem;
-      border-radius: 15px;
-    }
+  //   @media only screen and(max-width: 500px) {
+  //     padding: 5px 8px;
+  //     font-size: 0.5rem;
+  //     border-radius: 15px;
+  //   }
 
-    @media only screen and(max-width: 320px) {
-      padding: 2px 4px;
-      font-size: 0.2rem;
-    }
-  }
+  //   @media only screen and(max-width: 320px) {
+  //     padding: 2px 4px;
+  //     font-size: 0.2rem;
+  //   }
+  // }
 
-  .btn:active {
-    box-shadow: 0 5px #666;
-    transform: translateY(4px);
+  // .btn:active {
+  //   box-shadow: 0 5px #666;
+  //   transform: translateY(4px);
+  // }
+}
+
+.leaveBtnBox {
+  position: fixed;
+  bottom: 1%;
+  left: 5%;
+  @media only screen and(min-width: 1024px) {
+    position: fixed;
+    bottom: 90%;
   }
 }

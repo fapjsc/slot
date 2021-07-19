@@ -20,23 +20,25 @@ const io = require('socket.io')(httpsServer, {
 let broadcaster;
 
 io.sockets.on('connection', socket => {
-  console.log('connection');
-  socket.emit('connection');
-  // Base Event
-  socket.on('join', () => {
-    broadcaster = socket.id;
-    socket.emit('broadcaster');
-    console.log('broadcaster', broadcaster);
-  });
-  // socket.on('watcher', deviceId => {
-  //   console.log('watcher', socket.id, deviceId);
-  //   socket.to(broadcaster).emit('watcher', socket.id, deviceId);
-  // });
+  console.log('connection', socket.id);
 
-  socket.on('remoteUserSelectDevice', (deviceId, audioId) => {
-    console.log('remoteUserSelectDevice', socket.id, deviceId, audioId);
-    socket.to(broadcaster).emit('remoteUserSelectDevice', socket.id, deviceId, audioId);
+  socket.on('createRoom', roomId => {
+    socket.join(roomId);
+    socket.emit('create-room-message', `room: ${roomId} 已經建立`);
+
+    console.log(`${socket.id}建立 room: ${roomId}`);
   });
+
+  socket.on('joinRoom', (roomId, cameraId, audioId) => {
+    socket.join(roomId);
+    console.log(`${socket.id} join Room: ${roomId} Camera: ${cameraId}, Audio: ${audioId}`);
+    io.to(roomId).emit('sendCamera', socket.id, cameraId, audioId);
+  });
+
+  // socket.on('remoteUserSelectDevice', (deviceId, audioId) => {
+  //   console.log('remoteUserSelectDevice', socket.id, deviceId, audioId);
+  //   socket.to(broadcaster).emit('remoteUserSelectDevice', socket.id, deviceId, audioId);
+  // });
 
   socket.on('disconnect', () => {
     console.log('disconnect=====');

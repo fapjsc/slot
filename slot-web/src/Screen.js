@@ -31,10 +31,11 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
   console.log(selectEgm.cameraId);
   let cameraId = selectEgm.cameraId;
   let audioId = selectEgm.audioId;
+  const webNumber = selectEgm.webNumber;
 
   const handleSocket = () => {
-    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
-    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
+    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
+    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
     setSocket(socketConnect);
   };
 
@@ -66,13 +67,15 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
   useEffect(() => {
     if (!socket) return;
 
-    socket.on('connection', () => {
+    socket.on('connect', () => {
       console.log('connection', socket.id);
       // socket.emit('watcher');
-      socket.emit('remoteUserSelectDevice', cameraId, audioId);
+      socket.emit('joinRoom', webNumber, cameraId, audioId);
       // socket.emit('remoteUserSelectDevice', 'fbeeb7e467a9f690700523a7079e26205fb76d1ddcdef79075b9378602d3f65e', '75a59ed289aa13f5abcf465cc75583efccb2c744fd61e1c24f7c5362540b26dc');
       console.log(audioId);
     });
+
+    // socket.emit('remoteUserSelectDevice', cameraId, audioId);
 
     // socket.on('broadcaster', () => {
     //   console.log('broadcaster');
@@ -143,10 +146,10 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
   useEffect(() => {
     if (!setCloseWebRtcConnect) return;
     if (closeWebRtcConnect) {
-      socket.emit('closePeer', socket.id);
-      socket.close();
-      peerConnection.close();
-      setCloseWebRtcConnect(false);
+      // socket.emit('closePeer', socket.id);
+      // socket.close();
+      // peerConnection.close();
+      // setCloseWebRtcConnect(false);
     }
     // eslint-disable-next-line
   }, [closeWebRtcConnect]);

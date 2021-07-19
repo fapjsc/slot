@@ -1,0 +1,33 @@
+.glass {
+  /* background styles */
+  position: relative;
+  display: inline-block;
+  padding: 15px 25px;
+  background-color: red; /*for compatibility with older browsers*/
+  background-image: linear-gradient(red, rgb(240, 82, 82));
+
+  /* text styles */
+  text-decoration: none;
+  color: rgb(2, 26, 2);
+  font-size: 25px;
+  font-family: sans-serif;
+  font-weight: 100;
+
+  border-radius: 3px;
+  box-shadow: 0px 1px 2px -2px #333;
+  text-shadow: 0px -1px #333;
+}
+
+.glass:after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(100% - 4px);
+  height: 50%;
+  background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2));
+}
+
+.glass:active {
+  background: linear-gradient(rgb(119, 24, 0), hsl(14, 100%, 50%));
+}

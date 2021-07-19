@@ -60,7 +60,7 @@ const DeviceState = props => {
         headers,
         body: JSON.stringify({
           casino: 'casino_demo_1',
-          localSvrPosition: '192.168.10.60',
+          localSvrPosition: process.env.REACT_APP_AGENT_SERVER,
           egmCameraItems: newMap,
         }),
       });

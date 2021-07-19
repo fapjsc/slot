@@ -7,6 +7,9 @@ import UserContext from '../context/User/UserContext';
 
 // Components
 import Screen from '../Screen';
+import TheButton from '../components/UI/TheButton';
+import SlotButton from '../components/UI/SlotButton';
+import LeaveButton from '../components/UI/LeaveButton';
 
 // Style
 import classes from './GamePlay.module.scss';
@@ -60,10 +63,11 @@ const GamePlay = () => {
   };
 
   const handleChange = e => {
-    setCashIn(Number(e.target.value));
+    setCashIn(e.target.value);
   };
 
   const leave = async title => {
+    console.log('test');
     if (window.confirm(title)) {
       setOpen(true);
       setCloseWebRtcConnect(true);
@@ -198,6 +202,7 @@ const GamePlay = () => {
     const picName = localStorage.getItem('picName');
     const egmSession = localStorage.getItem('egmSession');
     const checkSum = localStorage.getItem('checkSum');
+    const webNumber = localStorage.getItem('webNumber');
     const selectEgm = {
       egmId,
       egmIp,
@@ -208,6 +213,7 @@ const GamePlay = () => {
       egmSession,
       checkSum,
       casinoToken,
+      webNumber,
     };
     setApiToken(token);
     setSelectEgm(selectEgm);
@@ -235,26 +241,34 @@ const GamePlay = () => {
         <p>結算中...</p>
       </Backdrop>
 
-      <main className={classes.slotMachine}>
+      <div className={classes.slotMachine}>
         <div className={classes.slotBanners} style={{ backgroundImage: 'url(' + imgObj + ')' }} />
+
         <div className={classes.slotScreen}>
           <Screen autoPlay={autoPlay} setAutoPlay={setAutoPlay} leave={leave} closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
           <div>
-            <Snackbar onClick={handleAutoPlay} open={state.openSnackbar} onClose={handleClose} TransitionComponent={state.Transition} message="點擊此處後開始播放" key={state.Transition.name} />
+            <Snackbar onClick={handleAutoPlay} open={state.openSnackbar} onClose={handleClose} TransitionComponent={state.Transition} message="點擊此處後開使遊戲" key={state.Transition.name} />
           </div>
         </div>
 
         <div className={classes.optionBox}>
           <div className={classes.inputBox}>
-            <input value={cashIn} onChange={handleChange} placeholder="點數" />
-            <button className={classes.slotButton} onClick={() => pointCash(cashIn)}>
+            <input type="number" value={cashIn} onChange={handleChange} placeholder="點數" />
+            {/* <button className={classes.slotButton} onClick={() => pointCash(cashIn)}>
               投幣
-            </button>
+            </button> */}
+            <SlotButton />
           </div>
-          <div className={classes.btnBox}>
+          {/* <div className={classes.btnBox}>
+            <TheButton text="離開" />
+            <TheButton text="離開" />
+            <TheButton text="離開" />
+            <TheButton text="離開" />
+
             <button className={classes.btn} style={accountBtn} onClick={() => leave('確定要離開嗎？')}>
               結算
             </button>
+
             <button className={classes.btn} style={maxBtn} onClick={maxBet}>
               MAX
             </button>
@@ -264,39 +278,50 @@ const GamePlay = () => {
             <button className={classes.btn} style={spinBtn} onClick={spin}>
               SPIN
             </button>
-          </div>
+          </div> */}
         </div>
-      </main>
+      </div>
+      <div className={classes.btnHandle}>
+        <div className={classes.btnBox}>
+          <TheButton text="AUTO" />
+          <TheButton text="MAX" />
+          <TheButton text="SPIN" />
+        </div>
+
+        <div className={`${classes.btnBox} ${classes.leaveBtnBox}`} onClick={() => leave('確定要離開嗎？')}>
+          <LeaveButton />
+        </div>
+      </div>
     </section>
   );
 };
 
-const accountBtn = {
-  backgroundColor: '#ebdada',
-  borderColor: '#a49898',
-  boxShadow: '0 6px #816060',
-  color: '#a2798f',
-};
+// const accountBtn = {
+//   backgroundColor: '#ebdada',
+//   borderColor: '#a49898',
+//   boxShadow: '0 6px #816060',
+//   color: '#a2798f',
+// };
 
-const spinBtn = {
-  backgroundColor: '#0d6349',
-  color: 'azure',
-  borderColor: '#81f722',
-  boxShadow: '0px 8px #05271d',
-};
+// const spinBtn = {
+//   backgroundColor: '#0d6349',
+//   color: 'azure',
+//   borderColor: '#81f722',
+//   boxShadow: '0px 8px #05271d',
+// };
 
-const maxBtn = {
-  backgroundColor: '#042a5f',
-  color: 'rgb(255, 240, 240)',
-  borderColor: '#9aa9bf',
-  boxShadow: '0 7px #02152f',
-};
+// const maxBtn = {
+//   backgroundColor: '#042a5f',
+//   color: 'rgb(255, 240, 240)',
+//   borderColor: '#9aa9bf',
+//   boxShadow: '0 7px #02152f',
+// };
 
-const autoBtn = {
-  backgroundColor: '#e01313',
-  color: 'azure',
-  borderColor: '#f8cfcf',
-  boxShadow: '0 8px #430505',
-};
+// const autoBtn = {
+//   backgroundColor: '#e01313',
+//   color: 'azure',
+//   borderColor: '#f8cfcf',
+//   boxShadow: '0 8px #430505',
+// };
 
 export default GamePlay;
