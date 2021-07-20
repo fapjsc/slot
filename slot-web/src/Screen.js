@@ -97,6 +97,8 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
         if (event.candidate) {
           socket.emit('candidate', id, event.candidate);
           console.log('candiDate', event.candidate.candidate);
+        } else {
+          alert('can not receive');
         }
       };
 
@@ -113,7 +115,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
 
     // 接收對方的 candidate 並加入自己的 RTCPeerConnection
     socket.on('candidate', (id, candidate) => {
-      peerConnection.addIceCandidate(new RTCIceCandidate(candidate)).catch(e => alert(e));
+      peerConnection.addIceCandidate(new RTCIceCandidate(candidate)).catch(e => alert(e, 'can not find'));
     });
 
     socket.on('cameraErr', () => {
