@@ -68,18 +68,10 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
 
     socket.on('connect', () => {
       console.log('connection', socket.id);
-      // socket.emit('watcher');
       socket.emit('joinRoom', webNumber, cameraId, audioId);
       // socket.emit('remoteUserSelectDevice', 'fbeeb7e467a9f690700523a7079e26205fb76d1ddcdef79075b9378602d3f65e', '75a59ed289aa13f5abcf465cc75583efccb2c744fd61e1c24f7c5362540b26dc');
       console.log(audioId);
     });
-
-    // socket.emit('remoteUserSelectDevice', cameraId, audioId);
-
-    // socket.on('broadcaster', () => {
-    //   console.log('broadcaster');
-    //   socket.emit('watcher');
-    // });
 
     socket.on('offer', (id, description) => {
       console.log('get offer', id);
@@ -127,11 +119,12 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
       leave('Camera Error');
     });
 
+    socket.on('deviceChange', message => {
+      console.log(message);
+    });
+
     socket.on('disconnect', () => {
       console.log('socket disconnect');
-      // peerConnection.close();
-      // socket.close();
-      // history.replace('/home');
     });
 
     window.onunload = window.onbeforeunload = () => {

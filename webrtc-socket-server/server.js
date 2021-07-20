@@ -43,15 +43,8 @@ io.sockets.on('connection', socket => {
     socket.to(roomId).emit('userLeft', socket.id);
   });
 
-  // socket.on('remoteUserSelectDevice', (deviceId, audioId) => {
-  //   console.log('remoteUserSelectDevice', socket.id, deviceId, audioId);
-  //   socket.to(broadcaster).emit('remoteUserSelectDevice', socket.id, deviceId, audioId);
-  // });
-
   socket.on('disconnect', () => {
     console.log('disconnect=====');
-    console.log(broadcaster);
-    console.log(socket.id);
   });
 
   socket.on('closePeer', (id, stream) => {
@@ -64,6 +57,10 @@ io.sockets.on('connection', socket => {
     socket.to(clientSocketId).emit('cameraErr');
   });
 
+  socket.on('deviceChange', message => {
+    socket.emit('deviceChange', message);
+  });
+
   // WebRTC Event
   socket.on('offer', (id, message) => {
     console.log('52', id, socket.id);
@@ -71,6 +68,7 @@ io.sockets.on('connection', socket => {
     socket.to(id).emit('offer', socket.id, message); // id是client端的socketID, socket.id是camera web第一次建立連線的socketID, message是session
   });
   socket.on('answer', (id, message) => {
+    console.log('answer', id, message);
     socket.to(id).emit('answer', socket.id, message);
   });
   socket.on('candidate', (id, message) => {

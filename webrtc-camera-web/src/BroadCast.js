@@ -33,10 +33,8 @@ const BroadCast = () => {
   // Init State
   const [allVideo, setAllVideo] = useState([]);
   const [allAudio, setAllAudio] = useState([]);
-  const [noDevice, setNoDevice] = useState(false);
   const [currentDevice, setCurrentDevice] = useState(); // Camera
   const [currentAudio, setCurrentAudio] = useState(); // Audio
-  const [flag, setFlag] = useState('');
   const [selectEgm, setSelectEgm] = useState('');
   const [egmIp, setEgmIp] = useState('');
   const [webNumber, setWebNumber] = useState(null);
@@ -88,8 +86,6 @@ const BroadCast = () => {
         },
       });
       camera.current.srcObject = stream;
-
-      // socket.emit('broadcaster');
     } catch (error) {
       console.log(error);
     }
@@ -123,11 +119,6 @@ const BroadCast = () => {
     }
   };
 
-  // 本地隨機產生flag id
-  // const getFlag = () => {
-  //   setFlag(uuidv4());
-  // };
-
   // 本地選擇設備後獲取 stream 以及 device info
   const handleChangeDevice = e => {
     console.log(e.target.id);
@@ -156,14 +147,12 @@ const BroadCast = () => {
   const handleSelectEgm = e => {
     const index = e.target.selectedIndex;
     const optionElement = e.target.childNodes[index];
-    // console.log(optionElement.id);
     setEgmIp(optionElement.id);
     setSelectEgm(e.target.value);
   };
 
-  const handleDeviceMap = (flag, egm, cameraId, deviceLabel, egmIp, audioLabel, audioDeviceId, webNumber) => {
+  const handleDeviceMap = (egm, cameraId, deviceLabel, egmIp, audioLabel, audioDeviceId, webNumber) => {
     const deviceObj = {
-      flag,
       egm,
       cameraId,
       deviceLabel,
@@ -188,11 +177,8 @@ const BroadCast = () => {
       });
     }
     getAllDevices();
-    // setEgmList([9, 10]);
     getEgmList(process.env.REACT_APP_AGENT_SERVER);
-    // navigator.mediaDevices.ondevicechange = event => {
-    //   getAllDevices();
-    // };
+
     socket.on('connect', () => {
       console.log('connection===========');
       console.log(socket.id);
@@ -232,8 +218,7 @@ const BroadCast = () => {
             socket.emit('offer', socketId, peerConnection.localDescription);
             navigator.mediaDevices.ondevicechange = event => {
               console.log(event, 'ondevicechange');
-              // socket.emit('offer', socketId, peerConnection.localDescription);
-              // socket.emit('cameraErr', socketId);
+              socket.emit('deviceChange', 'device is change');
             };
             console.log(peerConnections);
           });
@@ -256,6 +241,7 @@ const BroadCast = () => {
     socket.on('candidate', (id, candidate) => {
       console.log('candidate', id, candidate.candidate);
       peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
+      console.log('candidate', peerConnections[id]);
     });
 
     socket.on('userLeft', socketId => {
@@ -266,28 +252,10 @@ const BroadCast = () => {
     socket.on('closePeerCon', id => {
       console.log('closePeerCon =====', id);
       if (!peerConnections[id]) return;
-      // socket.close();
-
       console.log(peerConnections[id]);
-
-      // peerConnections[id].removeTrack();
-      // const track = stream.getVideoTracks()[0];
-      // const sender = peerConnections[id].addTrack(track, stream);
-      // peerConnections[id].removeTrack(sender);
       peerConnections[id].close();
-      console.log(peerConnections[id], '1234');
     });
 
-    socket.on('disconnect', () => {
-      console.log('socket disconnect');
-    });
-
-    // 關閉瀏覽器後socket斷線
-    // window.onunload = window.onbeforeunload = () => {
-    //   socket.close();
-    // };
-
-    // return () => {};
     // eslint-disable-next-line
   }, []);
 
@@ -310,70 +278,10 @@ const BroadCast = () => {
   }, [deviceIsChange]);
 
   useEffect(() => {
-    if (!allVideo.length) setNoDevice(true);
     if (allVideo.length && egmList.length) {
       socket.on('sendCamera', (cameraId, audioId) => {
         console.log(`Camera: ${cameraId} Audio: ${audioId}`);
       });
-      // 遠端User 選擇EGM後觸發
-      // socket.on('remoteUserSelectDevice', async (socketId, deviceId, audioId) => {
-      //   console.log('remoteUserSelectDevice', socketId);
-      //   console.log('get audio id', audioId);
-      //   console.log('get camera id', deviceId);
-      //   // console.log(egmList);
-      //   // const temp = allVideo.find(el => el.deviceId === deviceId);
-      //   // console.log(temp);
-      //   // if (!temp) {
-      //   //   socket.emit('cameraErr', socketId);
-      //   //   return;
-      //   // }
-
-      //   try {
-      //     const stream = await remoteStream(deviceId, audioId);
-      //     console.log(stream.getTracks());
-
-      //     const peerConnection = new RTCPeerConnection(pcConfig);
-      //     peerConnections[socketId] = peerConnection;
-
-      //     console.log(peerConnections[socketId], 'peer');
-
-      //     console.log(stream);
-      //     console.log(stream.getTracks());
-
-      //     // 將 stream 和 media track 加到 peerConnection
-      //     stream.getTracks().forEach(track => {
-      //       peerConnection.addTrack(track, stream);
-      //     });
-
-      //     // Candidate Event, 當找到本地的candiDate後發送給server，包含自己的socket id
-      //     peerConnection.onicecandidate = event => {
-      //       if (event.candidate) {
-      //         socket.emit('candidate', socketId, event.candidate);
-      //       }
-      //     };
-
-      //     // 創建offer以及設定local description
-      //     peerConnection
-      //       .createOffer()
-      //       .then(sdp => peerConnection.setLocalDescription(sdp))
-      //       .then(() => {
-      //         socket.emit('offer', socketId, peerConnection.localDescription);
-      //         navigator.mediaDevices.ondevicechange = event => {
-      //           console.log(event, 'ondevicechange');
-      //           // socket.emit('cameraErr', socketId);
-      //         };
-      //         console.log(peerConnections);
-      //       });
-
-      //     peerConnection.oniceconnectionstatechange = event => {
-      //       console.log(event, 'oniceconnectionstatechange');
-      //     };
-      //   } catch (error) {
-      //     console.warn('fail to get stream', error);
-      //   }
-      // });
-
-      setNoDevice(false);
     }
 
     // eslint-disable-next-line
@@ -402,19 +310,14 @@ const BroadCast = () => {
               </Col>
             </Form.Group>
 
-            {/* FLAG */}
-            <Form.Group as={Row} controlId="flag" className="">
+            {/* EGM IP */}
+            <Form.Group as={Row} controlId="egmIp" className="">
               <Form.Label column sm="2">
                 EGM IP
               </Form.Label>
               <Col sm="8" className="">
                 <Form.Control readOnly defaultValue={egmIp} />
               </Col>
-              {/* <Col sm="2" className="">
-                <Button size="sm" onClick={getFlag}>
-                  生成
-                </Button>
-              </Col> */}
             </Form.Group>
 
             {/* EGM */}
@@ -436,11 +339,6 @@ const BroadCast = () => {
                   )}
                 </Form.Control>
               </Col>
-              {/* <Col sm="2" className="">
-                <Button size="sm" onClick={() => getEgmList('192.168.10.60')}>
-                  刷新
-                </Button>
-              </Col> */}
             </Form.Group>
 
             {/* CAMERA */}
@@ -492,7 +390,7 @@ const BroadCast = () => {
                 size="lg"
                 className="w-25 p-2"
                 variant="primary"
-                onClick={() => handleDeviceMap(flag, +selectEgm, currentDevice.deviceId, currentDevice.label, egmIp, currentAudio.label, currentAudio.deviceId, webNumber)}
+                onClick={() => handleDeviceMap(+selectEgm, currentDevice.deviceId, currentDevice.label, egmIp, currentAudio.label, currentAudio.deviceId, webNumber)}
               >
                 確定
               </Button>

@@ -45,6 +45,8 @@ const GamePlay = () => {
   const [closeWebRtcConnect, setCloseWebRtcConnect] = useState(false);
   const [socketClient, setSocketClient] = useState(null);
   const [autoPlay, setAutoPlay] = useState(false);
+  const [autoGame, setAutoGame] = useState(false);
+  const [stopAutoGame, setStopAutoGame] = useState(false);
   const [state, setState] = useState({
     openSnackbar: true,
     Transition: Fade,
@@ -127,6 +129,11 @@ const GamePlay = () => {
 
   const maxBet = async () => {};
 
+  const handleAutoClick = type => {
+    if ('auto') {
+    }
+  };
+
   // 動態加載圖片
   const getImg = () => {
     if (selectEgm.picName) {
@@ -206,19 +213,12 @@ const GamePlay = () => {
         <div className={classes.optionBox}>
           <div className={classes.inputBox}>
             <input type="number" value={cashIn} onChange={handleChange} placeholder="點數" onWheel={event => event.currentTarget.blur()} />
-            {/* <button className={classes.slotButton} onClick={() => pointCash(cashIn)}>
-              投幣
-            </button> */}
+
             <div className={classes.slotBtnBox} onClick={() => pointCash(cashIn)}>
               <SlotButton />
             </div>
           </div>
           {/* <div className={classes.btnBox}>
-            <TheButton text="離開" />
-            <TheButton text="離開" />
-            <TheButton text="離開" />
-            <TheButton text="離開" />
-
             <button className={classes.btn} style={accountBtn} onClick={() => leave('確定要離開嗎？')}>
               結算
             </button>
@@ -239,6 +239,7 @@ const GamePlay = () => {
         <div className={classes.btnBox}>
           <TheButton text="AUTO" />
         </div>
+
         <div className={classes.btnBox}>
           <TheButton text="MAX" />
         </div>
