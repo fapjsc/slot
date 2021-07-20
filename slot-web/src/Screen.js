@@ -111,8 +111,9 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
       console.log(peerConnection);
     });
 
+    // 接收對方的 candidate 並加入自己的 RTCPeerConnection
     socket.on('candidate', (id, candidate) => {
-      peerConnection.addIceCandidate(new RTCIceCandidate(candidate)).catch(e => console.error(e));
+      peerConnection.addIceCandidate(new RTCIceCandidate(candidate)).catch(e => alert(e));
     });
 
     socket.on('cameraErr', () => {
