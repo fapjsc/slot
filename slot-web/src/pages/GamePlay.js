@@ -112,6 +112,7 @@ const GamePlay = () => {
 
   const pointCash = async cash => {
     // console.log(cash, 'cash');
+    setCashIn('');
     try {
       let responseData = await ApiController().pointCashCasinoApi(egmSession, checkSum, cash, casinoToken);
       // console.log(responseData);
