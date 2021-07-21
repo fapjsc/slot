@@ -78,7 +78,7 @@
 
   input[type='number']::placeholder {
     /* Firefox, Chrome, Opera */
-    padding: 10px;
+    padding: 8px;
   }
 
   input {
@@ -89,6 +89,7 @@
 
     @media only screen and(max-width: 414px) {
       padding: 1%;
+      width: 50%;
     }
   }
 
@@ -177,9 +178,6 @@
   padding-bottom: 80%;
   padding-top: 2%;
   flex-wrap: wrap;
-
-  @media only screen and(max-width: 720px) {
-  }
 }
 
 .slotBtnBox {
@@ -191,10 +189,12 @@
 .btnBox {
   width: 15%;
   margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
   margin-right: 3%;
   @media only screen and(max-width: 550px) {
-    width: 25%;
-    margin-right: 0;
+    width: 30%;
+    margin-right: 2%;
   }
 }
 

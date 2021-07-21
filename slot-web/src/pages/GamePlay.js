@@ -99,6 +99,14 @@ const GamePlay = () => {
     console.log('call spin');
     try {
       let responseData = await ApiController().pressSlotApi(mapId, egmId, egmIp, number, apiToken, egmSession);
+
+      // 閒時時間太長
+      if (responseData.code === 100000061) {
+        alert(responseData.msg);
+        localStorage.clear();
+        history.replace('/');
+      }
+
       if (responseData.code > 100000000) {
         alert('ERROR!');
       }
@@ -278,7 +286,7 @@ const GamePlay = () => {
 
         {/* Auto Button */}
         <div className={autoBtnStyle} onClick={() => setAutoGame(!autoGame)}>
-          <TheButton text={autoGame ? 'STOP' : 'AUTO'} />
+          <TheButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
         </div>
       </div>
     </section>
