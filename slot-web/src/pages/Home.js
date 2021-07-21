@@ -60,6 +60,14 @@ const Home = () => {
     webSocketHandler(egmStateWebSocketUri);
     let token = localStorage.getItem('token');
     setApiToken(token);
+
+    // window.onbeforeunload = function (event) {
+    //   localStorage.clear();
+
+    //   // 返回要顯示給使用者看的提醒文字
+    //   return '你確定要離開本頁面嗎？';
+    // };
+
     // console.log(egmList);
     return () => {
       if (wsClient) wsClient.close();

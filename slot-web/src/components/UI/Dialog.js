@@ -5,12 +5,20 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { makeStyles } from '@material-ui/core';
 
 import styles from './Dialog.module.scss';
+
+const useStyles = makeStyles(theme => ({
+  dialogPaper: {
+    maxHeight: '40rem',
+  },
+}));
 
 export default function ScrollDialog() {
   const [open, setOpen] = React.useState(true);
   const [scroll] = React.useState('paper');
+  const classes = useStyles();
   // const [scroll, setScroll] = React.useState('paper');
 
   // const handleClickOpen = scrollType => () => {
@@ -38,7 +46,15 @@ export default function ScrollDialog() {
 
   return (
     <div>
-      <Dialog onExit={handleExit} maxWidth="xm" open={open} onClose={handleClose} scroll={scroll} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
+      <Dialog
+        classes={{ paper: classes.dialogPaper }}
+        onExit={handleExit}
+        open={open}
+        onClose={handleClose}
+        scroll={scroll}
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+      >
         <DialogTitle id="scroll-dialog-title" className={`${styles.title}`}>
           Title
         </DialogTitle>
