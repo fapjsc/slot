@@ -70,6 +70,7 @@ const UserReducer = (state, action) => {
       if (existingItem) {
         const updateItem = {
           ...existingItem,
+          credit: action.payload.credit,
         };
 
         updateItems = [...egmCreditList];

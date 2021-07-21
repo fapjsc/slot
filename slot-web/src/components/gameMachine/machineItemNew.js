@@ -53,6 +53,7 @@ export default function MachineItem(props) {
   const [hasCredit, setHasCredit] = useState(false);
   const [isConn, setIsConn] = useState(true);
   const [loginData, setLoginData] = useState(null);
+  const [noConnState, setNoConnState] = useState(false);
 
   // User Context
   const userContext = useContext(UserContext);
@@ -161,11 +162,16 @@ export default function MachineItem(props) {
 
     // console.log(egmConnectList, 'egm connect list');
 
-    arr.forEach(el => {
-      el.map === props.machineDetails.mapId ? setIsConn(false) : setIsConn(true);
-    });
-    const existingItem = egmConnectList.findIndex(el => el.map === props.machineDetails.mapId);
-    existingItem === -1 ? setIsConn(false) : setIsConn(TrendingUpRounded);
+    // arr.forEach(el => {
+    //   el.map === Number(props.machineDetails.mapId) ? setIsConn(false) : setIsConn(true);
+    // });
+
+    const stateIndex = arr.findIndex(el => el.map === props.machineDetails.mapId); // state 等於2，無法連練
+    const existingItem = egmConnectList.findIndex(el => el.map === props.machineDetails.mapId); // 沒有在egmConnectList裡面，無法連線
+
+    existingItem === -1 ? setNoConnState(true) : setNoConnState(false);
+    stateIndex !== -1 ? setIsConn(false) : setIsConn(true);
+
     // eslint-disable-next-line
   }, [egmConnectList]);
 
@@ -188,10 +194,10 @@ export default function MachineItem(props) {
           </Typography>
         </CardContent>
         <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-          {!isConn ? (
+          {!isConn || noConnState ? (
             <span style={disableBtnStyle}>
               <Button disabled style={{ color: '#f2f2f2' }}>
-                連線中...
+                無法取得狀態
               </Button>
             </span>
           ) : isPlaying && props.machineDetails.isPlaying ? (
@@ -201,7 +207,7 @@ export default function MachineItem(props) {
               </Button>
             </span>
           ) : // hasCredit
-          false ? (
+          hasCredit ? (
             <span style={disableBtnStyle}>
               <Button disabled style={{ color: '#f2f2f2' }}>
                 結算中...

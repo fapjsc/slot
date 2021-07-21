@@ -182,6 +182,7 @@ const UserState = props => {
 
       // Egm Create State
       if (message.data.includes('EgmCredit')) {
+        console.log(message.data);
         let obj = {};
         let strArr = message.data.split('*|*');
         obj = {
@@ -196,6 +197,7 @@ const UserState = props => {
 
       // Egm Connect State
       if (message.data.includes('EgmState')) {
+        console.log(message.data, 'data');
         let obj = {};
         let strArr = message.data.split('*|*');
         obj = {
