@@ -1,5 +1,5 @@
 import ApiController from '../api/apiController';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 
 // Context
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 const GamePlay = () => {
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, selectEgm, setApiToken, setSelectEgm } = userContext;
+  const { apiToken, selectEgm, setApiToken, setSelectEgm, setBtnList, btnList, kickList, removeKickItem } = userContext;
   const { mapId, egmId, egmIp, egmSession, checkSum, casinoToken } = selectEgm;
 
   const styles = useStyles();
@@ -46,7 +46,6 @@ const GamePlay = () => {
   const [socketClient, setSocketClient] = useState(null);
   const [autoPlay, setAutoPlay] = useState(false);
   const [autoGame, setAutoGame] = useState(false);
-  const [stopAutoGame, setStopAutoGame] = useState(false);
   const [state, setState] = useState({
     openSnackbar: true,
     Transition: Fade,
@@ -70,15 +69,15 @@ const GamePlay = () => {
   };
 
   const leave = async title => {
-    console.log('test');
     if (window.confirm(title)) {
+      setAutoGame(false);
       setOpen(true);
       socketClient.emit('unsubscribe', selectEgm.webNumber);
       setCloseWebRtcConnect(true);
       try {
         let responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken, egmSession);
-        console.log(mapId, egmId, egmIp, egmSession);
-        console.log(responseData);
+        // console.log(mapId, egmId, egmIp, egmSession);
+        // console.log(responseData);
 
         if (responseData.code > 100000000) {
           alert(responseData.msg);
@@ -96,15 +95,15 @@ const GamePlay = () => {
     }
   };
 
-  const spin = async () => {
+  const spin = async number => {
     console.log('call spin');
     try {
-      let responseData = await ApiController().pressSlotApi(mapId, egmId, egmIp, 77, apiToken, egmSession);
+      let responseData = await ApiController().pressSlotApi(mapId, egmId, egmIp, number, apiToken, egmSession);
       if (responseData.code > 100000000) {
         alert('ERROR!');
       }
       if (responseData.code < 100000000) {
-        console.log(responseData);
+        // console.log(responseData);
       }
     } catch (error) {
       alert('ERROR message: ', error);
@@ -112,25 +111,18 @@ const GamePlay = () => {
   };
 
   const pointCash = async cash => {
-    console.log(cash, 'cash');
+    // console.log(cash, 'cash');
     try {
       let responseData = await ApiController().pointCashCasinoApi(egmSession, checkSum, cash, casinoToken);
-      console.log(responseData);
+      // console.log(responseData);
       if (responseData.code > 100000000) {
         alert('ERROR!');
       }
       if (responseData.code < 100000000) {
-        console.log(responseData);
+        // console.log(responseData);
       }
     } catch (error) {
       alert('ERROR message: ', error);
-    }
-  };
-
-  const maxBet = async () => {};
-
-  const handleAutoClick = type => {
-    if ('auto') {
     }
   };
 
@@ -162,6 +154,7 @@ const GamePlay = () => {
     const egmSession = localStorage.getItem('egmSession');
     const checkSum = localStorage.getItem('checkSum');
     const webNumber = localStorage.getItem('webNumber');
+    const btnList = JSON.parse(localStorage.getItem('btnList'));
     const selectEgm = {
       egmId,
       egmIp,
@@ -173,6 +166,7 @@ const GamePlay = () => {
       checkSum,
       casinoToken,
       webNumber,
+      btnList,
     };
     setApiToken(token);
     setSelectEgm(selectEgm);
@@ -180,17 +174,69 @@ const GamePlay = () => {
 
     return () => {
       // setSelectEgm({});
-      localStorage.removeItem('egmSession');
-      localStorage.removeItem('checkSum');
+      // localStorage.removeItem('egmSession');
+      // localStorage.removeItem('checkSum');
+      // localStorage.removeItem('btnList');
+      // setBtnList([]);
     };
 
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
+    if (!kickList.length) return;
+
+    kickList.forEach(el => {
+      // console.log(el);
+      if (String(el.egm) === selectEgm.egmSession && String(el.token) === apiToken) {
+        removeKickItem(el);
+        alert('閒置時間超過三分鐘，請重新登入');
+        history.replace('/');
+        localStorage.clear();
+      }
+    });
+  }, [kickList]);
+
+  useEffect(() => {
+    if (!autoGame) return;
+    spin(77);
+    let timer = setInterval(() => {
+      spin(77);
+    }, 2000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [autoGame]);
+
+  useEffect(() => {
     getImg();
+
     // eslint-disable-next-line
   }, [selectEgm]);
+
+  useEffect(() => {
+    if (btnList.length === 0) {
+      const btnList = JSON.parse(localStorage.getItem('btnList'));
+      setBtnList(btnList);
+    }
+    // eslint-disable-next-line
+  }, [btnList]);
+
+  const btnListEl = btnList.map(btn => (
+    <Fragment>
+      <div className={classes.btnBox} onClick={() => spin(btn.buttonNo)}>
+        <TheButton text={btn.buttonTxt} />
+      </div>
+    </Fragment>
+  ));
+
+  let autoBtnStyle;
+  if (!autoGame) {
+    autoBtnStyle = `${classes.btnBox}`;
+  } else {
+    autoBtnStyle = `${classes.btnBox} ${classes.test}`;
+  }
 
   return (
     <section className={classes.root}>
@@ -218,69 +264,21 @@ const GamePlay = () => {
               <SlotButton />
             </div>
           </div>
-          {/* <div className={classes.btnBox}>
-            <button className={classes.btn} style={accountBtn} onClick={() => leave('確定要離開嗎？')}>
-              結算
-            </button>
-
-            <button className={classes.btn} style={maxBtn} onClick={maxBet}>
-              MAX
-            </button>
-            <button className={classes.btn} style={autoBtn}>
-              AUTO
-            </button>
-            <button className={classes.btn} style={spinBtn} onClick={spin}>
-              SPIN
-            </button>
-          </div> */}
         </div>
       </div>
       <div className={classes.btnHandle}>
-        <div className={classes.btnBox}>
-          <TheButton text="AUTO" />
-        </div>
-
-        <div className={classes.btnBox}>
-          <TheButton text="MAX" />
-        </div>
-        <div className={classes.btnBox} onClick={spin}>
-          <TheButton text="SPIN" />
-        </div>
-
         <div className={`${classes.leaveBtnBox}`} onClick={() => leave('確定要離開嗎？')}>
           <LeaveButton />
+        </div>
+
+        {btnListEl}
+
+        <div className={autoBtnStyle} onClick={() => setAutoGame(!autoGame)}>
+          <TheButton text={autoGame ? 'STOP' : 'AUTO'} />
         </div>
       </div>
     </section>
   );
 };
-
-// const accountBtn = {
-//   backgroundColor: '#ebdada',
-//   borderColor: '#a49898',
-//   boxShadow: '0 6px #816060',
-//   color: '#a2798f',
-// };
-
-// const spinBtn = {
-//   backgroundColor: '#0d6349',
-//   color: 'azure',
-//   borderColor: '#81f722',
-//   boxShadow: '0px 8px #05271d',
-// };
-
-// const maxBtn = {
-//   backgroundColor: '#042a5f',
-//   color: 'rgb(255, 240, 240)',
-//   borderColor: '#9aa9bf',
-//   boxShadow: '0 7px #02152f',
-// };
-
-// const autoBtn = {
-//   backgroundColor: '#e01313',
-//   color: 'azure',
-//   borderColor: '#f8cfcf',
-//   boxShadow: '0 8px #430505',
-// };
 
 export default GamePlay;

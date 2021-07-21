@@ -17,8 +17,6 @@ import { red } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 // import styles from './machineIremNew.module.scss';
 
-import ApiController from '../../api/apiController';
-
 // Style
 import machineIcon from '../../asset/egzj1ui37v.jpeg';
 import { TrendingUpRounded } from '@material-ui/icons';
@@ -54,54 +52,57 @@ export default function MachineItem(props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasCredit, setHasCredit] = useState(false);
   const [isConn, setIsConn] = useState(true);
+  const [loginData, setLoginData] = useState(null);
 
   // User Context
   const userContext = useContext(UserContext);
-  const { setSelectEgm, onActionEgmList, egmCreditList, egmConnectList } = userContext;
+  const { onActionEgmList, egmCreditList, egmConnectList, setBtnList, chooseEgm, apiToken } = userContext;
 
-  const selectMachine = () => {
-    console.log('chooseEgm input: ', props.machineDetails);
-    console.log('chooseEgm token: ', props.token);
-    chooseEgm(props.machineDetails, props.token);
-  };
+  // const selectMachine = () => {
+  //   console.log('chooseEgm input: ', props.machineDetails);
+  //   console.log('chooseEgm token: ', props.token);
+  //   chooseEgm(props.machineDetails, props.token);
+  // };
 
-  const chooseEgm = async ({ mapId, egmId, egmIp, cameraId, audioId, picName, cameraIndex }, apiToken) => {
-    try {
-      let responseData = await ApiController().playerChooseEgmApi(mapId, egmId, egmIp, apiToken);
-      console.log('chooseEgm:', responseData); // 顯示取得回傳資料
+  // const chooseEgm = async ({ mapId, egmId, egmIp, cameraId, audioId, picName, cameraIndex }, apiToken) => {
+  //   try {
+  //     let responseData = await ApiController().playerChooseEgmApi(mapId, egmId, egmIp, apiToken);
+  //     console.log('chooseEgm:', responseData); // 顯示取得回傳資料
 
-      if (responseData.code > 100000000) {
-        // code 超過 100000000 為問題回傳
-        alert(responseData.msg);
-        console.log(responseData.msg);
-      }
-      if (responseData.code < 100000000) {
-        console.log(responseData.egmSession, responseData.checkSum);
-        setSelectEgm({
-          mapId: Number(mapId),
-          egmId: Number(egmId),
-          egmIp,
-          cameraId,
-          picName,
-          audioId,
-          cameraIndex,
-        });
+  //     if (responseData.code > 100000000) {
+  //       // code 超過 100000000 為問題回傳
+  //       alert(responseData.msg);
+  //       console.log(responseData.msg);
+  //     }
+  //     if (responseData.code < 100000000) {
+  //       setBtnList(responseData.btnList);
+  //       console.log(responseData.egmSession, responseData.checkSum);
+  //       setSelectEgm({
+  //         mapId: Number(mapId),
+  //         egmId: Number(egmId),
+  //         egmIp,
+  //         cameraId,
+  //         picName,
+  //         audioId,
+  //         cameraIndex,
+  //         btnList: responseData.btnList,
+  //       });
 
-        localStorage.setItem('egmId', Number(egmId));
-        localStorage.setItem('egmIp', egmIp);
-        localStorage.setItem('mapId', Number(mapId));
-        localStorage.setItem('cameraId', cameraId);
-        localStorage.setItem('audioId', audioId);
-        localStorage.setItem('picName', picName);
-        localStorage.setItem('egmSession', responseData.egmSession);
-        localStorage.setItem('checkSum', responseData.checkSum);
-        localStorage.setItem('webNumber', cameraIndex);
-        history.replace('/gameStart');
-      }
-    } catch (error) {
-      alert('ERROR message: ', error);
-    }
-  };
+  //       localStorage.setItem('egmId', Number(egmId));
+  //       localStorage.setItem('egmIp', egmIp);
+  //       localStorage.setItem('mapId', Number(mapId));
+  //       localStorage.setItem('cameraId', cameraId);
+  //       localStorage.setItem('audioId', audioId);
+  //       localStorage.setItem('picName', picName);
+  //       localStorage.setItem('egmSession', responseData.egmSession);
+  //       localStorage.setItem('checkSum', responseData.checkSum);
+  //       localStorage.setItem('webNumber', cameraIndex);
+  //       history.replace('/gameStart');
+  //     }
+  //   } catch (error) {
+  //     alert('ERROR message: ', error);
+  //   }
+  // };
 
   // 動態加載圖片
   const getImg = () => {
@@ -117,10 +118,22 @@ export default function MachineItem(props) {
 
   const handlePlayStartClick = () => {
     setIsPlaying(true);
-    selectMachine();
+    console.log('chooseEgm input: ', props.machineDetails);
+    console.log('chooseEgm token: ', props.token);
+    console.log(loginData, 'login data');
+    chooseEgm(loginData, props.machineDetails, apiToken);
+    // selectMachine();
   };
 
   useEffect(() => {
+    const data = {
+      pc: localStorage.getItem('pc'),
+      token: localStorage.getItem('token'),
+      at: localStorage.getItem('at'),
+      casino: localStorage.getItem('casino'),
+    };
+
+    setLoginData(data);
     getImg();
 
     // eslint-disable-next-line
@@ -135,14 +148,8 @@ export default function MachineItem(props) {
   useEffect(() => {
     if (!egmCreditList.length) return;
     const arr = egmCreditList.filter(el => Number(el.credit) > 0);
-
     const existingIndex = arr.findIndex(el => Number(el.map) === Number(props.machineDetails.mapId));
-
     existingIndex !== -1 ? setHasCredit(true) : setHasCredit(false);
-
-    // arr.forEach(el => {
-    //   Number(el.map) === Number(props.machineDetails.mapId) ? setHasCredit(true) : setHasCredit(false);
-    // });
     // eslint-disable-next-line
   }, [egmCreditList]);
 
@@ -152,7 +159,7 @@ export default function MachineItem(props) {
 
     const arr = egmConnectList.filter(el => el.state !== 1);
 
-    console.log(egmConnectList, 'arr');
+    // console.log(egmConnectList, 'egm connect list');
 
     arr.forEach(el => {
       el.map === props.machineDetails.mapId ? setIsConn(false) : setIsConn(true);

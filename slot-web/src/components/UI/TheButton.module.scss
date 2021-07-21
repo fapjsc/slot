@@ -65,6 +65,7 @@
   text-align: center;
   z-index: 999;
   text-shadow: #ddd 0px 0px 1px;
+
   // background-image: linear-gradient(to top, #09203f 0%, #537895 100%);
   // background: -moz-linear-gradient(to top, #09203f 0%, #537895 100%); /* FF3.6+ */
   // background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #a6c0fe), color-stop(100%, #f68084)); /* Chrome,Safari4+ */
@@ -80,7 +81,7 @@
   -moz-transition: all 0.1s ease-in-out;
 
   @media only screen and(max-width: 720px) {
-    font-size: 1rem;
+    font-size: 0.85rem;
   }
 
   @media only screen and(max-width: 400px) {

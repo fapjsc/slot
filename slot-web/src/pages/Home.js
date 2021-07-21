@@ -53,7 +53,7 @@ const Home = () => {
 
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, setApiToken, egmList, getEgmList, webSocketHandler, onActionEgmList, egmConnectList, wsClient } = userContext;
+  const { apiToken, setApiToken, egmList, getEgmList, webSocketHandler, onActionEgmList, egmConnectList, wsClient, setLoginData } = userContext;
 
   useEffect(() => {
     const egmStateWebSocketUri = `${wsUri}stateQuote`;
@@ -80,6 +80,7 @@ const Home = () => {
       token: localStorage.getItem('token'),
     };
     getEgmList(data);
+    setLoginData(data);
 
     // eslint-disable-next-line
   }, [apiToken, onActionEgmList]);

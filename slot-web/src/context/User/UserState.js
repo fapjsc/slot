@@ -1,17 +1,29 @@
+import { apiUrl } from '../../api/config';
+
 import { useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import UserReducer from './UserReducer';
 import UserContext from './UserContext';
 
-import { apiUrl } from '../../api/config';
-
 import { w3cwebsocket as W3CWebsocket } from 'websocket';
 
-import { SET_API_TOKEN, SET_EGM_LIST, SET_SELECT_EGM, SET_ON_ACTION_EGM_LIST, SET_WS_CLIENT, SET_EGM_CONNECT_STATE_LIST, SET_EMG_CREDIT_STATE_LIST } from '../type';
+import {
+  SET_API_TOKEN,
+  SET_EGM_LIST,
+  SET_SELECT_EGM,
+  SET_ON_ACTION_EGM_LIST,
+  SET_WS_CLIENT,
+  SET_EGM_CONNECT_STATE_LIST,
+  SET_EMG_CREDIT_STATE_LIST,
+  SET_BUTTON_LIST,
+  SET_LOGIN_DATA,
+  SET_KICK_LIST,
+  REMOVE_KICK_ITEM,
+} from '../type';
 
 const UserState = props => {
   // Router Props
-  let history = useHistory();
+  const history = useHistory();
 
   // Init State
   const initialState = {
@@ -24,20 +36,78 @@ const UserState = props => {
     wsClient: null,
     egmConnectList: [],
     egmCreditList: [],
+    btnList: [],
+    kickList: [],
   };
 
   // Get Http Header
-  const getHeaders = () => {
+  const getHeaders = token => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    // headers.append('Authorization', `Bearer ${token}`);
+    headers.append('Authorization', `Bearer ${token}`);
     return headers;
+  };
+
+  // Choose Egm List
+  const chooseEgm = async (data, machineDetails, apiToken) => {
+    const { pc, casino, at } = data;
+    const { mapId, egmIp, egmId, cameraId, audioId, cameraIndex, picName } = machineDetails;
+
+    let url = `${apiUrl}/playerChooseEgmApi?pc=${pc}&casino=${casino}&at=${at}`;
+    const headers = getHeaders(apiToken);
+    if (!headers) return;
+
+    let body = {
+      mapId: machineDetails.mapId,
+      egmId: machineDetails.egmId,
+      egmIP: machineDetails.egmIp,
+    };
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(body),
+      });
+
+      const resData = await res.json();
+
+      if (resData.code < 100000000) {
+        setBtnList(resData.btnList);
+        setSelectEgm({
+          mapId: Number(mapId),
+          egmId: Number(egmId),
+          egmIp,
+          cameraId,
+          picName,
+          audioId,
+          cameraIndex,
+        });
+
+        localStorage.setItem('egmId', Number(egmId));
+        localStorage.setItem('egmIp', egmIp);
+        localStorage.setItem('mapId', Number(mapId));
+        localStorage.setItem('cameraId', cameraId);
+        localStorage.setItem('audioId', audioId);
+        localStorage.setItem('picName', picName);
+        localStorage.setItem('egmSession', resData.egmSession);
+        localStorage.setItem('checkSum', resData.checkSum);
+        localStorage.setItem('webNumber', cameraIndex);
+        localStorage.setItem('btnList', JSON.stringify(resData.btnList));
+
+        history.replace('/gameStart');
+      } else {
+        alert(resData.msg);
+        // console.log(resData.msg);
+      }
+    } catch (error) {
+      console.log(error, 'res');
+    }
   };
 
   // Get Egm List
   const getEgmList = async data => {
     const { pc, casino, token } = data;
-    // console.log(pc, casino, at);
     const uri = `${apiUrl}EgmApi?pc=${pc}&casino=${casino}&tk=${token}`;
     // console.log(uri);
     const headers = getHeaders();
@@ -50,6 +120,12 @@ const UserState = props => {
       });
       const resData = await res.json();
       console.log(resData);
+
+      if (resData.code === 100000004) {
+        alert(resData.msg);
+        localStorage.clear();
+        history.replace('/');
+      }
       if (resData.code === 17) setEgmList(resData.egmList);
     } catch (error) {
       console.log(error);
@@ -73,7 +149,6 @@ const UserState = props => {
 
     // 收到server回復
     client.onmessage = message => {
-      // console.log(message);
       // const dataFromServer = JSON.parse(message);
       if (client.readyState === client.OPEN) {
         const data = {
@@ -84,6 +159,25 @@ const UserState = props => {
         // console.log(data);
 
         client.send(JSON.stringify(data));
+      }
+
+      // Kick State
+      if (message.data.includes('KickEgmNotify')) {
+        let str = message.data.replace('KickEgmNotify*>>*', '').replace('*^**>>*', '*^*');
+
+        let strArr = str.split('*^*');
+        // console.log(strArr, 'str');
+
+        strArr.forEach(el => {
+          let kickObj = {};
+          if (el !== '') {
+            let arr = el.split('*|*');
+            kickObj.egm = arr[0];
+            kickObj.token = arr[1];
+
+            setKickList(kickObj);
+          }
+        });
       }
 
       // Egm Create State
@@ -121,7 +215,7 @@ const UserState = props => {
       if (message.data.includes('EgmPlayingState')) {
         let stateList = [];
 
-        let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**<<*', '*^*');
+        let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**>>*', '*^*');
         let strArr = str.split('*^*');
         strArr.forEach(el => {
           let obj = {};
@@ -194,6 +288,22 @@ const UserState = props => {
     dispatch({ type: SET_EMG_CREDIT_STATE_LIST, payload: egmItem });
   };
 
+  const setBtnList = btnList => {
+    dispatch({ type: SET_BUTTON_LIST, payload: btnList });
+  };
+
+  const setLoginData = loginData => {
+    dispatch({ type: SET_LOGIN_DATA, payload: loginData });
+  };
+
+  const setKickList = kickObj => {
+    dispatch({ type: SET_KICK_LIST, payload: kickObj });
+  };
+
+  const removeKickItem = kickObj => {
+    dispatch({ type: REMOVE_KICK_ITEM, payload: kickObj });
+  };
+
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
   return (
@@ -208,6 +318,9 @@ const UserState = props => {
         wsClient: state.wsClient,
         egmConnectList: state.egmConnectList,
         egmCreditList: state.egmCreditList,
+        btnList: state.btnList,
+        loginData: state.loginData,
+        kickList: state.kickList,
 
         setApiToken,
         setEgmList,
@@ -216,6 +329,10 @@ const UserState = props => {
         webSocketHandler,
         setOnActionEgmList,
         setEgmConnectList,
+        setBtnList,
+        chooseEgm,
+        setLoginData,
+        removeKickItem,
       }}
     >
       {props.children}

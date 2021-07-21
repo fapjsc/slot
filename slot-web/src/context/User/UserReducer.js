@@ -1,7 +1,66 @@
-import { SET_API_TOKEN, SET_EGM_LIST, SET_SELECT_EGM, SET_ON_ACTION_EGM_LIST, SET_WS_CLIENT, SET_EGM_CONNECT_STATE_LIST, SET_EMG_CREDIT_STATE_LIST } from '../type';
+import {
+  SET_API_TOKEN,
+  SET_EGM_LIST,
+  SET_SELECT_EGM,
+  SET_ON_ACTION_EGM_LIST,
+  SET_WS_CLIENT,
+  SET_EGM_CONNECT_STATE_LIST,
+  SET_EMG_CREDIT_STATE_LIST,
+  SET_BUTTON_LIST,
+  SET_LOGIN_DATA,
+  SET_KICK_LIST,
+  REMOVE_KICK_ITEM,
+} from '../type';
 
 const UserReducer = (state, action) => {
   switch (action.type) {
+    // Remove Kick Item
+    case REMOVE_KICK_ITEM:
+      let updateRemoveKickItems = state.kickList.filter(el => el.egm !== action.payload.egm && el.token !== action.payload.token);
+      return {
+        ...state,
+        kickList: updateRemoveKickItems,
+      };
+
+    // Set Kick List
+    case SET_KICK_LIST:
+      const { kickList } = state;
+      const existingKickIndex = kickList.findIndex(el => el.egm === action.payload.egm);
+      const existingKickItem = kickList[existingKickIndex];
+
+      let updateKickItems;
+
+      if (existingKickItem) {
+        const updateKickItem = {
+          ...existingKickItem,
+        };
+
+        updateKickItems = [...kickList];
+        updateKickItems[existingKickItem] = updateKickItem;
+      } else {
+        updateKickItems = kickList.concat(action.payload);
+      }
+
+      return {
+        ...state,
+        kickList: updateKickItems,
+      };
+
+    // Login Data
+    case SET_LOGIN_DATA:
+      return {
+        ...state,
+        loginData: action.payload,
+      };
+
+    // Button List
+    case SET_BUTTON_LIST:
+      return {
+        ...state,
+        btnList: action.payload,
+      };
+
+    // Egm Credit State
     case SET_EMG_CREDIT_STATE_LIST:
       const { egmCreditList } = state;
       const existingEgmItemIndex = state.egmCreditList.findIndex(item => item.map === action.payload.map);
