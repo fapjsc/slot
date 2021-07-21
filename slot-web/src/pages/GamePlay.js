@@ -267,6 +267,8 @@ const GamePlay = () => {
           </div>
         </div>
       </div>
+
+      {/* Leave Button */}
       <div className={classes.btnHandle}>
         <div className={`${classes.leaveBtnBox}`} onClick={() => leave('確定要離開嗎？')}>
           <LeaveButton />
@@ -274,6 +276,7 @@ const GamePlay = () => {
 
         {btnListEl}
 
+        {/* Auto Button */}
         <div className={autoBtnStyle} onClick={() => setAutoGame(!autoGame)}>
           <TheButton text={autoGame ? 'STOP' : 'AUTO'} />
         </div>

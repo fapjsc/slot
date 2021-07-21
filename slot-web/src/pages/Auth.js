@@ -11,6 +11,8 @@ const useStyles = makeStyles(theme => ({
     minHeight: '100vh',
     paddingTop: 80,
     backgroundImage: `url(${backImg})`,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
 
   paper: {
