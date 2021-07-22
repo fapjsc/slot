@@ -220,8 +220,7 @@ const GamePlay = () => {
     if (!egmCreditList.length) return;
     let credit = egmCreditList.find(el => Number(el.map) === selectEgm.mapId);
 
-    if (!credit.credit) return;
-    console.log(credit, 'credit');
+    if (!credit) return;
     setCredit(credit.credit);
   }, [egmCreditList, selectEgm]);
 
