@@ -94,6 +94,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
 
       // 當找到自己的candiDate後，發送給server，包含自己的socket id
       peerConnection.onicecandidate = event => {
+        console.log(event);
         if (event.candidate) {
           socket.emit('candidate', id, event.candidate);
           console.log('candiDate', event.candidate.candidate);

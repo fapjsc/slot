@@ -212,7 +212,7 @@ const BroadCast = () => {
 
         // 創建offer以及設定local description
         peerConnection
-          .createOffer()
+          .createOffer({ offerToReceiveVideo: true, offerToReceiveAudio: true })
           .then(sdp => peerConnection.setLocalDescription(sdp))
           .then(() => {
             socket.emit('offer', socketId, peerConnection.localDescription);
