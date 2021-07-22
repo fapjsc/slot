@@ -291,7 +291,7 @@ const GamePlay = () => {
         <div className={classes.slotScreen}>
           <Screen setSocketClient={setSocketClient} autoPlay={autoPlay} setAutoPlay={setAutoPlay} leave={leave} closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
           <div>
-            <Snackbar onClick={handleAutoPlay} open={state.openSnackbar} onClose={handleClose} TransitionComponent={state.Transition} message="點擊此處後開使遊戲" key={state.Transition.name} />
+            <Snackbar onClick={handleAutoPlay} open={state.openSnackbar} onClose={handleClose} TransitionComponent={state.Transition} message="點擊此處後開始遊戲" key={state.Transition.name} />
           </div>
         </div>
 
