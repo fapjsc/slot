@@ -149,6 +149,7 @@ const UserState = props => {
 
     // 收到server回復
     client.onmessage = message => {
+      // console.log(message.data);
       // const dataFromServer = JSON.parse(message);
       if (client.readyState === client.OPEN) {
         const data = {

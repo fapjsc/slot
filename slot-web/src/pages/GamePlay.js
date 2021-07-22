@@ -1,6 +1,8 @@
 import ApiController from '../api/apiController';
 import { useContext, useState, useEffect, Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
+import Odometer from 'react-odometerjs';
+import 'odometer/themes/odometer-theme-digital.css';
 
 // Context
 import UserContext from '../context/User/UserContext';
@@ -30,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 const GamePlay = () => {
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, selectEgm, setApiToken, setSelectEgm, setBtnList, btnList, kickList, removeKickItem } = userContext;
+  const { apiToken, selectEgm, setApiToken, setSelectEgm, setBtnList, btnList, kickList, removeKickItem, egmCreditList } = userContext;
   const { mapId, egmId, egmIp, egmSession, checkSum, casinoToken } = selectEgm;
 
   const styles = useStyles();
@@ -46,6 +48,8 @@ const GamePlay = () => {
   const [socketClient, setSocketClient] = useState(null);
   const [autoPlay, setAutoPlay] = useState(false);
   const [autoGame, setAutoGame] = useState(false);
+  const [credit, setCredit] = useState(0);
+  const [creditLoading, setCreditLoading] = useState(false);
   const [state, setState] = useState({
     openSnackbar: true,
     Transition: Fade,
@@ -75,9 +79,7 @@ const GamePlay = () => {
       socketClient.emit('unsubscribe', selectEgm.webNumber);
       setCloseWebRtcConnect(true);
       try {
-        let responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken, egmSession);
-        // console.log(mapId, egmId, egmIp, egmSession);
-        // console.log(responseData);
+        const responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken, egmSession);
 
         if (responseData.code > 100000000) {
           alert(responseData.msg);
@@ -97,42 +99,64 @@ const GamePlay = () => {
 
   const spin = async number => {
     console.log('call spin');
+    if (!credit || credit === '' || credit <= 50) {
+      setAutoGame(false);
+      alert('credit 不足');
+      return;
+    }
     try {
       let responseData = await ApiController().pressSlotApi(mapId, egmId, egmIp, number, apiToken, egmSession);
 
-      // 閒時時間太長
+      // 閒置時間太長
       if (responseData.code === 100000061) {
+        setCloseWebRtcConnect(true);
         alert(responseData.msg);
+        setCloseWebRtcConnect(false);
         localStorage.clear();
         history.replace('/');
       }
 
       if (responseData.code > 100000000) {
-        alert('ERROR!');
+        console.log('ERROR!');
       }
       if (responseData.code < 100000000) {
         // console.log(responseData);
       }
     } catch (error) {
-      alert('ERROR message: ', error);
+      console.log('ERROR message: ', error);
     }
   };
 
   const pointCash = async cash => {
+    if (cashIn === '' || cashIn <= 0) {
+      alert('請輸入投幣點數');
+      return;
+    }
+    setCreditLoading(true);
     // console.log(cash, 'cash');
     setCashIn('');
     try {
       let responseData = await ApiController().pointCashCasinoApi(egmSession, checkSum, cash, casinoToken);
-      // console.log(responseData);
+      console.log(responseData);
       if (responseData.code > 100000000) {
+        setCreditLoading(false);
+
         alert('ERROR!');
       }
+
+      // 投幣成功
+      if (responseData.code === 1) {
+      }
+
       if (responseData.code < 100000000) {
-        // console.log(responseData);
       }
     } catch (error) {
       alert('ERROR message: ', error);
     }
+
+    setTimeout(() => {
+      setCreditLoading(false);
+    }, 3000);
   };
 
   // 動態加載圖片
@@ -193,21 +217,35 @@ const GamePlay = () => {
   }, []);
 
   useEffect(() => {
+    if (!egmCreditList.length) return;
+    let credit = egmCreditList.find(el => Number(el.map) === selectEgm.mapId);
+
+    if (!credit.credit) return;
+    console.log(credit, 'credit');
+    setCredit(credit.credit);
+  }, [egmCreditList, selectEgm]);
+
+  useEffect(() => {
     if (!kickList.length) return;
 
     kickList.forEach(el => {
-      // console.log(el);
       if (String(el.egm) === selectEgm.egmSession && String(el.token) === apiToken) {
+        setCloseWebRtcConnect(true);
         removeKickItem(el);
         alert('閒置時間超過三分鐘，請重新登入');
-        history.replace('/');
         localStorage.clear();
+        history.replace('/');
       }
     });
-  }, [kickList]);
+  }, [kickList, selectEgm, apiToken, removeKickItem, history]);
 
   useEffect(() => {
     if (!autoGame) return;
+    if (!credit || credit === '' || credit <= 50) {
+      setAutoGame(false);
+      alert('credit 不足');
+      return;
+    }
     spin(77);
     let timer = setInterval(() => {
       spin(77);
@@ -216,7 +254,7 @@ const GamePlay = () => {
     return () => {
       clearInterval(timer);
     };
-  }, [autoGame]);
+  }, [autoGame, credit]);
 
   useEffect(() => {
     getImg();
@@ -233,7 +271,7 @@ const GamePlay = () => {
   }, [btnList]);
 
   const btnListEl = btnList.map(btn => (
-    <Fragment>
+    <Fragment key={btn.buttonNo}>
       <div className={classes.btnBox} onClick={() => spin(btn.buttonNo)}>
         <TheButton text={btn.buttonTxt} />
       </div>
@@ -259,6 +297,17 @@ const GamePlay = () => {
         </div>
 
         <div className={classes.optionBox}>
+          <div className={classes.creditBox}>
+            {creditLoading ? (
+              <span style={{ fontSize: '1rem' }}>Loading...</span>
+            ) : (
+              <>
+                <span>$</span>
+                <Odometer format="(,ddd).dd" value={Number(credit)} className={classes.creditOdometer} />
+              </>
+            )}
+          </div>
+
           <div className={classes.inputBox}>
             <input type="number" value={cashIn} onChange={handleChange} placeholder="點數" onWheel={event => event.currentTarget.blur()} />
 

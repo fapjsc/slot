@@ -140,6 +140,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
   useEffect(() => {
     if (!setCloseWebRtcConnect) return;
     if (closeWebRtcConnect && socket && peerConnection) {
+      console.log('closePeer');
       socket.emit('closePeer', socket.id);
       socket.emit('unsubscribe', webNumber);
       socket.close();

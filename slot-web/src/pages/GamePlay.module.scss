@@ -68,12 +68,27 @@
   bottom: 2%;
   left: 15%;
   width: 72%;
-  height: 13%;
+  height: 27%;
+  padding-left: 3%;
+  padding-top: 1%;
+
+  .creditBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 1.2rem;
+    span {
+      font-size: 1rem;
+      margin-right: 5px;
+      color: green;
+    }
+  }
 }
 
 .inputBox {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
 
   input[type='number']::placeholder {
@@ -86,6 +101,7 @@
     padding: 3%;
     background-color: white;
     border-radius: 50rem;
+    margin-right: auto;
 
     @media only screen and(max-width: 414px) {
       padding: 1%;
@@ -178,6 +194,8 @@
   padding-bottom: 80%;
   padding-top: 2%;
   flex-wrap: wrap;
+  max-width: 50rem;
+  margin: 0 auto;
 }
 
 .slotBtnBox {
