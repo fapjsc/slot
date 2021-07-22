@@ -240,13 +240,6 @@ const GamePlay = () => {
     </Fragment>
   ));
 
-  let autoBtnStyle;
-  if (!autoGame) {
-    autoBtnStyle = `${classes.btnBox}`;
-  } else {
-    autoBtnStyle = `${classes.btnBox} ${classes.test}`;
-  }
-
   return (
     <section className={classes.root}>
       {/* Back Drop Loading... */}
@@ -285,7 +278,7 @@ const GamePlay = () => {
         {btnListEl}
 
         {/* Auto Button */}
-        <div className={autoBtnStyle} onClick={() => setAutoGame(!autoGame)}>
+        <div className={classes.btnBox} onClick={() => setAutoGame(!autoGame)}>
           <TheButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
         </div>
       </div>

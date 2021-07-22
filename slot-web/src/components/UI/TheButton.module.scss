@@ -101,3 +101,34 @@
   background-image: linear-gradient(120deg, #ffffff 0%, #ccb7b7 100%);
   filter: blur(20px);
 }
+
+.flashText {
+  animation: textAnimate 3s linear infinite;
+}
+
+@keyframes textAnimate {
+  0%,
+  18%,
+  20%,
+  50.1%,
+  60%,
+  65.1%,
+  80%,
+  90.1%,
+  92% {
+    color: #0e3742;
+    text-shadow: none;
+  }
+  18.1%,
+  20.1%,
+  30%,
+  50%,
+  60.1%,
+  65%,
+  80.1%,
+  92.1%,
+  100% {
+    color: #fff;
+    text-shadow: 0 0 10px #03bef4, 0 0 20px #03bef4, 0 0 40px #03bef4, 0 0 80px #03bef4, 0 0 100px #03bef4;
+  }
+}
