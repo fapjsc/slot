@@ -1,10 +1,14 @@
 .root {
-  height: 100vh;
+  height: 100%;
   background-image: linear-gradient(to right bottom, rgba(2, 1, 48, 0.7), rgba(0, 0, 0, 0.7)), url(../asset/casino-bg.jpg);
   background-size: cover;
   background-position: top;
-  padding-top: 20px;
+  padding: 2rem;
   text-align: center;
+  margin: auto;
+  @media only screen and(max-width: 768px) {
+    padding: 0;
+  }
 }
 
 .slotMachine {
@@ -13,8 +17,8 @@
   background-position: top;
   background-repeat: no-repeat;
   position: relative;
-  height: 38rem;
-  max-width: 50rem;
+  height: 62vh;
+  max-width: 678px;
   margin: 10rem auto 0 auto;
   background-size: 100% 100%;
 
@@ -23,9 +27,7 @@
     margin-top: 18rem;
   }
 
-  @media only screen and(max-width: 414px) {
-    height: 48%;
-    width: 100%;
+  @media only screen and(max-width: 450px) {
     margin-top: 7rem;
     background-size: 100% 100%;
   }
@@ -36,6 +38,9 @@
   background-image: url(../asset/new/wolf.jpg);
   background-size: cover;
   background-position: center;
+  height: 16rem;
+  width: 100%;
+  top: -16rem;
 
   @media only screen and(max-width: 768px) {
     height: 16rem;
@@ -43,7 +48,7 @@
     top: -16rem;
   }
 
-  @media only screen and(max-width: 414px) {
+  @media only screen and(max-width: 450px) {
     height: 8rem;
     width: 100%;
     top: -8.1rem;
@@ -65,163 +70,154 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  padding-left: 3%;
   bottom: 2%;
   left: 15%;
-  width: 72%;
-  height: 27%;
-  padding-left: 3%;
-  padding-top: 1%;
+  width: 70%;
+  height: 28%;
+  padding-top: 2.5%;
+
+  @media only screen and(max-width: 450px) {
+    height: 28%;
+    padding-left: 0;
+    bottom: 0;
+    width: 72%;
+    padding-top: 1%;
+  }
 
   .creditBox {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    color: #fff;
-    font-size: 1.2rem;
-    span {
-      font-size: 1rem;
-      margin-right: 5px;
-      color: green;
+    font-size: 2.4rem;
+    @media only screen and(max-width: 450px) {
+      font-size: 1.8rem;
     }
-  }
-}
+    p {
+      // font-size: 1rem;
+      // margin-right: 5px;
+      color: rgb(68, 194, 68);
+      font-size: 1.2rem;
+      margin-left: 1rem;
+    }
 
-.inputBox {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+    .moneyBox {
+      height: 100%;
+      width: 15%;
+      display: flex;
+      align-items: center;
 
-  input[type='number']::placeholder {
-    /* Firefox, Chrome, Opera */
-    padding-left: 5px;
-  }
-
-  input {
-    width: 60%;
-    padding: 3%;
-    background-color: white;
-    border-radius: 50rem;
-    margin-right: auto;
-
-    @media only screen and(max-width: 414px) {
-      padding: 1%;
-      width: 50%;
+      @media only screen and(max-width: 450px) {
+        width: 20%;
+      }
+      .money {
+        width: 100%;
+      }
     }
   }
 
-  // placeholder style
-  ::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
-    font-size: 1rem;
-    @media only screen and(width: 720px) and(height:1280px) {
-      font-size: 1rem;
+  // Input Box
+  .inputBox {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    input[type='number']::placeholder {
+      /* Firefox, Chrome, Opera */
+      padding-left: 5px;
     }
 
-    @media only screen and(max-width: 480px) {
-      font-size: 9px;
-    }
-  }
-  ::-moz-placeholder {
-    /* Firefox 19+ */
-    font-size: 1rem;
-    @media only screen and(width: 720px) and(height:1280px) {
-      font-size: 1rem;
-    }
-    @media only screen and(max-width: 480px) {
-      font-size: 9px;
-    }
-  }
-  :-ms-input-placeholder {
-    /* IE 10+ */
-    font-size: 1rem;
-    @media only screen and(width: 720px) and(height:1280px) {
-      font-size: 1rem;
-    }
-    @media only screen and(max-width: 480px) {
-      font-size: 9px;
-    }
-  }
-  :-moz-placeholder {
-    font-size: 1rem;
-    @media only screen and(width: 720px) and(height:1280px) {
-      font-size: 1rem;
-    }
-    @media only screen and(max-width: 480px) {
-      font-size: 9px;
-    }
-  }
+    input {
+      width: 60%;
+      padding: 3%;
+      background-color: white;
+      border-radius: 50rem;
+      margin-right: 10%;
+      margin-bottom: -4%;
+      margin: 0 5px 0 0;
 
-  .slotButton {
-    background-color: #042a5f;
-    border-radius: 15px;
-    color: azure;
-    padding: 2%;
-    font-size: 1.5rem;
-    padding: 0.6rem 2rem;
+      @media only screen and(max-width: 450px) {
+        padding: 2%;
+        width: 60%;
+      }
 
-    @media only screen and(width: 720px) and(height:1280px) {
-      font-size: 1.5rem;
-      padding: 0.6rem 2rem;
+      // placeholder style
+      ::-webkit-input-placeholder {
+        /* Chrome/Opera/Safari */
+        font-size: 1rem;
+        @media only screen and(max-width: 450px) {
+          font-size: 0.7rem;
+        }
+      }
+      ::-moz-placeholder {
+        /* Firefox 19+ */
+        font-size: 1rem;
+      }
+      :-ms-input-placeholder {
+        /* IE 10+ */
+        font-size: 1rem;
+      }
+      :-moz-placeholder {
+        font-size: 1rem;
+      }
     }
 
-    @media only screen and(width: 424px) and(height:753px) {
-      font-size: 1rem;
-      padding: 0.3rem 1rem;
+    .goldBox {
+      height: 100%;
+      width: 15%;
+      display: flex;
+      align-items: center;
+      padding-bottom: 2%;
+
+      @media only screen and(max-width: 450px) {
+        width: 20%;
+      }
+
+      .gold {
+        width: 100%;
+      }
     }
 
-    @media only screen and(max-width: 756px) {
-      font-size: 1rem;
-      padding: 0.8rem 1rem;
-    }
+    .slotBtnBox {
+      height: 100%;
+      width: 27%;
 
-    @media only screen and(max-width: 414px) {
-      font-size: 0.8rem;
-      padding: 0.1rem 0.6rem;
-    }
+      @media only screen and(max-width: 450px) {
+        width: 30%;
+      }
 
-    @media only screen and(max-width: 320px) {
-      font-size: 0.4rem;
-      padding: 0.1rem 0.4rem;
+      @media only screen and(max-width: 320px) {
+      }
     }
   }
 }
 
 .btnHandle {
   background: hsl(323, 21%, 16%);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 80%;
-  padding-top: 2%;
-  flex-wrap: wrap;
-  max-width: 50rem;
+  padding-bottom: 10rem;
+  max-width: 678px;
   margin: 0 auto;
-}
-
-.slotBtnBox {
-  @media only screen and(max-width: 480px) {
-    width: 20%;
-  }
-}
-
-.btnBox {
-  width: 15%;
-  margin-top: 0.5rem;
-  display: flex;
-  justify-content: center;
-  margin-right: 3%;
-  @media only screen and(max-width: 550px) {
-    width: 30%;
-    margin-right: 2%;
+  padding: 3% 4%;
+  // display: flex;
+  // align-items: center;
+  // justify-content: flex-end;
+  // padding-top: 2%;
+  // flex-wrap: wrap;
+  .btnBox {
+    // margin-top: 0.5rem;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // margin-right: 3%;
+    // @media only screen and(max-width: 450px) {
+    //   width: 30%;
+    //   margin-right: 2%;
+    // }
   }
 }
 
 .leaveBtnBox {
   position: fixed;
-  bottom: 1%;
+  top: 1%;
   left: 5%;
-  @media only screen and(min-width: 1024px) {
-    position: fixed;
-    bottom: 90%;
-  }
 }

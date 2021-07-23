@@ -19,6 +19,7 @@ import {
   SET_LOGIN_DATA,
   SET_KICK_LIST,
   REMOVE_KICK_ITEM,
+  SET_REVIEW_STATE,
 } from '../type';
 
 const UserState = props => {
@@ -38,6 +39,7 @@ const UserState = props => {
     egmCreditList: [],
     btnList: [],
     kickList: [],
+    reviewState: false,
   };
 
   // Get Http Header
@@ -46,6 +48,26 @@ const UserState = props => {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `Bearer ${token}`);
     return headers;
+  };
+
+  // User Review
+  const userReview = async (token, data) => {
+    const headers = getHeaders(token);
+    if (!headers) return;
+
+    const url = `${apiUrl}/PlayEgmCommentApi`;
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(data),
+      });
+      const resData = await res.json();
+      console.log(resData);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Choose Egm List
@@ -97,7 +119,7 @@ const UserState = props => {
 
         history.replace('/gameStart');
       } else {
-        alert(resData.msg);
+        alert(resData.msg, '102');
         // console.log(resData.msg);
       }
     } catch (error) {
@@ -119,17 +141,17 @@ const UserState = props => {
         headers,
       });
       const resData = await res.json();
-      // console.log(resData);
 
       if (resData.code === 100000004) {
         alert(resData.msg);
         localStorage.clear();
         history.replace('/');
       }
+
       if (resData.code === 17) setEgmList(resData.egmList);
     } catch (error) {
       console.log(error);
-      alert('無法獲取EGM，請重新登入');
+      alert('發生錯誤，請重新登入 134');
       localStorage.clear();
       history.replace('/');
     }
@@ -305,6 +327,10 @@ const UserState = props => {
     dispatch({ type: REMOVE_KICK_ITEM, payload: kickObj });
   };
 
+  const setReviewState = value => {
+    dispatch({ type: SET_REVIEW_STATE, payload: value });
+  };
+
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
   return (
@@ -322,6 +348,7 @@ const UserState = props => {
         btnList: state.btnList,
         loginData: state.loginData,
         kickList: state.kickList,
+        reviewState: state.reviewState,
 
         setApiToken,
         setEgmList,
@@ -334,6 +361,8 @@ const UserState = props => {
         chooseEgm,
         setLoginData,
         removeKickItem,
+        setReviewState,
+        userReview,
       }}
     >
       {props.children}

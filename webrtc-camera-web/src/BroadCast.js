@@ -205,6 +205,7 @@ const BroadCast = () => {
 
         // Candidate Event, 當找到本地的candiDate後發送給server，包含自己的socket id
         peerConnection.onicecandidate = event => {
+          console.log(event, 'onIceCandidate on fire');
           if (event.candidate) {
             socket.emit('candidate', socketId, event.candidate);
           }

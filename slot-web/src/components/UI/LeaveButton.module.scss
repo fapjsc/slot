@@ -4,9 +4,6 @@ $color-primary: hsl(317, 100%, 54%);
 $color-secondary: hsl(323, 21%, 16%);
 
 .neonButton {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   z-index: 999;
   color: $color-primary;
   border: $color-primary 0.125em solid;
@@ -23,7 +20,7 @@ $color-secondary: hsl(323, 21%, 16%);
   position: relative;
 
   @media only screen and(max-width: 400px) {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 
   &:active {

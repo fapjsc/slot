@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import io from 'socket.io-client';
 
 // Context
@@ -21,6 +22,9 @@ let peerConnection;
 
 const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, setAutoPlay, setSocketClient }) => {
   const remoteCamera = useRef();
+
+  // Router Props
+  const history = useHistory();
 
   const [socket, setSocket] = useState();
 
@@ -94,7 +98,6 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
 
       // 當找到自己的candiDate後，發送給server，包含自己的socket id
       peerConnection.onicecandidate = event => {
-        console.log(event);
         if (event.candidate) {
           socket.emit('candidate', id, event.candidate);
           console.log('candiDate', event.candidate.candidate);
@@ -119,7 +122,10 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
     });
 
     socket.on('cameraErr', () => {
-      leave('Camera Error');
+      // leave('Camera Error');
+      alert('發生錯誤,請從新登入');
+      history.replace('/');
+      localStorage.clear();
     });
 
     socket.on('deviceChange', message => {

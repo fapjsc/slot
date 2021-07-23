@@ -15,11 +15,9 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
-// import styles from './machineIremNew.module.scss';
 
 // Style
 import machineIcon from '../../asset/egzj1ui37v.jpeg';
-import { TrendingUpRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,7 +43,7 @@ export default function MachineItem(props) {
   const classes = useStyles();
 
   // Router Props
-  let history = useHistory();
+  // let history = useHistory();
 
   // Init State
   const [imgObj, setImgObj] = useState();
@@ -57,7 +55,7 @@ export default function MachineItem(props) {
 
   // User Context
   const userContext = useContext(UserContext);
-  const { onActionEgmList, egmCreditList, egmConnectList, setBtnList, chooseEgm, apiToken } = userContext;
+  const { onActionEgmList, egmCreditList, egmConnectList, chooseEgm, apiToken } = userContext;
 
   // const selectMachine = () => {
   //   console.log('chooseEgm input: ', props.machineDetails);
@@ -119,9 +117,9 @@ export default function MachineItem(props) {
 
   const handlePlayStartClick = () => {
     setIsPlaying(true);
-    console.log('chooseEgm input: ', props.machineDetails);
-    console.log('chooseEgm token: ', props.token);
-    console.log(loginData, 'login data');
+    // console.log('chooseEgm input: ', props.machineDetails);
+    // console.log('chooseEgm token: ', props.token);
+    // console.log(loginData, 'login data');
     chooseEgm(loginData, props.machineDetails, apiToken);
     // selectMachine();
   };

@@ -10,8 +10,11 @@ import UserContext from '../context/User/UserContext';
 // Components
 import Screen from '../Screen';
 import TheButton from '../components/UI/TheButton';
-import SlotButton from '../components/UI/SlotButton';
 import LeaveButton from '../components/UI/LeaveButton';
+import Review from '../components/review/Review';
+
+// Media Query
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 // Style
 import classes from './GamePlay.module.scss';
@@ -20,6 +23,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import Fade from '@material-ui/core/Fade';
+import Grid from '@material-ui/core/Grid';
+
+// Image
+import moneyImg from '../asset/money.png';
+import goldImg from '../asset/gold.png';
 
 // Material Style
 const useStyles = makeStyles(theme => ({
@@ -27,15 +35,26 @@ const useStyles = makeStyles(theme => ({
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
+  snackbarRoot: {
+    fontSize: '1rem',
+    width: '26rem',
+  },
+  snackbarMessage: {
+    textAlign: 'center',
+    margin: '0 auto',
+  },
 }));
 
 const GamePlay = () => {
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, selectEgm, setApiToken, setSelectEgm, setBtnList, btnList, kickList, removeKickItem, egmCreditList } = userContext;
+  const { apiToken, selectEgm, setApiToken, setSelectEgm, setBtnList, btnList, kickList, removeKickItem, egmCreditList, setReviewState, userReview } = userContext;
   const { mapId, egmId, egmIp, egmSession, checkSum, casinoToken } = selectEgm;
 
   const styles = useStyles();
+
+  // Mobile Break Point
+  const matches = useMediaQuery('(max-width:320px)');
 
   // Router Props
   const history = useHistory();
@@ -72,28 +91,51 @@ const GamePlay = () => {
     setCashIn(e.target.value);
   };
 
-  const leave = async title => {
-    if (window.confirm(title)) {
-      setAutoGame(false);
-      setOpen(true);
-      socketClient.emit('unsubscribe', selectEgm.webNumber);
-      setCloseWebRtcConnect(true);
-      try {
-        const responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken, egmSession);
+  // const leave = async title => {
+  //   if (window.confirm(title)) {
+  //     setOpen(true);
+  //     setAutoGame(false);
+  //     socketClient.emit('unsubscribe', selectEgm.webNumber);
+  //     setCloseWebRtcConnect(true);
+  //     try {
+  //       const responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken, egmSession);
 
-        if (responseData.code > 100000000) {
-          alert(responseData.msg);
-          setOpen(false);
-        }
+  //       if (responseData.code > 100000000) {
+  //         alert(responseData.msg);
+  //         setOpen(false);
+  //       }
 
-        if (responseData.code === 6 || responseData.code === 5) {
-          history.replace('/home');
-          setOpen(false);
-        }
-      } catch (error) {
-        alert('ERROR message: ', error);
+  //       if (responseData.code === 6 || responseData.code === 5) {
+  //         history.replace('/home');
+  //         setOpen(false);
+  //       }
+  //     } catch (error) {
+  //       alert('ERROR message: ', error);
+  //       setOpen(false);
+  //     }
+  //   }
+  // };
+
+  const leave = async () => {
+    setOpen(true);
+    setAutoGame(false);
+    socketClient.emit('unsubscribe', selectEgm.webNumber);
+    setCloseWebRtcConnect(true);
+    try {
+      const responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken, egmSession);
+
+      if (responseData.code > 100000000) {
+        alert(responseData.msg);
         setOpen(false);
       }
+
+      if (responseData.code === 6 || responseData.code === 5) {
+        history.replace('/home');
+        setOpen(false);
+      }
+    } catch (error) {
+      alert('ERROR message: ', error);
+      setOpen(false);
     }
   };
 
@@ -111,7 +153,6 @@ const GamePlay = () => {
       if (responseData.code === 100000061) {
         setCloseWebRtcConnect(true);
         alert(responseData.msg);
-        setCloseWebRtcConnect(false);
         localStorage.clear();
         history.replace('/');
       }
@@ -146,6 +187,14 @@ const GamePlay = () => {
 
       // 投幣成功
       if (responseData.code === 1) {
+      }
+
+      // 閒置時間太長
+      if (responseData.code === 100000061) {
+        setCloseWebRtcConnect(true);
+        alert(responseData.msg);
+        localStorage.clear();
+        history.replace('/');
       }
 
       if (responseData.code < 100000000) {
@@ -270,11 +319,9 @@ const GamePlay = () => {
   }, [btnList]);
 
   const btnListEl = btnList.map(btn => (
-    <Fragment key={btn.buttonNo}>
-      <div className={classes.btnBox} onClick={() => spin(btn.buttonNo)}>
-        <TheButton text={btn.buttonTxt} />
-      </div>
-    </Fragment>
+    <Grid item xs={4} key={btn.buttonNo} className={classes.btnBox} onClick={() => spin(btn.buttonNo)}>
+      <TheButton text={btn.buttonTxt} />
+    </Grid>
   ));
 
   return (
@@ -285,50 +332,76 @@ const GamePlay = () => {
         <p>結算中...</p>
       </Backdrop>
 
+      <Review machine={selectEgm.mapId} leave={leave} userReview={userReview} token={apiToken} selectEgm={selectEgm} />
+
       <div className={classes.slotMachine}>
         <div className={classes.slotBanners} style={{ backgroundImage: 'url(' + imgObj + ')' }} />
 
         <div className={classes.slotScreen}>
           <Screen setSocketClient={setSocketClient} autoPlay={autoPlay} setAutoPlay={setAutoPlay} leave={leave} closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
           <div>
-            <Snackbar onClick={handleAutoPlay} open={state.openSnackbar} onClose={handleClose} TransitionComponent={state.Transition} message="點擊此處後開始遊戲" key={state.Transition.name} />
+            <Snackbar
+              ContentProps={{
+                classes: {
+                  root: styles.snackbarRoot,
+                  message: styles.snackbarMessage,
+                },
+              }}
+              onClick={handleAutoPlay}
+              open={state.openSnackbar}
+              onClose={handleClose}
+              TransitionComponent={state.Transition}
+              message="點擊此處後開始遊戲"
+              key={state.Transition.name}
+            />
           </div>
         </div>
 
         <div className={classes.optionBox}>
           <div className={classes.creditBox}>
-            {creditLoading ? (
-              <span style={{ fontSize: '1rem' }}>Loading...</span>
-            ) : (
-              <>
-                <span>$</span>
-                <Odometer format="(,ddd).dd" value={Number(credit)} className={classes.creditOdometer} />
-              </>
-            )}
+            <Fragment>
+              {/* img */}
+              <div className={classes.moneyBox}>
+                <img className={classes.money} src={moneyImg} alt="money" />
+              </div>
+              {creditLoading ? (
+                <Fragment>
+                  <CircularProgress />
+                  <p>開分中，請稍候...</p>
+                </Fragment>
+              ) : (
+                <Odometer className={classes.odometer} format="(,ddd).dd" value={Number(credit)} />
+              )}
+            </Fragment>
           </div>
 
           <div className={classes.inputBox}>
+            {/* img */}
+            <div className={classes.goldBox}>
+              <img className={classes.gold} src={goldImg} alt="gold" />
+            </div>
+            {/* input */}
             <input type="number" value={cashIn} onChange={handleChange} placeholder="點數" onWheel={event => event.currentTarget.blur()} />
-
+            {/* button */}
             <div className={classes.slotBtnBox} onClick={() => pointCash(cashIn)}>
-              <SlotButton />
+              <TheButton text="開分" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Leave Button */}
       <div className={classes.btnHandle}>
-        <div className={`${classes.leaveBtnBox}`} onClick={() => leave('確定要離開嗎？')}>
-          <LeaveButton />
-        </div>
+        <Grid container spacing={matches ? 1 : 3}>
+          {btnListEl}
+          {/* Auto Button */}
+          <Grid item xs={4} className={classes.btnBox} onClick={() => setAutoGame(!autoGame)}>
+            <TheButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
+          </Grid>
+        </Grid>
+      </div>
 
-        {btnListEl}
-
-        {/* Auto Button */}
-        <div className={classes.btnBox} onClick={() => setAutoGame(!autoGame)}>
-          <TheButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
-        </div>
+      <div className={`${classes.leaveBtnBox}`} onClick={() => setReviewState(true)}>
+        <LeaveButton />
       </div>
     </section>
   );

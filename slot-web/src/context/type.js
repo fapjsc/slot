@@ -9,3 +9,4 @@ export const SET_BUTTON_LIST = 'SET_BUTTON_LIST';
 export const SET_LOGIN_DATA = 'SET_LOGIN_DATA';
 export const SET_KICK_LIST = 'SET_KICK_LIST';
 export const REMOVE_KICK_ITEM = 'REMOVE_KICK_ITEM';
+export const SET_REVIEW_STATE = 'SET_REVIEW_STATE';

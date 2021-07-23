@@ -70,6 +70,11 @@ const Home = () => {
 
     // console.log(egmList);
     return () => {
+      if (egmList === undefined) {
+        // alert('無法獲取EGM，請重新登入');
+        // history.replace('/');
+        // localStorage.clear();
+      }
       if (wsClient) wsClient.close();
     };
     // eslint-disable-next-line

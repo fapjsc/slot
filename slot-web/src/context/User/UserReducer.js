@@ -10,10 +10,17 @@ import {
   SET_LOGIN_DATA,
   SET_KICK_LIST,
   REMOVE_KICK_ITEM,
+  SET_REVIEW_STATE,
 } from '../type';
 
 const UserReducer = (state, action) => {
   switch (action.type) {
+    // Client Review State
+    case SET_REVIEW_STATE:
+      return {
+        ...state,
+        reviewState: action.payload,
+      };
     // Remove Kick Item
     case REMOVE_KICK_ITEM:
       let updateRemoveKickItems = state.kickList.filter(el => el.egm !== action.payload.egm && el.token !== action.payload.token);
