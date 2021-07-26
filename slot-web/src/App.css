@@ -28,3 +28,18 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
+.odometer-value {
+  color: #fff;
+}
+
+.odometer-inside {
+  padding: 0 0.4rem;
+  font-family: 'Roboto', sans-serif;
+  color: #fff;
+}
+
+/* .odometer-inside {
+  display: flex;
+  align-items: center;
+} */

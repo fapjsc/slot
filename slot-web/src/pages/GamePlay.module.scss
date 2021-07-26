@@ -6,6 +6,7 @@
   padding: 2rem;
   text-align: center;
   margin: auto;
+
   @media only screen and(max-width: 768px) {
     padding: 0;
   }
@@ -17,7 +18,7 @@
   background-position: top;
   background-repeat: no-repeat;
   position: relative;
-  height: 62vh;
+  height: 52vh;
   max-width: 678px;
   margin: 10rem auto 0 auto;
   background-size: 100% 100%;
@@ -66,153 +67,257 @@
 }
 
 .optionBox {
+  background-image: linear-gradient(#2a2619, #a7a2a2, #2a2619);
   position: absolute;
+  bottom: 0;
+  left: 10%;
+  height: 29%;
+  width: 80%;
+  clip-path: polygon(8% 0, 93% 0%, 100% 100%, 0 100%);
+  -webkit-clip-path: polygon(8% 0, 93% 0%, 100% 100%, 0 100%);
+  padding: 1% 6%;
+
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding-left: 3%;
-  bottom: 2%;
-  left: 15%;
-  width: 70%;
-  height: 28%;
-  padding-top: 2.5%;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
 
-  @media only screen and(max-width: 450px) {
-    height: 28%;
-    padding-left: 0;
-    bottom: 0;
-    width: 72%;
-    padding-top: 1%;
-  }
-
-  .creditBox {
+  .subBtnBox {
+    flex: 1;
+    width: 18%;
+    max-width: 18%;
+    min-width: 18%;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-size: 2.4rem;
-    @media only screen and(max-width: 450px) {
-      font-size: 1.8rem;
-    }
-    p {
-      // font-size: 1rem;
-      // margin-right: 5px;
-      color: rgb(68, 194, 68);
-      font-size: 1.2rem;
-      margin-left: 1rem;
+    justify-content: center;
+    height: 49%;
+    margin-right: 1%;
+
+    @media only screen and(max-width: 414px) {
+      margin-right: 0;
+      width: 20%;
+      max-width: 20%;
+      min-width: 20%;
+      height: 40%;
     }
 
-    .moneyBox {
-      height: 100%;
-      width: 15%;
-      display: flex;
-      align-items: center;
-
-      @media only screen and(max-width: 450px) {
-        width: 20%;
-      }
-      .money {
-        width: 100%;
-      }
+    .subBtn {
+      width: 70%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      cursor: pointer;
     }
   }
 
-  // Input Box
-  .inputBox {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  .credit1 {
+    background-image: url('../asset//button/dragon/Credit-1.png');
+  }
 
-    input[type='number']::placeholder {
-      /* Firefox, Chrome, Opera */
-      padding-left: 5px;
-    }
+  .credit3 {
+    background-image: url('../asset//button/dragon/Credit-3.png');
+  }
 
-    input {
-      width: 60%;
-      padding: 3%;
-      background-color: white;
-      border-radius: 50rem;
-      margin-right: 10%;
-      margin-bottom: -4%;
-      margin: 0 5px 0 0;
+  .credit7 {
+    background-image: url('../asset//button/dragon/Credit-7.png');
+  }
 
-      @media only screen and(max-width: 450px) {
-        padding: 2%;
-        width: 60%;
-      }
+  .credit15 {
+    background-image: url('../asset//button/dragon/Credit-15.png');
+  }
 
-      // placeholder style
-      ::-webkit-input-placeholder {
-        /* Chrome/Opera/Safari */
-        font-size: 1rem;
-        @media only screen and(max-width: 450px) {
-          font-size: 0.7rem;
-        }
-      }
-      ::-moz-placeholder {
-        /* Firefox 19+ */
-        font-size: 1rem;
-      }
-      :-ms-input-placeholder {
-        /* IE 10+ */
-        font-size: 1rem;
-      }
-      :-moz-placeholder {
-        font-size: 1rem;
-      }
-    }
+  .credit25 {
+    background-image: url('../asset//button/dragon/Credit-25.png');
+  }
 
-    .goldBox {
-      height: 100%;
-      width: 15%;
-      display: flex;
-      align-items: center;
-      padding-bottom: 2%;
+  .bet1 {
+    background-image: url('../asset/button/dragon/Bet-1.png');
+  }
 
-      @media only screen and(max-width: 450px) {
-        width: 20%;
-      }
+  .bet2 {
+    background-image: url('../asset/button/dragon/Bet-2.png');
+  }
 
-      .gold {
-        width: 100%;
-      }
-    }
+  .bet5 {
+    background-image: url('../asset/button/dragon/Bet-5.png');
+  }
 
-    .slotBtnBox {
-      height: 100%;
-      width: 27%;
+  .bet10 {
+    background-image: url('../asset/button/dragon/Bet-10.png');
+  }
 
-      @media only screen and(max-width: 450px) {
-        width: 30%;
-      }
-
-      @media only screen and(max-width: 320px) {
-      }
-    }
+  .bet15 {
+    background-image: url('../asset/button/dragon/Bet-15.png');
   }
 }
 
 .btnHandle {
-  background: hsl(323, 21%, 16%);
-  padding-bottom: 10rem;
+  border-color: #9e9e9e;
+  background-image: linear-gradient(#9e9e9e, #eaeaea, #9e9e9e);
   max-width: 678px;
   margin: 0 auto;
-  padding: 3% 4%;
-  // display: flex;
-  // align-items: center;
-  // justify-content: flex-end;
-  // padding-top: 2%;
-  // flex-wrap: wrap;
-  .btnBox {
-    // margin-top: 0.5rem;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
-    // margin-right: 3%;
-    // @media only screen and(max-width: 450px) {
-    //   width: 30%;
-    //   margin-right: 2%;
-    // }
+  padding: 2%;
+  padding-bottom: 10%;
+  display: flex;
+  flex-direction: column;
+
+  .box1 {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-image: linear-gradient(to right, #3d2f2f, #463a3a, #524243);
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+
+  .box2 {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 100%;
+
+    @media only screen and(max-width: 414px) {
+      flex-wrap: wrap;
+    }
+
+    // Credit Box
+    .creditBox {
+      display: flex;
+      flex-direction: column;
+      font-size: 1.5rem;
+      padding: 1%;
+      background-color: rgba(0, 0, 0, 0.7);
+      margin-right: 3%;
+      width: 50%;
+      border-radius: 20px;
+
+      @media only screen and(max-width: 414px) {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 1rem;
+        padding: 1% 5% 5% 5%;
+      }
+
+      .moneyBox {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: auto;
+        height: 100%;
+
+        .money {
+          width: 20%;
+        }
+
+        .span {
+          color: #fff;
+          font-size: 1.4rem;
+          text-align: left;
+          font-weight: bold;
+
+          @media only screen and(max-width: 700px) {
+            font-size: 1rem;
+          }
+        }
+      }
+
+      .odometerBox {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 1% 5% 0%;
+        background-color: rgba(0, 0, 0, 0.5);
+
+        @media only screen and(max-width: 414px) {
+          padding: 3% 1%;
+        }
+      }
+    }
+
+    // Input Box
+    .inputBox {
+      display: flex;
+      flex-direction: column;
+      font-size: 1.5rem;
+      padding: 1%;
+      background-color: rgba(0, 0, 0, 0.7);
+      width: 50%;
+      border-radius: 20px;
+
+      @media only screen and(max-width: 414px) {
+        width: 100%;
+        padding: 1% 5% 5% 5%;
+      }
+
+      input[type='number']::placeholder {
+        /* Firefox, Chrome, Opera */
+        padding-left: 5px;
+      }
+
+      input {
+        width: 90%;
+        padding: 3%;
+        background-color: white;
+        border-radius: 50rem;
+        margin-right: 1rem;
+
+        // placeholder style
+        ::-webkit-input-placeholder {
+          /* Chrome/Opera/Safari */
+          font-size: 1rem;
+          @media only screen and(max-width: 450px) {
+            font-size: 0.7rem;
+          }
+        }
+        ::-moz-placeholder {
+          /* Firefox 19+ */
+          font-size: 1rem;
+        }
+        :-ms-input-placeholder {
+          /* IE 10+ */
+          font-size: 1rem;
+        }
+        :-moz-placeholder {
+          font-size: 1rem;
+        }
+      }
+
+      .span {
+        color: #fff;
+        font-size: 1.4rem;
+        text-align: left;
+        margin-bottom: 1%;
+        font-weight: bold;
+
+        @media only screen and(max-width: 700px) {
+          font-size: 1rem;
+        }
+      }
+
+      .goldBox {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: auto;
+        height: 100%;
+
+        .gold {
+          width: 20%;
+        }
+      }
+
+      .inputInnerBox {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 1%;
+      }
+
+      .slotIcon {
+        color: #fff;
+        cursor: pointer;
+        font-size: 2.2rem;
+      }
+    }
   }
 }
 

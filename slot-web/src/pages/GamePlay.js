@@ -1,8 +1,8 @@
 import ApiController from '../api/apiController';
-import { useContext, useState, useEffect, Fragment } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Odometer from 'react-odometerjs';
-import 'odometer/themes/odometer-theme-digital.css';
+import 'odometer/themes/odometer-theme-train-station.css';
 
 // Context
 import UserContext from '../context/User/UserContext';
@@ -24,6 +24,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
 // Image
 import moneyImg from '../asset/money.png';
@@ -37,7 +38,8 @@ const useStyles = makeStyles(theme => ({
   },
   snackbarRoot: {
     fontSize: '1rem',
-    width: '26rem',
+    height: '10em',
+    width: '28em',
   },
   snackbarMessage: {
     textAlign: 'center',
@@ -69,6 +71,8 @@ const GamePlay = () => {
   const [autoGame, setAutoGame] = useState(false);
   const [credit, setCredit] = useState(0);
   const [creditLoading, setCreditLoading] = useState(false);
+  const [mainBtn, setMainBtn] = useState([]);
+  const [subBtn, setSubBtn] = useState([]);
   const [state, setState] = useState({
     openSnackbar: true,
     Transition: Fade,
@@ -315,14 +319,106 @@ const GamePlay = () => {
       const btnList = JSON.parse(localStorage.getItem('btnList'));
       setBtnList(btnList);
     }
+    let mainBtnTemp = [];
+    let subBtnTemp = [];
+    btnList.forEach(btn => {
+      if (btn.buttonNo === 77 || btn.buttonNo === 99) {
+        mainBtnTemp.push(btn);
+      } else {
+        subBtnTemp.push(btn);
+      }
+    });
+
+    setMainBtn(mainBtnTemp);
+    setSubBtn(subBtnTemp.reverse());
+
     // eslint-disable-next-line
   }, [btnList]);
 
-  const btnListEl = btnList.map(btn => (
-    <Grid item xs={4} key={btn.buttonNo} className={classes.btnBox} onClick={() => spin(btn.buttonNo)}>
-      <TheButton text={btn.buttonTxt} />
-    </Grid>
-  ));
+  const mainBtnListEl = mainBtn.map(btn => {
+    return (
+      <Grid item xs={4} key={btn.buttonNo} className={classes.btnBox} onClick={() => spin(btn.buttonNo)}>
+        <TheButton text={btn.buttonTxt} />
+      </Grid>
+    );
+  });
+
+  const subBtnListEl = subBtn.map(btn => {
+    switch (btn.buttonTxt) {
+      case '1-1':
+        return (
+          <div className={`${classes.subBtnBox}`}>
+            <button className={`${classes.subBtn} ${classes.credit1}`} onClick={() => spin(btn.buttonNo)} />
+          </div>
+        );
+
+      case '1-2':
+        return (
+          <div className={`${classes.subBtnBox}`}>
+            <button className={`${classes.subBtn} ${classes.credit3}`} onClick={() => spin(btn.buttonNo)} />
+          </div>
+        );
+
+      case '1-3':
+        return (
+          <div className={`${classes.subBtnBox}`}>
+            <button className={`${classes.subBtn} ${classes.credit7}`} onClick={() => spin(btn.buttonNo)} />
+          </div>
+        );
+
+      case '1-4':
+        return (
+          <div className={`${classes.subBtnBox}`}>
+            <button className={`${classes.subBtn} ${classes.credit15}`} onClick={() => spin(btn.buttonNo)} />
+          </div>
+        );
+
+      case '1-5':
+        return (
+          <div className={`${classes.subBtnBox}`}>
+            <button className={`${classes.subBtn} ${classes.credit25}`} onClick={() => spin(btn.buttonNo)} />
+          </div>
+        );
+
+      case 'Bet1':
+        return (
+          <div className={`${classes.subBtnBox}`}>
+            <button className={`${classes.subBtn} ${classes.bet1}`} onClick={() => spin(btn.buttonNo)} />
+          </div>
+        );
+
+      case 'Bet2':
+        return (
+          <div className={`${classes.subBtnBox}`}>
+            <button className={`${classes.subBtn} ${classes.bet2}`} onClick={() => spin(btn.buttonNo)} />
+          </div>
+        );
+
+      case 'Bet5':
+        return (
+          <div className={`${classes.subBtnBox}`}>
+            <button className={`${classes.subBtn} ${classes.bet5}`} onClick={() => spin(btn.buttonNo)} />
+          </div>
+        );
+
+      case 'Bet10':
+        return (
+          <div className={`${classes.subBtnBox}`}>
+            <button className={`${classes.subBtn} ${classes.bet10}`} onClick={() => spin(btn.buttonNo)} />
+          </div>
+        );
+
+      case 'Bet15':
+        return (
+          <div className={`${classes.subBtnBox}`}>
+            <button className={`${classes.subBtn} ${classes.bet15}`} onClick={() => spin(btn.buttonNo)} />
+          </div>
+        );
+
+      default:
+        return <button style={{ fontSize: '5px' }}>no button </button>;
+    }
+  });
 
   return (
     <section className={classes.root}>
@@ -339,28 +435,25 @@ const GamePlay = () => {
 
         <div className={classes.slotScreen}>
           <Screen setSocketClient={setSocketClient} autoPlay={autoPlay} setAutoPlay={setAutoPlay} leave={leave} closeWebRtcConnect={closeWebRtcConnect} setCloseWebRtcConnect={setCloseWebRtcConnect} />
-          <div>
-            <Snackbar
-              ContentProps={{
-                classes: {
-                  root: styles.snackbarRoot,
-                  message: styles.snackbarMessage,
-                },
-              }}
-              onClick={handleAutoPlay}
-              open={state.openSnackbar}
-              onClose={handleClose}
-              TransitionComponent={state.Transition}
-              message="點擊此處後開始遊戲"
-              key={state.Transition.name}
-            />
-          </div>
+          <Snackbar
+            ContentProps={{
+              classes: {
+                root: styles.snackbarRoot,
+                message: styles.snackbarMessage,
+              },
+            }}
+            onClick={handleAutoPlay}
+            open={state.openSnackbar}
+            onClose={handleClose}
+            TransitionComponent={state.Transition}
+            message="點擊此處後開始遊戲"
+            key={state.Transition.name}
+          />
         </div>
-
+        {/* 
         <div className={classes.optionBox}>
           <div className={classes.creditBox}>
             <Fragment>
-              {/* img */}
               <div className={classes.moneyBox}>
                 <img className={classes.money} src={moneyImg} alt="money" />
               </div>
@@ -376,28 +469,59 @@ const GamePlay = () => {
           </div>
 
           <div className={classes.inputBox}>
-            {/* img */}
             <div className={classes.goldBox}>
               <img className={classes.gold} src={goldImg} alt="gold" />
             </div>
-            {/* input */}
             <input type="number" value={cashIn} onChange={handleChange} placeholder="點數" onWheel={event => event.currentTarget.blur()} />
-            {/* button */}
             <div className={classes.slotBtnBox} onClick={() => pointCash(cashIn)}>
-              <TheButton text="開分" />
             </div>
           </div>
-        </div>
+        </div> */}
+
+        <div className={classes.optionBox}>{subBtnListEl}</div>
       </div>
 
       <div className={classes.btnHandle}>
-        <Grid container spacing={matches ? 1 : 3}>
-          {btnListEl}
-          {/* Auto Button */}
-          <Grid item xs={4} className={classes.btnBox} onClick={() => setAutoGame(!autoGame)}>
-            <TheButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
+        <div className={classes.box1}>
+          <Grid container spacing={matches ? 1 : 3}>
+            {mainBtnListEl}
+            <Grid item xs={4} className={classes.btnBox} onClick={() => setAutoGame(!autoGame)}>
+              <TheButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
+
+        <div className={classes.box2}>
+          {/* Credit */}
+          <div className={classes.creditBox}>
+            <div className={classes.moneyBox}>
+              <img className={classes.money} src={moneyImg} alt="money" />
+              <span className={classes.span}>CREDIT</span>
+            </div>
+
+            {creditLoading ? (
+              <div style={{ textAlign: 'center' }}>
+                <CircularProgress />
+              </div>
+            ) : (
+              <div className={classes.odometerBox}>
+                <Odometer format="(,ddd).dd" value={Number(credit)} />
+              </div>
+            )}
+          </div>
+
+          {/* input */}
+          <div className={classes.inputBox}>
+            <div className={classes.goldBox}>
+              <img className={classes.gold} src={goldImg} alt="gold" />
+              <span className={classes.span}>開分</span>
+            </div>
+            <div className={classes.inputInnerBox}>
+              <input type="number" value={cashIn} onChange={handleChange} placeholder="點數" onWheel={event => event.currentTarget.blur()} />
+              <AddBoxIcon className={classes.slotIcon} onClick={() => pointCash(cashIn)} />
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className={`${classes.leaveBtnBox}`} onClick={() => setReviewState(true)}>

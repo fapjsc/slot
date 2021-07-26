@@ -5,6 +5,10 @@
   cursor: pointer;
   font-family: 'Mukta', sans-serif;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10%;
 
   // @media only screen and(max-width: 720px) {
   //   width: 80% !important;
@@ -20,7 +24,7 @@
   -moz-border-radius: 1rem;
   box-shadow: inset rgba(0, 0, 0, 0.85) 0px 1px 5px;
   -webkit-box-shadow: inset rgba(0, 0, 0, 0.85) 0px 1px 5px;
-  -moz-box-shadow: inset rgba(0, 0, 0, 0.85) 0px 1px 5px;
+  -moz-box-shadow: inset #000000d9 0px 1px 5px;
   -webkit-transform: perspective(500px) rotateX(35deg);
   -moz-transform: perspective(500px) rotateX(35deg);
   background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
@@ -32,9 +36,9 @@
 .button .outer .height {
   position: relative;
   height: 125%;
-  margin-top: -1rem;
-  padding-bottom: 1rem;
+  margin-top: -0.95rem;
   background-image: linear-gradient(to top, #09203f 0%, #537895 100%);
+  // background-color: red;
 
   border-radius: 1rem;
   -webkit-border-radius: 1rem;
@@ -50,11 +54,6 @@
   }
 }
 
-.button:active .outer .height {
-  margin-top: 0px;
-  padding-bottom: 0px;
-}
-
 .button .outer .height .inner {
   color: #8aaeca;
   line-height: 4rem;
@@ -64,7 +63,7 @@
   position: relative;
   height: 100%;
   text-align: center;
-  z-index: 999;
+  z-index: 99;
   text-shadow: #ddd 0px 0px 1px;
 
   // background-image: linear-gradient(to top, #09203f 0%, #537895 100%);
@@ -104,6 +103,11 @@
   -moz-box-shadow: inset rgba(0, 0, 0, 0.9) 0px 0px 8px;
   background-image: linear-gradient(120deg, #ffffff 0%, #ccb7b7 100%);
   filter: blur(20px);
+}
+
+.button:active .outer .height {
+  margin-top: -10px;
+  padding-bottom: 0px;
 }
 
 .flashText {

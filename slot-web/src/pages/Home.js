@@ -5,6 +5,9 @@ import { useHistory } from 'react-router-dom';
 import MachineList from '../components/gameMachine/machineList';
 import Dialog from '../components/UI/Dialog';
 
+//Demo
+import SlotButton from '../components/UI/SlotButton';
+
 // Context
 import UserContext from '../context/User/UserContext';
 

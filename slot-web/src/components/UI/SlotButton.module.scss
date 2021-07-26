@@ -1,46 +1,37 @@
-// @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&display=swap');
-// .glass {
-//   /* background styles */
+// .slotBtn {
 //   position: relative;
-//   padding: 0.8rem 1rem;
-//   background-image: linear-gradient(red, rgb(240, 82, 82));
+//   padding: 0.6rem 2rem;
+//   display: inline-block;
+//   font-size: 1rem;
+//   font-weight: bold;
+//   color: #fff;
+//   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+//   border: 1px solid #444;
+//   border-bottom: 1px solid #444;
+//   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -1px 0, rgba(0, 0, 0, 0.4);
+//   border-radius: 999px;
+//   cursor: pointer;
+//   background: #fff;
+//   background: linear-gradient(to bottom, #d33672, #5f3847);
 
-//   /* text styles */
-//   color: rgb(235, 235, 235);
-//   font-size: 1.2rem;
-//   // font-family: 'Noto Serif TC', serif;
-//   font-family: 'Noto Sans TC', sans-serif;
-
-//   border-radius: 3px;
-//   box-shadow: 0px 1px 2px -2px #333;
-//   text-shadow: 0px -1px #333;
-
-//   @media only screen and(max-width: 720px) {
-//     font-size: 1.5rem;
-//     padding: 0.6rem 1.2rem;
+//   &:active {
+//     background: #c30e54;
+//     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
+//     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
 //   }
 
-//   @media only screen and(max-width: 480px) {
-//     font-size: 0.8rem;
-//     padding: 0.5rem 1.5rem;
+//   &::after {
+//     content: '';
+//     background: #f2f2f2;
+//     display: block;
+//     position: absolute;
+//     width: 100%;
+//     height: 100%;
+//     padding: 8px;
+//     top: -8px;
+//     left: -9px;
+//     box-shadow: inset 0 1px 2px #888, 0 1px 0 #fff;
+//     border-radius: 999px;
+//     z-index: -1;
 //   }
-
-//   @media only screen and(max-width: 430px) {
-//     font-size: 0.5rem;
-//     padding: 0.5rem;
-//   }
-// }
-
-// .glass:after {
-//   content: '';
-//   position: absolute;
-//   top: 2px;
-//   left: 2px;
-//   width: calc(100% - 4px);
-//   height: 50%;
-//   background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2));
-// }
-
-// .glass:active {
-//   background: linear-gradient(rgb(119, 24, 0), hsl(14, 100%, 50%));
 // }
