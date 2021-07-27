@@ -7,6 +7,9 @@ import 'odometer/themes/odometer-theme-train-station.css';
 // Context
 import UserContext from '../context/User/UserContext';
 
+// Api
+import { wsUri } from '../api/config';
+
 // Components
 import Screen from '../Screen';
 import TheButton from '../components/UI/TheButton';
@@ -50,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 const GamePlay = () => {
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, selectEgm, setApiToken, setSelectEgm, setBtnList, btnList, kickList, removeKickItem, egmCreditList, setReviewState, userReview } = userContext;
+  const { apiToken, selectEgm, setApiToken, setSelectEgm, setBtnList, btnList, kickList, removeKickItem, egmCreditList, setReviewState, userReview, wsClient, webSocketHandler } = userContext;
   const { mapId, egmId, egmIp, egmSession, checkSum, casinoToken } = selectEgm;
 
   const styles = useStyles();
@@ -209,7 +212,7 @@ const GamePlay = () => {
 
     setTimeout(() => {
       setCreditLoading(false);
-    }, 3000);
+    }, 4000);
   };
 
   // 動態加載圖片
@@ -228,6 +231,10 @@ const GamePlay = () => {
 
   // UseEffect
   useEffect(() => {
+    if (!wsClient) {
+      const egmStateWebSocketUri = `${wsUri}stateQuote`;
+      webSocketHandler(egmStateWebSocketUri);
+    }
     window.scrollTo(0, 0);
     const token = localStorage.getItem('token');
     const casinoToken = localStorage.getItem('casinoToken');
@@ -418,6 +425,13 @@ const GamePlay = () => {
       default:
         return <button style={{ fontSize: '5px' }}>no button </button>;
     }
+  });
+
+  window.addEventListener('beforeunload', function (e) {
+    // Cancel the event
+    e.preventDefault();
+    // Chrome requires returnValue to be set
+    e.returnValue = 'some text';
   });
 
   return (

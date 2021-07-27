@@ -6,7 +6,7 @@ import MachineList from '../components/gameMachine/machineList';
 import Dialog from '../components/UI/Dialog';
 
 //Demo
-import SlotButton from '../components/UI/SlotButton';
+// import SlotButton from '../components/UI/SlotButton';
 
 // Context
 import UserContext from '../context/User/UserContext';
@@ -64,14 +64,6 @@ const Home = () => {
     let token = localStorage.getItem('token');
     setApiToken(token);
 
-    // window.onbeforeunload = function (event) {
-    //   localStorage.clear();
-
-    //   // 返回要顯示給使用者看的提醒文字
-    //   return '你確定要離開本頁面嗎？';
-    // };
-
-    // console.log(egmList);
     return () => {
       if (egmList === undefined) {
         // alert('無法獲取EGM，請重新登入');

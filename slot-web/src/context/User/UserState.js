@@ -6,6 +6,7 @@ import UserReducer from './UserReducer';
 import UserContext from './UserContext';
 
 import { w3cwebsocket as W3CWebsocket } from 'websocket';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
 import {
   SET_API_TOKEN,
@@ -159,7 +160,8 @@ const UserState = props => {
 
   // WebSocket Handler
   const webSocketHandler = uri => {
-    const client = new W3CWebsocket(uri);
+    // const client = new W3CWebsocket(uri);
+    const client = new ReconnectingWebSocket(uri);
 
     let stateArr = [];
 
