@@ -257,6 +257,10 @@ const BroadCast = () => {
       peerConnections[id].close();
     });
 
+    socket.on('disconnect', () => {
+      console.log('socket disconnect');
+    });
+
     // eslint-disable-next-line
   }, []);
 
