@@ -81,6 +81,11 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
         peerConnection.close();
         socket.emit('joinRoom', webNumber, cameraId, audioId);
       });
+
+      socket.on('camera-Err', () => {
+        console.log('Camera Err');
+        alert('Camera Error');
+      });
     });
 
     socket.on('offer', (id, description) => {

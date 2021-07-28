@@ -113,6 +113,10 @@ const BroadCast = () => {
         return stream;
       } catch (error) {
         console.log(error);
+        if (error.constraint === 'deviceId') {
+          const webNumber = localStorage.getItem('webNumber');
+          socket.emit('cameraErr', webNumber);
+        }
       }
     } else {
       console.log('沒有camera id..');

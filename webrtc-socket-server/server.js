@@ -39,7 +39,6 @@ io.sockets.on('connection', socket => {
   socket.on('joinRoom', (roomId, cameraId, audioId) => {
     socket.join(roomId);
     console.log(`${socket.id} join Room: [${roomId}] Camera:[ ${cameraId}], Audio: [${audioId}]`);
-    console.log(socket.rooms);
     io.to(roomId).emit('sendCamera', socket.id, cameraId, audioId);
 
     const rooms = Object.keys(socket.rooms);
@@ -61,9 +60,10 @@ io.sockets.on('connection', socket => {
     socket.to(broadcaster).emit('closePeerCon', id);
   });
 
-  socket.on('cameraErr', clientSocketId => {
-    console.log(clientSocketId);
-    socket.to(clientSocketId).emit('cameraErr');
+  socket.on('cameraErr', roomId => {
+    console.log(roomId, 'cameraErr');
+    io.to(roomId).emit('camera-Err');
+    // socket.to(clientSocketId).emit('cameraErr');
   });
 
   socket.on('deviceChange', message => {
