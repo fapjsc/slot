@@ -16,6 +16,7 @@ const UpdateMap = () => {
         <Table striped bordered hover responsive>
           <thead>
             <tr>
+              <th>Web Num</th>
               <th>Egm ID</th>
               <th>Egm IP</th>
               <th>Camera名稱</th>
@@ -28,6 +29,7 @@ const UpdateMap = () => {
             {deviceMap.length
               ? deviceMap.map((el, index) => (
                   <tr key={index}>
+                    <td>{el.piIndex}</td>
                     <td>{el.egm}</td>
                     <td>{el.egmIp}</td>
                     <td>{el.deviceLabel}</td>

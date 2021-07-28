@@ -21,20 +21,29 @@ let broadcaster;
 
 io.sockets.on('connection', socket => {
   console.log(`connection: [${socket.id}]`);
-  console.log(`房間數量：[${socket.rooms.size}]`);
-  for (let [key, value] of socket.rooms.entries()) console.log(`房間名稱：[${value}]`);
+
+  // console.log(socketIO.engine.clientsCount);
+  console.log(`連線數量：[${io.engine.clientsCount}]`);
+  // console.log(`房間數量：[${socket.rooms.size}]`);
+  // for (let [key, value] of socket.rooms.entries()) console.log(`房間名稱：[${value}]`);
 
   socket.on('createRoom', roomId => {
     socket.join(roomId);
-    socket.emit('create-room-message', `room: ${roomId} 已經建立`);
+    io.to(roomId).emit('create-room-message', `room: ${roomId} 已經建立`);
     console.log(`房間數量：[${socket.rooms.size}]`);
-    for (let [key, value] of socket.rooms.entries()) console.log(`房間名稱：[${value}]`);
+    for (let [key, value] of socket.rooms.entries()) {
+      console.log(`房間名稱：[${value}]`);
+    }
   });
 
   socket.on('joinRoom', (roomId, cameraId, audioId) => {
     socket.join(roomId);
     console.log(`${socket.id} join Room: [${roomId}] Camera:[ ${cameraId}], Audio: [${audioId}]`);
+    console.log(socket.rooms);
     io.to(roomId).emit('sendCamera', socket.id, cameraId, audioId);
+
+    const rooms = Object.keys(socket.rooms);
+    console.log(rooms);
   });
 
   socket.on('unsubscribe', roomId => {
@@ -47,7 +56,7 @@ io.sockets.on('connection', socket => {
     console.log('disconnect=====');
   });
 
-  socket.on('closePeer', (id, stream) => {
+  socket.on('closePeer', id => {
     console.log('closePeer =====', id);
     socket.to(broadcaster).emit('closePeerCon', id);
   });
@@ -68,7 +77,7 @@ io.sockets.on('connection', socket => {
     socket.to(id).emit('offer', socket.id, message); // id是client端的socketID, socket.id是camera web第一次建立連線的socketID, message是session
   });
   socket.on('answer', (id, message) => {
-    console.log('answer', id, message);
+    console.log('answer', id);
     socket.to(id).emit('answer', socket.id, message);
   });
   socket.on('candidate', (id, message) => {

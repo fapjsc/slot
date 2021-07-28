@@ -173,7 +173,7 @@ const BroadCast = () => {
     if (localStorage.getItem('webNumber')) {
       socket.emit('createRoom', localStorage.getItem('webNumber'));
       socket.on('create-room-message', message => {
-        console.log(message);
+        console.log(message, 'create room message');
       });
     }
     getAllDevices();
@@ -391,7 +391,7 @@ const BroadCast = () => {
           <Form.Group as={Row} className="">
             <Col sm="10" className="mx-auto text-center">
               <Button
-                disabled={!selectEgm || !currentDevice}
+                disabled={!selectEgm || !currentDevice || !webNumber}
                 size="lg"
                 className="w-25 p-2"
                 variant="primary"

@@ -74,7 +74,11 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
       console.log('connection', socket.id);
       socket.emit('joinRoom', webNumber, cameraId, audioId);
       // socket.emit('remoteUserSelectDevice', 'fbeeb7e467a9f690700523a7079e26205fb76d1ddcdef79075b9378602d3f65e', '75a59ed289aa13f5abcf465cc75583efccb2c744fd61e1c24f7c5362540b26dc');
-      console.log(audioId);
+      // console.log(audioId);
+
+      socket.on('create-room-message', message => {
+        console.log(message);
+      });
     });
 
     socket.on('offer', (id, description) => {
@@ -108,7 +112,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
       peerConnection.onconnectionstatechange = event => {
         console.log(event.currentTarget.iceConnectionState);
         if (event.currentTarget.iceConnectionState === 'disconnected') {
-          // peerConnection.close();
+          peerConnection.close();
           socket.emit('joinRoom', webNumber, cameraId, audioId);
         }
       };
