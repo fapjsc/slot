@@ -57,9 +57,6 @@ export const login = (props, data) => {
   } else if (data.name === '0019' && data.password === '0019') {
     localStorage.setItem('auth', data);
     props.history.push(`/load/?player=${data.name}&at=MDAxOURlbW8x&casino=casino_demo_1`);
-  } else if (data.name === '0020' && data.password === '0020') {
-    localStorage.setItem('auth', data);
-    props.history.push(`/load/?player=${data.name}&at=MDAyMERlbW8x&casino=casino_demo_1`);
   } else {
     alert('帳號密碼錯誤');
   }
