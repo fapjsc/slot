@@ -23,7 +23,7 @@ io.sockets.on('connection', socket => {
   console.log(`connection: [${socket.id}]`);
 
   // console.log(socketIO.engine.clientsCount);
-  console.log(`連線數量：[${io.engine.clientsCount}]`);
+  // console.log(`連線數量：[${io.engine.clientsCount}]`);
   // console.log(`房間數量：[${socket.rooms.size}]`);
   // for (let [key, value] of socket.rooms.entries()) console.log(`房間名稱：[${value}]`);
 

@@ -78,6 +78,8 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
 
       socket.on('create-room-message', message => {
         console.log(message);
+        peerConnection.close();
+        socket.emit('joinRoom', webNumber, cameraId, audioId);
       });
     });
 

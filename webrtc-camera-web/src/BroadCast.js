@@ -261,6 +261,10 @@ const BroadCast = () => {
       console.log('socket disconnect');
     });
 
+    socket.on('reconnect', () => {
+      console.log('socket reconnect');
+    });
+
     // eslint-disable-next-line
   }, []);
 
