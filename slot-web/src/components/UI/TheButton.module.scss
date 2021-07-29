@@ -112,17 +112,27 @@
 }
 
 .flashText {
-  animation: textAnimate 700ms linear infinite;
+  animation: textAnimate 4.5s linear infinite;
 }
 
 @keyframes textAnimate {
+  // 0% {
+  //   color: #0e3742;
+  //   text-shadow: none;
+  // }
+
+  // 10% {
+  //   color: #fff;
+  //   text-shadow: 0 0 10px #03bef4, 0 0 20px #03bef4, 0 0 40px #03bef4, 0 0 80px #03bef4, 0 0 100px #03bef4;
+  // }
+
   0% {
-    color: #0e3742;
-    text-shadow: none;
+    color: #fff;
+    text-shadow: 0 0 10px #03bef4, 0 0 20px #03bef4, 0 0 40px #03bef4, 0 0 80px #03bef4, 10px 10px 1000px #03bef4;
   }
 
-  100% {
-    color: #fff;
-    text-shadow: 0 0 10px #03bef4, 0 0 20px #03bef4, 0 0 40px #03bef4, 0 0 80px #03bef4, 0 0 100px #03bef4;
+  10% {
+    color: #8aaeca;
+    text-shadow: none;
   }
 }

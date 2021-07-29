@@ -322,10 +322,10 @@ const GamePlay = () => {
   }, [selectEgm]);
 
   useEffect(() => {
-    // if (btnList.length === 0) {
-    //   const btnList = JSON.parse(localStorage.getItem('btnList'));
-    //   setBtnList(btnList);
-    // }
+    if (btnList.length === 0) {
+      const btnList = JSON.parse(localStorage.getItem('btnList'));
+      setBtnList(btnList);
+    }
     let mainBtnTemp = [];
     let subBtnTemp = [];
     btnList.forEach(btn => {

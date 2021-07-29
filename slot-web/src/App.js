@@ -10,6 +10,9 @@ import UserState from './context/User/UserState';
 import PublicRoute from './hooks/PublicRoute';
 import PrivateRoute from './hooks/PrivateRoute';
 
+// Demo
+import Demo from './pages/demo/Demo';
+
 // Style
 import './App.css';
 
@@ -22,6 +25,7 @@ const App = () => {
           <PrivateRoute path="/home" component={Home} exact />
           <PrivateRoute path="/load" component={LoadingScreen} />
           <PrivateRoute path="/gameStart" component={GamePlay} />
+          <PrivateRoute path="/demo" component={Demo} />
         </UserState>
       </Switch>
     </Router>

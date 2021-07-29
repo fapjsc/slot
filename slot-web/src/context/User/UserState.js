@@ -238,6 +238,7 @@ const UserState = props => {
 
       // Egm Playing State
       if (message.data.includes('EgmPlayingState')) {
+        console.log(message.data);
         let stateList = [];
 
         let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**>>*', '*^*');
