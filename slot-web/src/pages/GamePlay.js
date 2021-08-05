@@ -327,7 +327,7 @@ const GamePlay = () => {
         item
         xs={3}
         key={btn.buttonNo}
-        className={btn.buttonTxt === 'SPIN' ? `${classes.rotatorBtnBox} ${classes.spinBtnGrid}` : classes.rotatorBtnBox}
+        className={btn.buttonTxt === 'SPIN' ? `${classes.rotatorBtnBox} ${classes.autoBtnGrid}` : classes.rotatorBtnBox}
         onClick={() => spin(btn.buttonNo)}
       >
         <SquareButton text={btn.buttonTxt} />

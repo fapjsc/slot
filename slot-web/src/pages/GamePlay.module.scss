@@ -62,6 +62,9 @@
 }
 
 .girdContainer {
+  height: 50%;
+  justify-content: center;
+
   @media only screen and(max-width: 500px) {
     // transform: translateX(-10%);
   }
@@ -278,7 +281,6 @@
   position: absolute;
   top: 10%;
   right: 40%;
-  // background-color: red;
 
   @media only screen and(max-width: 720px) {
     right: 20%;
@@ -324,6 +326,6 @@
   order: 1;
 }
 
-.spinBtnGrid {
+.autoBtnGrid {
   order: 2;
 }
