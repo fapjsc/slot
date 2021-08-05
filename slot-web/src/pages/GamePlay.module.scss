@@ -17,7 +17,7 @@
   background-size: 100% 100%;
 
   @media only screen and(max-width: 414px) {
-    min-height: 60vh;
+    min-height: 68vh;
     background-size: 117% 100%;
   }
 
@@ -62,9 +62,7 @@
 }
 
 .girdContainer {
-  height: 50%;
   justify-content: center;
-
   @media only screen and(max-width: 500px) {
     // transform: translateX(-10%);
   }
@@ -320,6 +318,10 @@
 
 .rotatorBtnBox {
   transform: rotateX(58deg);
+
+  @media only screen and(max-width: 700px) {
+    transform: translateY(-15%) rotateX(58deg);
+  }
 }
 
 .grid0 {
