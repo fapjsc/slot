@@ -29,6 +29,7 @@ const SubButtonHandle = ({ subBtn, spin }) => {
 
   const subBtnListEl = subBtn.map(btn => {
     switch (btn.buttonTxt) {
+      // 貴族
       case '1-1':
         return (
           <div className={`${classes.subBtnBox}`}>
@@ -100,12 +101,12 @@ const SubButtonHandle = ({ subBtn, spin }) => {
         );
 
       // 雄狼
-      // case '25':
-      //   return (
-      //     <div className={`${classes.subBtnBox}`}>
-      //       <button className={`${classes.subBtn} ${classes.aruze50}`} onClick={() => spin(btn.buttonNo)} />
-      //     </div>
-      //   );
+      case '25':
+        return (
+          <div className={`${classes.subBtnBox}`}>
+            <button className={`${classes.subBtn} ${classes.aruze25}`} onClick={() => spin(btn.buttonNo)} />
+          </div>
+        );
 
       case '50':
         return (
