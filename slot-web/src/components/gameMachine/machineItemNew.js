@@ -21,7 +21,7 @@ import machineIcon from '../../asset/egzj1ui37v.jpeg';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    maxWidth: 250,
+    width: '100%',
     backgroundColor: '#f2f2f2',
     borderRadius: '10px',
     border: 'none',

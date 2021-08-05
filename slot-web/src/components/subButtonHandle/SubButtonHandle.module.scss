@@ -1,0 +1,88 @@
+.btnContainer {
+  max-width: 678px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 10rem;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1% 0;
+  background-image: linear-gradient(#2a2619, #a7a2a2, #2a2619);
+}
+
+.subBtnBox {
+  width: 20%;
+  min-height: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .subBtn {
+    height: 3rem;
+    width: 3.1rem;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}
+
+.credit1 {
+  background-image: url(../../asset/button/dragon/Credit-1.png);
+}
+
+.credit3 {
+  background-image: url(../../asset//button/dragon/Credit-3.png);
+}
+
+.credit7 {
+  background-image: url(../../asset//button/dragon/Credit-7.png);
+}
+
+.credit15 {
+  background-image: url(../../asset//button/dragon/Credit-15.png);
+}
+
+.credit25 {
+  background-image: url(../../asset//button/dragon/Credit-25.png);
+}
+
+.bet1 {
+  background-image: url(../../asset/button/dragon/Bet-1.png);
+}
+
+.bet2 {
+  background-image: url(../../asset/button/dragon/Bet-2.png);
+}
+
+.bet5 {
+  background-image: url(../../asset/button/dragon/Bet-5.png);
+}
+
+.bet10 {
+  background-image: url(../../asset/button/dragon/Bet-10.png);
+}
+
+.bet15 {
+  background-image: url(../../asset/button/dragon/Bet-15.png);
+}
+
+.aruze50 {
+  background-image: url(../../asset/button/aruze/Aruze-Bet50.png);
+}
+
+.aruze100 {
+  background-image: url(../../asset/button/aruze/Aruze-Bet100.png);
+}
+
+.aruze150 {
+  background-image: url(../../asset/button/aruze/Aruze-Bet150.png);
+}
+
+.aruze250 {
+  background-image: url(../../asset/button/aruze/Aruze-Bet250.png);
+}
+
+.aruze500 {
+  background-image: url(../../asset/button/aruze/Aruze-Bet500.png);
+}

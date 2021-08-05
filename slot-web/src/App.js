@@ -12,6 +12,7 @@ import PrivateRoute from './hooks/PrivateRoute';
 
 // Demo
 import Demo from './pages/demo/Demo';
+import Demo2 from './pages/demo/Demo2';
 
 // Style
 import './App.css';
@@ -26,6 +27,7 @@ const App = () => {
           <PrivateRoute path="/load" component={LoadingScreen} />
           <PrivateRoute path="/gameStart" component={GamePlay} />
           <PrivateRoute path="/demo" component={Demo} />
+          <PrivateRoute path="/demo2" component={Demo2} />
         </UserState>
       </Switch>
     </Router>

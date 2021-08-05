@@ -1,0 +1,65 @@
+.header {
+  height: 6rem;
+  background-image: linear-gradient(to top, #09203f 0%, #537895 100%);
+
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  color: #fff;
+  max-width: 678px;
+  margin: 0 auto;
+  .infoBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .machineNum {
+      margin-left: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .icon {
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+
+  .userBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+
+    @media only screen and(max-width: 414px) {
+      font-size: 1rem;
+    }
+
+    .user {
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .credit {
+      text-align: left;
+      margin-top: 5px;
+    }
+  }
+
+  .navBox {
+    display: flex;
+    align-items: center;
+  }
+
+  .badge {
+    border-radius: 100%;
+    background-color: rebeccapurple;
+    padding: 20%;
+    margin-top: 20%;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

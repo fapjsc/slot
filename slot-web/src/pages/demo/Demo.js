@@ -15,7 +15,7 @@ const Demo = () => {
             <Box className={styles.screen}></Box>
           </Box>
         </Container>
-        {/* <div className={styles.optionBox}></div> */}
+        <div className={styles.optionBox}></div>
       </main>
     </>
   );

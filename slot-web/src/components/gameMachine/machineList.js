@@ -13,10 +13,8 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     padding: 50,
   },
-  grid: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
+  container: {},
+  grid: {},
 }));
 
 const MachineList = props => {
@@ -25,9 +23,11 @@ const MachineList = props => {
 
   const renderMachineList = props.egmList.map((item, index) => {
     return (
-      <BorderAnimation key={index}>
-        <MachineItemNew index={index} title={item.gameName} description={item.gameDesc} picName={item.picName} machineDetails={item} token={props.token} />
-      </BorderAnimation>
+      <Grid className={classes.grid} key={index} item md={3} style={{ maxWidth: '20rem' }}>
+        <BorderAnimation>
+          <MachineItemNew index={index} title={item.gameName} description={item.gameDesc} picName={item.picName} machineDetails={item} token={props.token} />
+        </BorderAnimation>
+      </Grid>
     );
   });
 
@@ -37,7 +37,7 @@ const MachineList = props => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={5} style={{ padding: 10 }}>
+      <Grid container spacing={4} className={classes.container}>
         {renderMachineList}
       </Grid>
     </div>

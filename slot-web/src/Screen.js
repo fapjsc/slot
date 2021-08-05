@@ -11,11 +11,6 @@ const pcConfig = {
     {
       urls: 'stun:stun.l.google.com:19302', // 使用來設定iceServer,用來當作打通NAT作用。
     },
-    {
-      urls: 'turn:18.191.253.152:3478',
-      username: 'alex',
-      credential: 'abcdefg',
-    },
   ],
 };
 let peerConnection;

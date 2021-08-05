@@ -1,58 +1,36 @@
 .root {
-  height: 100%;
+  min-height: 100vh;
   background-image: linear-gradient(to right bottom, rgba(2, 1, 48, 0.7), rgba(0, 0, 0, 0.7)), url(../asset/casino-bg.jpg);
   background-size: cover;
   background-position: top;
-  padding: 2rem;
   text-align: center;
-  margin: auto;
-
-  @media only screen and(max-width: 768px) {
-    padding: 0;
-  }
 }
 
 .slotMachine {
-  background-image: url('../asset/slot-machine.jpg');
-  background-size: contain;
-  background-position: top;
+  background-image: url(../asset/slot-machine.jpg);
+  background-position: center;
   background-repeat: no-repeat;
   position: relative;
-  height: 52vh;
+  min-height: 70vh;
   max-width: 678px;
-  margin: 10rem auto 0 auto;
+  margin: 0px auto;
   background-size: 100% 100%;
 
-  @media only screen and(max-width: 768px) {
-    width: 100%;
-    margin-top: 18rem;
+  @media only screen and(max-width: 414px) {
+    min-height: 56vh;
+    background-size: 117% 100%;
   }
 
-  @media only screen and(max-width: 450px) {
-    margin-top: 7rem;
-    background-size: 100% 100%;
-  }
-}
-
-.slotBanners {
-  position: absolute;
-  background-image: url(../asset/new/wolf.jpg);
-  background-size: cover;
-  background-position: center;
-  height: 16rem;
-  width: 100%;
-  top: -16rem;
-
-  @media only screen and(max-width: 768px) {
-    height: 16rem;
+  .snackBar {
+    z-index: 999 !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url(../asset/snack.png);
+    height: 100%;
     width: 100%;
-    top: -16rem;
-  }
-
-  @media only screen and(max-width: 450px) {
-    height: 8rem;
-    width: 100%;
-    top: -8.1rem;
+    background-size: cover;
+    background-position: center;
   }
 }
 
@@ -60,99 +38,40 @@
   position: absolute;
   background-color: #010116;
   width: 69%;
-  height: 70.5%;
-  top: 0%;
+  height: 62.5%;
+  top: 20%;
   left: 50.5%;
   transform: translate(-50%);
 }
 
 .optionBox {
-  background-image: linear-gradient(#2a2619, #a7a2a2, #2a2619);
+  background-image: linear-gradient(to bottom, #2a2619, #a7a2a2, #2a2619);
   position: absolute;
   bottom: 0;
-  left: 10%;
-  height: 29%;
-  width: 80%;
-  clip-path: polygon(8% 0, 93% 0%, 100% 100%, 0 100%);
-  -webkit-clip-path: polygon(8% 0, 93% 0%, 100% 100%, 0 100%);
-  padding: 1% 6%;
-
+  left: 11%;
+  height: 16%;
+  width: 78%;
+  clip-path: polygon(8% 0, 93% 0%, 100% 100%, 0% 100%);
+  -webkit-clip-path: polygon(5% 0, 95% 0%, 100% 100%, 0% 100%);
+  -webkit-transform: translateZ(90deg);
   display: flex;
-  justify-content: space-evenly;
   align-items: center;
-  flex-wrap: wrap;
 
-  .subBtnBox {
-    flex: 1;
-    width: 18%;
-    max-width: 18%;
-    min-width: 18%;
-    display: flex;
-    justify-content: center;
-    height: 49%;
-    margin-right: 1%;
-
-    @media only screen and(max-width: 414px) {
-      margin-right: 0;
-      width: 20%;
-      max-width: 20%;
-      min-width: 20%;
-      height: 40%;
-    }
-
-    .subBtn {
-      width: 70%;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      cursor: pointer;
-    }
+  @media only screen and(max-width: 414px) {
+    width: 98%;
+    left: 1%;
   }
+}
 
-  .credit1 {
-    background-image: url('../asset//button/dragon/Credit-1.png');
-  }
-
-  .credit3 {
-    background-image: url('../asset//button/dragon/Credit-3.png');
-  }
-
-  .credit7 {
-    background-image: url('../asset//button/dragon/Credit-7.png');
-  }
-
-  .credit15 {
-    background-image: url('../asset//button/dragon/Credit-15.png');
-  }
-
-  .credit25 {
-    background-image: url('../asset//button/dragon/Credit-25.png');
-  }
-
-  .bet1 {
-    background-image: url('../asset/button/dragon/Bet-1.png');
-  }
-
-  .bet2 {
-    background-image: url('../asset/button/dragon/Bet-2.png');
-  }
-
-  .bet5 {
-    background-image: url('../asset/button/dragon/Bet-5.png');
-  }
-
-  .bet10 {
-    background-image: url('../asset/button/dragon/Bet-10.png');
-  }
-
-  .bet15 {
-    background-image: url('../asset/button/dragon/Bet-15.png');
+.girdContainer {
+  @media only screen and(max-width: 500px) {
+    // transform: translateX(-10%);
   }
 }
 
 .btnHandle {
   border-color: #9e9e9e;
-  background-image: linear-gradient(#9e9e9e, #eaeaea, #9e9e9e);
+  background-image: linear-gradient(#2a2619, #a7a2a2, #2a2619);
   max-width: 678px;
   margin: 0 auto;
   padding: 2%;
@@ -160,62 +79,39 @@
   display: flex;
   flex-direction: column;
 
-  .box1 {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-image: linear-gradient(to right, #3d2f2f, #463a3a, #524243);
-    border-radius: 20px;
-    margin-bottom: 1rem;
-  }
-
   .box2 {
     display: flex;
     justify-content: flex-start;
     align-items: stretch;
-    width: 100%;
-
-    @media only screen and(max-width: 414px) {
-      flex-wrap: wrap;
-    }
+    padding-top: 1.2rem;
 
     // Credit Box
     .creditBox {
       display: flex;
       flex-direction: column;
-      font-size: 1.5rem;
       padding: 2% 3%;
       background-color: rgba(0, 0, 0, 0.7);
-      margin-right: 3%;
-      width: 50%;
       border-radius: 20px;
-
-      @media only screen and(max-width: 414px) {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 1rem;
-        padding: 1% 5% 5% 5%;
-      }
+      width: 50%;
+      margin-right: 3%;
 
       .moneyBox {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        margin-bottom: auto;
-        height: 100%;
 
         .money {
           width: 20%;
+          height: 100%;
         }
 
         .span {
           color: #fff;
-          font-size: 1.4rem;
-          text-align: left;
+          font-size: 1.5rem;
           font-weight: bold;
 
-          @media only screen and(max-width: 700px) {
-            font-size: 1rem;
+          @media only screen and(max-width: 500px) {
+            font-size: 0.8rem;
           }
         }
       }
@@ -224,11 +120,18 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        padding: 1% 5% 0%;
-        background-color: rgba(0, 0, 0, 0.5);
+        padding: 1%;
+        height: 100%;
+        font-size: 1.4rem;
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 20px;
 
-        @media only screen and(max-width: 414px) {
-          padding: 3% 1%;
+        @media only screen and(max-width: 500px) {
+          font-size: 1rem;
+        }
+        @media only screen and(max-width: 500px) {
+          margin-top: 3px;
+          font-size: 0.8rem;
         }
       }
     }
@@ -237,16 +140,10 @@
     .inputBox {
       display: flex;
       flex-direction: column;
-      font-size: 1.5rem;
-      padding: 2% 3%;
+      padding: 1.2% 3%;
       background-color: rgba(0, 0, 0, 0.7);
-      width: 50%;
       border-radius: 20px;
-
-      @media only screen and(max-width: 414px) {
-        width: 100%;
-        padding: 1% 5% 5% 5%;
-      }
+      width: 50%;
 
       input[type='number']::placeholder {
         /* Firefox, Chrome, Opera */
@@ -258,7 +155,10 @@
         padding: 3%;
         background-color: white;
         border-radius: 50rem;
-        margin-right: 1rem;
+
+        @media only screen and(max-width: 500px) {
+          width: 80%;
+        }
 
         // placeholder style
         ::-webkit-input-placeholder {
@@ -281,27 +181,24 @@
         }
       }
 
-      .span {
-        color: #fff;
-        font-size: 1.4rem;
-        text-align: left;
-        margin-bottom: 1%;
-        font-weight: bold;
-
-        @media only screen and(max-width: 700px) {
-          font-size: 1rem;
-        }
-      }
-
       .goldBox {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        margin-bottom: auto;
-        height: 100%;
 
         .gold {
           width: 20%;
+          height: 100%;
+        }
+
+        .span {
+          color: #fff;
+          font-size: 1.5rem;
+          font-weight: bold;
+
+          @media only screen and(max-width: 500px) {
+            font-size: 0.8rem;
+          }
         }
       }
 
@@ -310,14 +207,144 @@
         align-items: center;
         justify-content: flex-start;
         padding: 1%;
+        height: 100%;
       }
 
       .slotIcon {
         color: #fff;
         cursor: pointer;
         font-size: 2.2rem;
+        margin-left: 5px;
+
+        @media only screen and(max-width: 500px) {
+          font-size: 2rem;
+        }
       }
     }
+  }
+}
+
+.marqueeBox {
+  position: absolute;
+  font-size: 1rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  top: 10%;
+  left: 38%;
+  width: 24%;
+  height: 11%;
+  font-size: 2.2rem;
+
+  @media only screen and(max-width: 1500px) {
+    top: 13%;
+    left: 34%;
+    width: 32%;
+    height: 10.5%;
+    font-size: 2.2rem;
+  }
+
+  @media only screen and(max-width: 1024px) and(height: 600px) {
+    top: 16.5%;
+    left: 29%;
+    width: 42%;
+    height: 10.5%;
+    font-size: 2.2rem;
+  }
+
+  @media only screen and(max-width: 920px) {
+    left: 25%;
+    width: 50.5%;
+  }
+
+  @media only screen and(max-width: 720px) {
+    top: 8%;
+    left: 17%;
+    width: 65%;
+  }
+
+  @media only screen and(max-width: 424px) {
+    top: 13%;
+    left: 16%;
+    width: 60%;
+    height: 11.2%;
+    font-size: 1.5rem;
+  }
+
+  @media only screen and(max-width: 414px) {
+    top: 13%;
+    left: 16%;
+    width: 60%;
+    height: 10%;
+    font-size: 1.5rem;
+  }
+
+  @media only screen and(max-width: 400px) {
+    top: 15.5%;
+    left: 10%;
+    width: 65%;
+    height: 8.5%;
+    font-size: 1.5rem;
+  }
+
+  @media only screen and(max-width: 320px) {
+    top: 18.5%;
+    left: 10%;
+    width: 65%;
+    height: 8.5%;
+    font-size: 1.5rem;
+  }
+
+  @media only screen and(width: 320px) and(height: 568px) {
+    top: 17%;
+    left: 10%;
+    width: 65%;
+    height: 9%;
+    font-size: 1.5rem;
+  }
+
+  @media only screen and(width: 320px) and(height: 480px) {
+    top: 20.2%;
+    left: 10%;
+    width: 65%;
+    height: 9%;
+    font-size: 1.5rem;
+  }
+}
+
+.subBtnHandlerBox {
+  position: absolute;
+  top: 15%;
+  right: 5%;
+  // background-color: red;
+
+  @media only screen and(max-width: 720px) {
+    right: 20%;
+    top: 11%;
+  }
+
+  @media only screen and(max-width: 424px) {
+    top: 15%;
+    right: 15%;
+  }
+
+  @media only screen and(max-width: 375px) and(height: 667px) {
+    top: 16%;
+    right: 10%;
+  }
+
+  @media only screen and(max-width: 320px) {
+    top: 17%;
+    right: 10%;
+  }
+
+  @media only screen and(max-width: 320px) and(height: 568px) {
+    top: 18%;
+  }
+
+  @media only screen and(max-width: 320px) and(height: 480px) {
+    top: 20%;
+    right: 10%;
   }
 }
 
@@ -325,4 +352,8 @@
   position: fixed;
   top: 1%;
   left: 5%;
+}
+
+.testBtnBox {
+  transform: rotateX(55deg);
 }
