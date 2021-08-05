@@ -54,8 +54,6 @@
   clip-path: polygon(8% 0, 93% 0%, 100% 100%, 0% 100%);
   -webkit-clip-path: polygon(5% 0, 95% 0%, 100% 100%, 0% 100%);
   -webkit-transform: translateZ(90deg);
-  display: flex;
-  align-items: center;
 
   @media only screen and(max-width: 414px) {
     width: 98%;
@@ -318,6 +316,14 @@
   left: 5%;
 }
 
-.testBtnBox {
-  transform: rotateX(60deg);
+.rotatorBtnBox {
+  transform: rotateX(58deg);
+}
+
+.grid0 {
+  order: 1;
+}
+
+.spinBtnGrid {
+  order: 2;
 }

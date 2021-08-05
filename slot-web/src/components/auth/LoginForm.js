@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { login } from '../../middleware/auth';
+
+//test
+// import useScreenOrientation from 'react-hook-screen-orientation';
 
 // Style
 import Avatar from '@material-ui/core/Avatar';
@@ -11,7 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import { login } from '../../middleware/auth';
+import styles from './LoginForm.module.scss';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -36,6 +40,12 @@ const useStyles = makeStyles(theme => ({
 
 const LoginForm = props => {
   const classes = useStyles();
+
+  // test
+  // const screenOrientation = useScreenOrientation();
+  // useEffect(() => {
+  //   console.log(screenOrientation);
+  // }, [screenOrientation]);
 
   // Init State
   const [name, setName] = useState('');
@@ -67,7 +77,18 @@ const LoginForm = props => {
           登入
         </Typography>
         <form className={classes.form} noValidate onSubmit={submitHandler}>
-          <TextField value={name} onChange={onChangeHandler} variant="outlined" margin="normal" required fullWidth id="name" label="user name" name="name" autoComplete="off" />
+          <TextField
+            value={name}
+            onChange={onChangeHandler}
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="name"
+            label="user name"
+            name="name"
+            autoComplete="off"
+          />
           <TextField
             value={password}
             onChange={onChangeHandler}
@@ -88,6 +109,10 @@ const LoginForm = props => {
           <Grid container></Grid>
         </form>
       </div>
+
+      {/* <div className={styles.box1}>1234</div>
+      <div className={styles.box2}>1234</div> */}
+      {/* <p>Screen orientation is: {screenOrientation}</p> */}
     </Container>
   );
 };

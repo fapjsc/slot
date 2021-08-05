@@ -13,6 +13,8 @@ import PrivateRoute from './hooks/PrivateRoute';
 // Demo
 import Demo from './pages/demo/Demo';
 import Demo2 from './pages/demo/Demo2';
+import HomeLevel from './pages/demo/HomeLevel';
+import HomeVertical from './pages/demo/HomeVertical';
 
 // Style
 import './App.css';
@@ -28,6 +30,8 @@ const App = () => {
           <PrivateRoute path="/gameStart" component={GamePlay} />
           <PrivateRoute path="/demo" component={Demo} />
           <PrivateRoute path="/demo2" component={Demo2} />
+          <PrivateRoute path="/level" component={HomeLevel} />
+          <PrivateRoute path="/vertical" component={HomeVertical} />
         </UserState>
       </Switch>
     </Router>

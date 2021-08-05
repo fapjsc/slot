@@ -33,6 +33,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import Box from '@material-ui/core/Box';
 
 // Image
 import moneyImg from '../asset/money.png';
@@ -314,7 +315,7 @@ const GamePlay = () => {
       }
     });
 
-    setMainBtn(mainBtnTemp);
+    setMainBtn(mainBtnTemp.reverse());
     setSubBtn(subBtnTemp.reverse());
 
     // eslint-disable-next-line
@@ -322,7 +323,13 @@ const GamePlay = () => {
 
   const mainBtnListEl = mainBtn.map(btn => {
     return (
-      <Grid item xs={3} key={btn.buttonNo} className={classes.testBtnBox} onClick={() => spin(btn.buttonNo)}>
+      <Grid
+        item
+        xs={3}
+        key={btn.buttonNo}
+        className={btn.buttonTxt === 'SPIN' ? `${classes.rotatorBtnBox} ${classes.spinBtnGrid}` : classes.rotatorBtnBox}
+        onClick={() => spin(btn.buttonNo)}
+      >
         <SquareButton text={btn.buttonTxt} />
       </Grid>
     );
@@ -368,11 +375,10 @@ const GamePlay = () => {
             {/* <Grid item xs={4} className={classes.btnBox} onClick={() => setAutoGame(!autoGame)}>
               <TheButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
             </Grid> */}
-            {mainBtnListEl}
-
-            <Grid item xs={3} className={classes.testBtnBox} onClick={() => setAutoGame(!autoGame)}>
+            <Grid item xs={3} className={`${classes.rotatorBtnBox} ${classes.grid0}`} onClick={() => setAutoGame(!autoGame)}>
               <SquareButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
             </Grid>
+            {mainBtnListEl}
           </Grid>
         </div>
       </div>
@@ -406,10 +412,6 @@ const GamePlay = () => {
               <AddBoxIcon className={classes.slotIcon} onClick={() => pointCash(cashIn)} />
             </div>
           </div>
-
-          {/* <div className={classes.marqueeBox}>
-            <marquee scrollamount="10">歡迎光臨～～</marquee>
-          </div> */}
 
           <div className={classes.marquee}>
             <p>歡迎光臨～～</p>

@@ -26,7 +26,7 @@ const ApiController = () => {
         EgmSession: egmSession,
       };
 
-      console.log(body);
+      console.log(body, 'body');
       return await apiPost('PressSlotApi', body, token);
     },
 

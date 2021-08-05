@@ -101,12 +101,12 @@ const SubButtonHandle = ({ subBtn, spin }) => {
         );
 
       // 雄狼
-      case '25':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button className={`${classes.subBtn} ${classes.aruze25}`} onClick={() => spin(btn.buttonNo)} />
-          </div>
-        );
+      // case '25':
+      //   return (
+      //     <div className={`${classes.subBtnBox}`}>
+      //       <button className={`${classes.subBtn} ${classes.aruze25}`} onClick={() => spin(btn.buttonNo)} />
+      //     </div>
+      //   );
 
       case '50':
         return (
