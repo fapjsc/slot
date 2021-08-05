@@ -269,9 +269,9 @@ const GamePlay = () => {
       if (String(el.egm) === selectEgm.egmSession && String(el.token) === apiToken) {
         setCloseWebRtcConnect(true);
         removeKickItem(el);
-        alert('閒置時間超過三分鐘，請重新登入');
-        localStorage.clear();
-        history.replace('/');
+        // alert('閒置時間超過三分鐘，請重新登入');
+        // localStorage.clear();
+        // history.replace('/');
       }
     });
   }, [kickList, selectEgm, apiToken, removeKickItem, history]);
@@ -407,8 +407,12 @@ const GamePlay = () => {
             </div>
           </div>
 
-          <div className={classes.marqueeBox}>
+          {/* <div className={classes.marqueeBox}>
             <marquee scrollamount="10">歡迎光臨～～</marquee>
+          </div> */}
+
+          <div className={classes.marquee}>
+            <p>歡迎光臨～～</p>
           </div>
 
           <div className={classes.subBtnHandlerBox}>
