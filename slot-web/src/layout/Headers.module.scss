@@ -1,7 +1,6 @@
 .header {
   height: 4rem;
   background-image: linear-gradient(to top, #09203f 0%, #537895 100%);
-
   display: flex;
   justify-content: space-around;
   align-items: stretch;
@@ -13,11 +12,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 30%;
+
+    .txt {
+      margin-right: 3px;
+    }
+
+    .badge {
+      border-radius: 100%;
+      background-color: rebeccapurple;
+      padding: 5%;
+      font-size: 8px;
+
+      @media only screen and(max-width: 414px) {
+        padding: 7%;
+      }
+    }
 
     .machineNum {
-      // margin-left: 15px;
-      display: flex;
-      flex-direction: column;
+      // display: flex;
+      // background-color: red;
     }
 
     .icon {
@@ -41,26 +55,10 @@
       text-align: left;
       font-weight: bold;
     }
-
-    // .credit {
-    //   text-align: left;
-    //   margin-top: 5px;
-    // }
   }
 
   .navBox {
     display: flex;
     align-items: center;
-  }
-
-  .badge {
-    border-radius: 100%;
-    background-color: rebeccapurple;
-    padding: 20%;
-    margin-top: 20%;
-    font-size: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 }

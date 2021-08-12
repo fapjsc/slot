@@ -172,6 +172,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
     }
   }, [remoteCamera]);
 
+  // return <video ref={remoteCamera} autoPlay playsInline style={{ width: '100%', height: '100%' }} />;
   return <video onClick={videoPlay} ref={remoteCamera} autoPlay playsInline style={{ width: '100%', height: '100%' }} />;
 };
 

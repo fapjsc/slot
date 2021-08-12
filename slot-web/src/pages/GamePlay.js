@@ -289,7 +289,7 @@ const GamePlay = () => {
     spin(77);
     let timer = setInterval(() => {
       spin(77);
-    }, 3000);
+    }, 4000);
 
     return () => {
       clearInterval(timer);
@@ -401,7 +401,15 @@ const GamePlay = () => {
           </div> */}
 
           <div>
-            <OpenPointHandle cashIn={cashIn} handleChange={handleChange} pointCash={pointCash} />
+            <OpenPointHandle
+              openPoint
+              cashIn={cashIn}
+              handleChange={handleChange}
+              pointCash={pointCash}
+              creditLoading={creditLoading}
+              credit={credit}
+              setAutoGame={setAutoGame}
+            />
           </div>
 
           <div>
@@ -409,11 +417,22 @@ const GamePlay = () => {
           </div>
 
           <div>
+            <OpenPointHandle
+              cashIn={cashIn}
+              handleChange={handleChange}
+              pointCash={pointCash}
+              creditLoading={creditLoading}
+              credit={credit}
+              setAutoGame={setAutoGame}
+            />
+          </div>
+
+          {/* <div>
             <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary">
               <AccountBalanceIcon fontSize="small" onClick={() => setAutoGame(false)} />
             </IconButton>
             <p style={{ color: 'white' }}>查詢餘額</p>
-          </div>
+          </div> */}
 
           <div>
             <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary" onClick={refreshPage}>

@@ -6,6 +6,7 @@
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 20px;
   width: 70%;
+  padding-bottom: 1rem;
 
   input[type='number']::placeholder {
     /* Firefox, Chrome, Opera */
@@ -80,6 +81,57 @@
 
     @media only screen and(max-width: 500px) {
       font-size: 2rem;
+    }
+  }
+}
+
+// Credit Box
+.creditBox {
+  display: flex;
+  flex-direction: column;
+  padding: 1.2% 3%;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 20px;
+  width: 70%;
+  padding-bottom: 1rem;
+
+  .moneyBox {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .money {
+      width: 20%;
+      height: 100%;
+    }
+
+    .span {
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: bold;
+
+      @media only screen and(max-width: 500px) {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .odometerBox {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1%;
+    height: 100%;
+    font-size: 1.4rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+
+    @media only screen and(max-width: 500px) {
+      font-size: 1rem;
+    }
+    @media only screen and(max-width: 500px) {
+      margin-top: 3px;
+      font-size: 0.8rem;
     }
   }
 }

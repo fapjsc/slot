@@ -4,12 +4,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 
 import IconButton from '@material-ui/core/IconButton';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 
-// Icon
-// import goldImg from '../asset/gold.png';
+// Balance
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Odometer from 'react-odometerjs';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+
+// Img
 import goldImg from '../../asset/gold.jpg';
-import AddBoxIcon from '@material-ui/icons/AddBox';
+import moneyImg from '../../asset/money.png';
 
 // Style
 import classes from './OpenPointHandle.module.scss';
@@ -28,7 +33,7 @@ const useStyles = makeStyles({
   },
 });
 
-const OpenPointHandle = ({ cashIn, handleChange, pointCash }) => {
+const OpenPointHandle = ({ cashIn, handleChange, pointCash, credit, creditLoading, openPoint, setAutoGame }) => {
   const styles = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -65,16 +70,42 @@ const OpenPointHandle = ({ cashIn, handleChange, pointCash }) => {
     </div>
   );
 
+  const balanceList = anchor => (
+    <div
+      className={clsx(styles.list, {
+        [styles.fullList]: anchor === 'top' || anchor === 'bottom',
+      })}
+      role="presentation"
+    >
+      <div className={classes.creditBox}>
+        <div className={classes.moneyBox}>
+          <img className={classes.money} src={moneyImg} alt="money" />
+          <span className={classes.span}>餘額</span>
+        </div>
+
+        {creditLoading ? (
+          <div style={{ textAlign: 'center' }}>
+            <CircularProgress />
+          </div>
+        ) : (
+          <div className={classes.odometerBox}>
+            <Odometer format="(,ddd).dd" value={Number(credit)} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <>
       {['bottom'].map(anchor => (
         <React.Fragment key={anchor}>
           <IconButton style={{ backgroundColor: '#ddd' }} color="primary" aria-label="add to shopping cart" onClick={toggleDrawer(anchor, true)}>
-            <MonetizationOnIcon fontSize="small" />
+            {openPoint ? <MonetizationOnIcon fontSize="small" /> : <AccountBalanceIcon fontSize="small" onClick={() => setAutoGame(false)} />}
           </IconButton>
-          <p style={{ color: 'white' }}>開分</p>
+          {openPoint ? <p style={{ color: 'white' }}>開分</p> : <p style={{ color: 'white' }}>查詢餘額</p>}
           <SwipeableDrawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)} onOpen={toggleDrawer(anchor, true)}>
-            {list(anchor)}
+            {openPoint ? list(anchor) : balanceList(anchor)}
           </SwipeableDrawer>
         </React.Fragment>
       ))}
