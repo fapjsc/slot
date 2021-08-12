@@ -8,13 +8,14 @@
   color: #fff;
   max-width: 678px;
   margin: 0 auto;
+
   .infoBox {
     display: flex;
     align-items: center;
     justify-content: center;
 
     .machineNum {
-      margin-left: 15px;
+      // margin-left: 15px;
       display: flex;
       flex-direction: column;
     }
@@ -41,10 +42,10 @@
       font-weight: bold;
     }
 
-    .credit {
-      text-align: left;
-      margin-top: 5px;
-    }
+    // .credit {
+    //   text-align: left;
+    //   margin-top: 5px;
+    // }
   }
 
   .navBox {

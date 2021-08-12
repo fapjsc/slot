@@ -56,30 +56,11 @@ export default function ScrollDialog() {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title" className={`${styles.title}`}>
-          Title
+          溫馨提醒
         </DialogTitle>
         <DialogContent dividers={scroll === 'paper'} className={`${styles.content}`}>
           <DialogContentText id="scroll-dialog-description" ref={descriptionElementRef} tabIndex={-1} className={styles.contextText}>
-            Lorem ipsum odor amet, consectetuer adipiscing elit. Nisi facilisi id volutpat. Erat fermentum nam donec sit. Luctus phasellus diam parturient dui. Congue nibh nostra congue. Imperdiet
-            conubia habitant aenean mauris etiam. Molestie vulputate hac venenatis senectus. semper. Mattis eleifend sem dictum habitasse ultricies. Lorem ipsum odor amet, consectetuer adipiscing
-            elit. Nisi facilisi id volutpat. Erat fermentum nam donec sit. Luctus phasellus diam parturient dui. Congue nibh nostra congue. Imperdiet conubia habitant aenean mauris etiam. Molestie
-            vulputate hac venenatis senectus. Hendrerit ultrices nisl faucibus taciti quam. Tristique volutpat mus augue inceptos ligula? Pretium praesent nisl vel at. Senectus pharetra maecenas
-            integer. Ridiculus purus aliquam dapibus porta fames. Vulputate vestibulum euismod tristique sem. Enim fermentum at. Phasellus posuere accumsan nunc torquent. Molestie at curabitur feugiat
-            mi nibh. Mus nulla integer montes torquent. Litora magna dui porta taciti habitant. Nullam hendrerit eleifend fames. Elementum proin semper. Mattis eleifend sem dictum habitasse ultricies.
-            Lorem ipsum odor amet, consectetuer adipiscing elit. Nisi facilisi id volutpat. Erat fermentum nam donec sit. Luctus phasellus diam parturient dui. Congue nibh nostra congue. Imperdiet
-            conubia habitant conubia habitant aenean mauris etiam. Molestie vulputate hac venenatis senectus. semper. Mattis eleifend sem dictum habitasse ultricies. Lorem ipsum odor amet,
-            consectetuer adipiscing elit. Nisi facilisi id volutpat. Erat fermentum nam donec sit. Luctus phasellus diam parturient dui. Congue nibh nostra congue. Imperdiet conubia habitant aenean
-            mauris etiam. Molestie vulputate hac venenatis senectus. Hendrerit ultrices nisl faucibus taciti quam. Tristique volutpat mus augue inceptos ligula? Pretium praesent nisl vel at. Senectus
-            pharetra maecenas integer. Ridiculus purus aliquam dapibus porta fames. Vulputate vestibulum euismod tristique sem. Enim fermentum at. Phasellus posuere accumsan nunc torquent. Molestie at
-            curabitur feugiat mi nibh. Mus nulla integer montes torquent. Litora magna dui porta taciti habitant. Nullam hendrerit eleifend fames. Elementum proin semper. Mattis eleifend sem dictum
-            habitasse ultricies. Lorem ipsum odor amet, consectetuer adipiscing elit. Nisi facilisi id volutpat. Erat fermentum nam donec sit. Luctus phasellus diam parturient dui. Congue nibh nostra
-            congue. Imperdiet conubia habitant conubia habitant aenean mauris etiam. Molestie vulputate hac venenatis senectus. semper. Mattis eleifend sem dictum habitasse ultricies. Lorem ipsum odor
-            amet, consectetuer adipiscing elit. Nisi facilisi id volutpat. Erat fermentum nam donec sit. Luctus phasellus diam parturient dui. Congue nibh nostra congue. Imperdiet conubia habitant
-            aenean mauris etiam. Molestie vulputate hac venenatis senectus. Hendrerit ultrices nisl faucibus taciti quam. Tristique volutpat mus augue inceptos ligula? Pretium praesent nisl vel at.
-            Senectus pharetra maecenas integer. Ridiculus purus aliquam dapibus porta fames. Vulputate vestibulum euismod tristique sem. Enim fermentum at. Phasellus posuere accumsan nunc torquent.
-            Molestie at curabitur feugiat mi nibh. Mus nulla integer montes torquent. Litora magna dui porta taciti habitant. Nullam hendrerit eleifend fames. Elementum proin semper. Mattis eleifend
-            sem dictum habitasse ultricies. Lorem ipsum odor amet, consectetuer adipiscing elit. Nisi facilisi id volutpat. Erat fermentum nam donec sit. Luctus phasellus diam parturient dui. Congue
-            nibh nostra congue. Imperdiet conubia habitant
+            為維護遊戲良好連線品質，建議使用5G或WIFI連線，並使用下列瀏覽器：Chrome、Safari瀏覽器開啟遊戲，祝君好運。
           </DialogContentText>
         </DialogContent>
         <DialogActions className={styles.darkBg}>

@@ -195,7 +195,7 @@ export default function MachineItem(props) {
           {!isConn || noConnState ? (
             <span style={disableBtnStyle}>
               <Button disabled style={{ color: '#f2f2f2' }}>
-                連線中...
+                維護中
               </Button>
             </span>
           ) : isPlaying && props.machineDetails.isPlaying ? (

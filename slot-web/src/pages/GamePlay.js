@@ -13,18 +13,13 @@ import { wsUri } from '../api/config';
 
 // Components
 import Screen from '../Screen';
-// import TheButton from '../components/UI/TheButton';
-// import LeaveButton from '../components/UI/LeaveButton';
 import Review from '../components/review/Review';
 import SubButtonHandle from '../components/subButtonHandle/SubButtonHandle';
 import SquareButton from '../components/UI/button/SquareButton';
+import OpenPointHandle from '../components/openPointHandle/OpenPointHandle';
 
 // Layout
 import Headers from '../layout/Headers';
-// import Nav from '../layout/Nav';
-
-// Media Query
-// import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 // Style
 import classes from './GamePlay.module.scss';
@@ -32,12 +27,18 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+
+// Icon
+import ScreenRotationIcon from '@material-ui/icons/ScreenRotation';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import Box from '@material-ui/core/Box';
+import BuildIcon from '@material-ui/icons/Build';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 
 // Image
 import moneyImg from '../asset/money.png';
-import goldImg from '../asset/gold.png';
+import goldImg from '../asset/gold.jpg';
 
 // Material Style
 const useStyles = makeStyles(theme => ({
@@ -164,7 +165,8 @@ const GamePlay = () => {
 
   const pointCash = async cash => {
     if (cashIn === '' || cashIn <= 0) {
-      alert('請輸入投幣點數');
+      // alert('請輸入投幣點數');
+      alert('餘額不足');
       return;
     }
     setCreditLoading(true);
@@ -287,7 +289,7 @@ const GamePlay = () => {
     spin(77);
     let timer = setInterval(() => {
       spin(77);
-    }, 2000);
+    }, 3000);
 
     return () => {
       clearInterval(timer);
@@ -335,6 +337,10 @@ const GamePlay = () => {
     );
   });
 
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
   window.addEventListener('beforeunload', function (e) {
     // Cancel the event
     e.preventDefault();
@@ -368,13 +374,8 @@ const GamePlay = () => {
         </div>
 
         {/* SubButton */}
-        {/* <div className={classes.optionBox}>{subBtnListEl}</div> */}
-        <div className={classes.optionBox}>
-          {/* <Grid className={classes.girdContainer} container spacing={matches ? 2 : 3}> */}
+        <div className={classes.mainBtnBox}>
           <Grid className={classes.girdContainer} spacing={0} container>
-            {/* <Grid item xs={4} className={classes.btnBox} onClick={() => setAutoGame(!autoGame)}>
-              <TheButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
-            </Grid> */}
             <Grid item xs={3} className={`${classes.rotatorBtnBox} ${classes.grid0}`} onClick={() => setAutoGame(!autoGame)}>
               <SquareButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
             </Grid>
@@ -384,7 +385,42 @@ const GamePlay = () => {
       </div>
 
       <div className={classes.btnHandle}>
-        <div className={classes.box2}>
+        <div className={classes.marquee}>
+          <p>歡迎光臨～～</p>
+        </div>
+
+        <div className={classes.optionBtnBox}>
+          {/* <div>
+            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary">
+              <MonetizationOnIcon fontSize="small" />
+            </IconButton>
+            <p style={{ color: 'white' }}>開分</p>
+          </div> */}
+
+          <div>
+            <OpenPointHandle cashIn={cashIn} handleChange={handleChange} pointCash={pointCash} />
+          </div>
+
+          <div>
+            <SubButtonHandle subBtn={subBtn} spin={spin} />
+          </div>
+
+          <div>
+            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary">
+              <AccountBalanceIcon fontSize="small" onClick={() => setAutoGame(false)} />
+            </IconButton>
+            <p style={{ color: 'white' }}>查詢餘額</p>
+          </div>
+
+          <div>
+            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary" onClick={refreshPage}>
+              <BuildIcon fontSize="small" />
+            </IconButton>
+            <p style={{ color: 'white' }}>畫面優化</p>
+          </div>
+        </div>
+
+        {/* <div className={classes.box2}>
           <div className={classes.creditBox}>
             <div className={classes.moneyBox}>
               <img className={classes.money} src={moneyImg} alt="money" />
@@ -412,20 +448,12 @@ const GamePlay = () => {
               <AddBoxIcon className={classes.slotIcon} onClick={() => pointCash(cashIn)} />
             </div>
           </div>
+        </div> */}
 
-          <div className={classes.marquee}>
-            <p>歡迎光臨～～</p>
-          </div>
-
-          <div className={classes.subBtnHandlerBox}>
-            <SubButtonHandle subBtn={subBtn} spin={spin} />
-          </div>
-        </div>
+        {/* <div className={classes.subBtnHandlerBox}>
+          <SubButtonHandle subBtn={subBtn} spin={spin} />
+        </div> */}
       </div>
-
-      {/* <div className={`${classes.leaveBtnBox}`} onClick={() => setReviewState(true)}>
-        <LeaveButton />
-      </div> */}
     </section>
   );
 };

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 // Components
 import MachineItemNew from './machineItemNew';
+import Dialog from '../../components/UI/Dialog';
 
 // Style
 import { makeStyles } from '@material-ui/core/styles';
@@ -44,6 +45,8 @@ const MachineList = props => {
 
   return (
     <div className={classes.root}>
+      {!localStorage.getItem('isShow') && <Dialog />}
+
       <Grid container spacing={4} className={classes.container}>
         {renderMachineList}
       </Grid>

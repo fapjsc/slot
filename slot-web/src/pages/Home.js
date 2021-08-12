@@ -1,12 +1,10 @@
-import { useEffect, useContext, Fragment } from 'react';
+import { useEffect, useContext, Fragment, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 // Components
 import MachineList from '../components/gameMachine/machineList';
 import Dialog from '../components/UI/Dialog';
-
-//Demo
-// import SlotButton from '../components/UI/SlotButton';
+import ThePadding from '../components/UI/padding/ThePadding';
 
 // Context
 import UserContext from '../context/User/UserContext';
@@ -28,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    height: '100%',
+    minHeight: '100vh',
   },
   rootList: {
     // backgroundImage: `url(${backgroundImg})`,
@@ -58,6 +56,9 @@ const Home = () => {
   const userContext = useContext(UserContext);
   const { apiToken, setApiToken, egmList, getEgmList, webSocketHandler, onActionEgmList, egmConnectList, wsClient, setLoginData } = userContext;
 
+  // Init State
+  const [showList, setShowList] = useState(false);
+
   useEffect(() => {
     const egmStateWebSocketUri = `${wsUri}stateQuote`;
     webSocketHandler(egmStateWebSocketUri);
@@ -76,6 +77,9 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    egmConnectList.forEach(el => {
+      if (el.state === 1) setShowList(true);
+    });
     // console.log(egmConnectList);
   }, [egmConnectList]);
 
@@ -102,14 +106,16 @@ const Home = () => {
   return (
     <div className={classes.root}>
       <Box className={classes.rootList}>
-        {!localStorage.getItem('isShow') && <Dialog />}
         <Box style={{ padding: 20, display: 'flex', justifyContent: 'flex-end' }}>
           <Button onClick={handleLogout} variant="contained" color="secondary">
             登出
           </Button>
         </Box>
 
-        {egmList && (
+        <ThePadding show={true} showList={showList} />
+        {/* <ThePadding show={true} /> */}
+
+        {egmList && showList && (
           <Fragment>
             <MachineList egmList={egmList} token={apiToken} />
           </Fragment>
