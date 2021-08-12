@@ -183,8 +183,9 @@ const BroadCast = () => {
       console.log(socket.id);
     });
 
-    socket.on('refresh', () => {
+    socket.on('refresh', roomId => {
       console.log('refresh=========');
+      socket.emit('refreshed', roomId);
       window.location.reload();
     });
 

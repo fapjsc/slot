@@ -2,7 +2,7 @@ import ApiController from '../api/apiController';
 
 import { useContext, useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import Odometer from 'react-odometerjs';
+// import Odometer from 'react-odometerjs';
 import 'odometer/themes/odometer-theme-train-station.css';
 
 // Context
@@ -30,15 +30,15 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 
 // Icon
-import ScreenRotationIcon from '@material-ui/icons/ScreenRotation';
-import AddBoxIcon from '@material-ui/icons/AddBox';
+// import ScreenRotationIcon from '@material-ui/icons/ScreenRotation';
+// import AddBoxIcon from '@material-ui/icons/AddBox';
 import BuildIcon from '@material-ui/icons/Build';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+// import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+// import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 
 // Image
-import moneyImg from '../asset/money.png';
-import goldImg from '../asset/gold.jpg';
+// import moneyImg from '../asset/money.png';
+// import goldImg from '../asset/gold.jpg';
 
 // Material Style
 const useStyles = makeStyles(theme => ({
@@ -341,7 +341,10 @@ const GamePlay = () => {
 
   const refreshPage = () => {
     socketClient.emit('refresh', selectEgm.webNumber);
-    window.location.reload();
+    socketClient.on('clientReload', () => {
+      console.log('client reload ==========');
+      window.location.reload();
+    });
   };
 
   window.addEventListener('beforeunload', function (e) {

@@ -53,7 +53,12 @@ io.sockets.on('connection', socket => {
 
   socket.on('refresh', roomId => {
     console.log('refresh===', roomId);
-    socket.to(roomId).emit('refresh');
+    socket.to(roomId).emit('refresh', roomId);
+  });
+
+  socket.on('refreshed', roomId => {
+    console.log('==== call clientReload ======', roomId);
+    socket.to(roomId).emit('clientReload');
   });
 
   socket.on('disconnect', () => {

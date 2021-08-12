@@ -31,8 +31,8 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
   const webNumber = selectEgm.webNumber;
 
   const handleSocket = () => {
-    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
-    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
+    // const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
+    const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT__1);
     setSocket(socketConnect);
     setSocketClient(socketConnect);
   };
@@ -73,7 +73,7 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
 
       socket.on('create-room-message', message => {
         console.log(message);
-        peerConnection.close();
+        if (peerConnection) peerConnection.close();
         socket.emit('joinRoom', webNumber, cameraId, audioId);
       });
 
