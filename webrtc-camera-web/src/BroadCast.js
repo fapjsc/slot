@@ -183,6 +183,11 @@ const BroadCast = () => {
       console.log(socket.id);
     });
 
+    socket.on('refresh', () => {
+      console.log('refresh=========');
+      window.location.reload();
+    });
+
     socket.on('sendCamera', async (socketId, cameraId, audioId) => {
       console.log(`Camera: ${cameraId} Audio: ${audioId}`);
       try {
@@ -398,7 +403,9 @@ const BroadCast = () => {
                 size="lg"
                 className="w-25 p-2"
                 variant="primary"
-                onClick={() => handleDeviceMap(+selectEgm, currentDevice.deviceId, currentDevice.label, egmIp, currentAudio.label, currentAudio.deviceId, webNumber)}
+                onClick={() =>
+                  handleDeviceMap(+selectEgm, currentDevice.deviceId, currentDevice.label, egmIp, currentAudio.label, currentAudio.deviceId, webNumber)
+                }
               >
                 確定
               </Button>

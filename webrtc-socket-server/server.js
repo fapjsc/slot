@@ -51,6 +51,11 @@ io.sockets.on('connection', socket => {
     socket.to(roomId).emit('userLeft', socket.id);
   });
 
+  socket.on('refresh', roomId => {
+    console.log('refresh===', roomId);
+    socket.to(roomId).emit('refresh');
+  });
+
   socket.on('disconnect', () => {
     console.log('disconnect=====');
   });

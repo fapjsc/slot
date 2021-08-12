@@ -95,6 +95,8 @@ const UserState = props => {
 
       const resData = await res.json();
 
+      console.log(resData);
+
       if (resData.code < 100000000) {
         setBtnList(resData.btnList);
         setSelectEgm({
@@ -142,6 +144,8 @@ const UserState = props => {
         headers,
       });
       const resData = await res.json();
+
+      console.log(resData);
 
       if (resData.code === 100000004) {
         alert(resData.msg);
@@ -238,7 +242,7 @@ const UserState = props => {
 
       // Egm Playing State
       if (message.data.includes('EgmPlayingState')) {
-        console.log(message.data);
+        // console.log(message.data);
         let stateList = [];
 
         let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**>>*', '*^*');

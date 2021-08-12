@@ -303,10 +303,6 @@ const GamePlay = () => {
   // }, [selectEgm]);
 
   useEffect(() => {
-    if (btnList.length === 0) {
-      const btnList = JSON.parse(localStorage.getItem('btnList'));
-      setBtnList(btnList);
-    }
     let mainBtnTemp = [];
     let subBtnTemp = [];
     btnList.forEach(btn => {
@@ -319,9 +315,15 @@ const GamePlay = () => {
 
     setMainBtn(mainBtnTemp.reverse());
     setSubBtn(subBtnTemp.reverse());
-
-    // eslint-disable-next-line
   }, [btnList]);
+
+  useEffect(() => {
+    if (btnList.length === 0) {
+      const btnList = JSON.parse(localStorage.getItem('btnList'));
+      setBtnList(btnList);
+    }
+    // eslint-disable-next-line
+  }, []);
 
   const mainBtnListEl = mainBtn.map(btn => {
     return (
@@ -338,6 +340,7 @@ const GamePlay = () => {
   });
 
   const refreshPage = () => {
+    socketClient.emit('refresh', selectEgm.webNumber);
     window.location.reload();
   };
 

@@ -66,6 +66,11 @@ const LoginForm = props => {
     login(props, data);
   };
 
+  // const refreshPage = () => {
+  //   socketClient.emit('refresh', selectEgm.webNumber);
+  //   window.location.reload();
+  // };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
