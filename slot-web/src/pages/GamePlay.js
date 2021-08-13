@@ -251,19 +251,19 @@ const GamePlay = () => {
 
     // 實驗中的功能
     // https://developer.mozilla.org/zh-TW/docs/Web/API/Screen/orientation
-    if (window.screen) {
-      window.screen.orientation.addEventListener('change', function (e) {
-        if (e.currentTarget.type === 'landscape-primary') {
-          // landscape mode => angle 0
-          console.log('landscape');
-          setDirectionMode('landscape');
-        } else if (e.currentTarget.type === 'portrait-primary') {
-          // portrait mode => angle 0
-          console.log('portrait');
-          setDirectionMode('portrait');
-        }
-      });
-    }
+    // if (window.screen) {
+    //   window.screen.orientation.addEventListener('change', function (e) {
+    //     if (e.currentTarget.type === 'landscape-primary') {
+    //       // landscape mode => angle 0
+    //       console.log('landscape');
+    //       setDirectionMode('landscape');
+    //     } else if (e.currentTarget.type === 'portrait-primary') {
+    //       // portrait mode => angle 0
+    //       console.log('portrait');
+    //       setDirectionMode('portrait');
+    //     }
+    //   });
+    // }
 
     window.addEventListener('beforeunload', function (e) {
       // Cancel the event
