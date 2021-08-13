@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   },
 });
 
-const SubButtonHandle = ({ subBtn, spin }) => {
+const SubButtonHandle = ({ subBtn, spin, landscape }) => {
   const styles = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -181,7 +181,7 @@ const SubButtonHandle = ({ subBtn, spin }) => {
           <IconButton style={{ backgroundColor: '#ddd' }} color="primary" aria-label="add to shopping cart" onClick={toggleDrawer(anchor, true)}>
             <TouchAppIcon fontSize="small" />
           </IconButton>
-          <p style={{ color: 'white' }}>操作</p>
+          {landscape ? <span style={{ color: 'white', marginLeft: '10px' }}>操作</span> : <p style={{ color: 'white' }}>操作</p>}
           <SwipeableDrawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)} onOpen={toggleDrawer(anchor, true)}>
             {list(anchor)}
           </SwipeableDrawer>

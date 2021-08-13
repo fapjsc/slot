@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { login } from '../../middleware/auth';
 
-//test
-// import ScreenOrientationReact from 'screen-orientation-react';
+// Context
+import UserContext from '../../context/User/UserContext';
 
 // Style
 import Avatar from '@material-ui/core/Avatar';
@@ -39,6 +39,9 @@ const useStyles = makeStyles(theme => ({
 const LoginForm = props => {
   const classes = useStyles();
 
+  // UserContext
+  const { userLanding } = useContext(UserContext);
+
   // Init State
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -55,7 +58,8 @@ const LoginForm = props => {
       password,
     };
 
-    login(props, data);
+    // login(props, data);
+    userLanding(data);
   };
 
   return (

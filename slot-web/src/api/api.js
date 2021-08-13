@@ -3,17 +3,9 @@ import { apiUrl, apiCasinoUrl } from './config';
 export const apiGet = async targetApi => {
   let url = `${apiUrl}${targetApi}`;
   let options = {
-    // cache: 'no-cache',
-    // credentials: 'same-origin',
     headers: {
-      // 'user-agent': 'Mozilla/4.0 MDN Example',
       'content-type': 'application/json',
     },
-    // method: 'GET',
-    // mode: 'cors',
-    // redirect: 'follow',
-    // referrer: 'no-referrer',
-    // insecure: true,
   };
 
   let response = await fetch(url, options);

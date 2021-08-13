@@ -25,14 +25,13 @@ const App = () => {
       <Switch>
         <UserState>
           <PublicRoute restricted={true} path="/" component={Auth} exact />
-          <PublicRoute path="/home" component={Home} exact />
-          {/* <PrivateRoute path="/home" component={Home} exact /> */}
-          <PublicRoute path="/load" component={LoadingScreen} />
-          <PublicRoute path="/gameStart" component={GamePlay} />
-          <PublicRoute path="/demo" component={Demo} />
-          <PublicRoute path="/demo2" component={Demo2} />
-          <PublicRoute path="/level" component={HomeLevel} />
-          <PublicRoute path="/vertical" component={HomeVertical} />
+          <PublicRoute path="/load/" component={LoadingScreen} />
+          <PrivateRoute path="/home" component={Home} exact />
+          <PrivateRoute path="/gameStart" component={GamePlay} exact />
+          <PrivateRoute path="/demo" component={Demo} exact />
+          <PrivateRoute path="/demo2" component={Demo2} exact />
+          <PrivateRoute path="/level" component={HomeLevel} exact />
+          <PrivateRoute path="/vertical" component={HomeVertical} exact />
         </UserState>
       </Switch>
     </Router>

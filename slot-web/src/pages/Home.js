@@ -16,7 +16,8 @@ import { wsUri } from '../api/config';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
-// import backImg from '../asset/yeQ9yk6EY4.jpg';
+
+// Image
 import backgroundImg from '../asset/5dde4f6dc409c1574850413996.jpg';
 
 const useStyles = makeStyles(theme => ({

@@ -11,7 +11,6 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
-// import backImg from '../asset/yeQ9yk6EY4.jpg';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -41,24 +40,30 @@ const LoadingScreen = () => {
   // Router Props
   let location = useLocation();
   let params = new URLSearchParams(location.search);
+
   const history = useHistory();
 
   let playerLandingApi = async () => {
     setIsLoadFailed(false);
-    let pc = params.get('player');
+    let player = params.get('player');
     let casino = params.get('casino');
     let at = params.get('at');
+    let backToCasinoUrl = params.get('returnUrl');
 
-    localStorage.setItem('pc', pc);
+    localStorage.setItem('player', player);
     localStorage.setItem('casino', casino);
     localStorage.setItem('at', at);
+    localStorage.setItem('backToCasinoUrl', backToCasinoUrl); // 返回娛樂城的url
 
     try {
-      let responseData = await ApiController().playerLandingApi(pc, casino, at);
+      let responseData = await ApiController().playerLandingApi(player, casino, at);
+      console.log(responseData);
+
       if (responseData.code > 100000000) {
         // code 超過 100000000 為問題回傳
         setIsLoadFailed(true);
         localStorage.clear();
+        return;
       }
       if (responseData.code < 100000000) {
         localStorage.setItem('token', responseData.apiToken);
@@ -81,7 +86,6 @@ const LoadingScreen = () => {
 
   useEffect(() => {
     playerLandingApi();
-
     // eslint-disable-next-line
   }, []);
   return (

@@ -2,8 +2,6 @@ import ApiController from '../api/apiController';
 
 import { useContext, useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-// import Odometer from 'react-odometerjs';
-import 'odometer/themes/odometer-theme-train-station.css';
 
 // Context
 import UserContext from '../context/User/UserContext';
@@ -28,17 +26,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import 'odometer/themes/odometer-theme-train-station.css';
+import Box from '@material-ui/core/Box';
 
 // Icon
-// import ScreenRotationIcon from '@material-ui/icons/ScreenRotation';
-// import AddBoxIcon from '@material-ui/icons/AddBox';
 import BuildIcon from '@material-ui/icons/Build';
-// import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
-// import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-
-// Image
-// import moneyImg from '../asset/money.png';
-// import goldImg from '../asset/gold.jpg';
 
 // Material Style
 const useStyles = makeStyles(theme => ({
@@ -75,12 +67,10 @@ const GamePlay = () => {
     wsClient,
     webSocketHandler,
   } = userContext;
+
   const { mapId, egmId, egmIp, egmSession, checkSum, casinoToken } = selectEgm;
 
   const styles = useStyles();
-
-  // Mobile Break Point
-  // const matches = useMediaQuery('(max-width:320px)');
 
   // Router Props
   const history = useHistory();
@@ -88,7 +78,6 @@ const GamePlay = () => {
   // Init State
   const [cashIn, setCashIn] = useState('');
   const [open, setOpen] = useState(false);
-  // const [imgObj, setImgObj] = useState();
   const [closeWebRtcConnect, setCloseWebRtcConnect] = useState(false);
   const [socketClient, setSocketClient] = useState(null);
   const [autoPlay, setAutoPlay] = useState(false);
@@ -98,6 +87,7 @@ const GamePlay = () => {
   const [mainBtn, setMainBtn] = useState([]);
   const [subBtn, setSubBtn] = useState([]);
   const [openSnack, setOpenSnack] = useState(true);
+  const [directionMode, setDirectionMode] = useState('portrait');
 
   const handleAutoPlay = () => {
     setAutoPlay(true);
@@ -106,6 +96,14 @@ const GamePlay = () => {
 
   const handleChange = e => {
     setCashIn(e.target.value);
+  };
+
+  const refreshPage = () => {
+    socketClient.emit('refresh', selectEgm.webNumber);
+    socketClient.on('clientReload', () => {
+      console.log('client reload ==========');
+      window.location.reload();
+    });
   };
 
   const leave = async () => {
@@ -204,22 +202,12 @@ const GamePlay = () => {
     }, 4000);
   };
 
-  // 動態加載圖片
-  // const getImg = () => {
-  //   if (selectEgm.picName) {
-  //     // webPack api 獲取圖片資料夾的上下文，遞歸尋找符合jpg的圖片
-  //     const imgContext = require.context('../asset/new', true, /\.jpg$/);
-  //     // 過濾符合props給的picName
-  //     const imgPath = imgContext.keys().filter(path => path.includes(selectEgm.picName));
-  //     // 轉成 es6 import obj
-  //     const images = imgPath.map(path => imgContext(path));
-  //     // return react 可以用的src obj
-  //     if (images[0]) setImgObj(images[0].default);
-  //   }
-  // };
-
   // UseEffect
   useEffect(() => {
+    if (!btnList.length) {
+      const btnList = JSON.parse(localStorage.getItem('btnList'));
+      setBtnList(btnList);
+    }
     if (!wsClient) {
       const egmStateWebSocketUri = `${wsUri}stateQuote`;
       webSocketHandler(egmStateWebSocketUri);
@@ -236,7 +224,7 @@ const GamePlay = () => {
     const egmSession = localStorage.getItem('egmSession');
     const checkSum = localStorage.getItem('checkSum');
     const webNumber = localStorage.getItem('webNumber');
-    const btnList = JSON.parse(localStorage.getItem('btnList'));
+    // const btnList = JSON.parse(localStorage.getItem('btnList'));
     const selectEgm = {
       egmId,
       egmIp,
@@ -248,11 +236,45 @@ const GamePlay = () => {
       checkSum,
       casinoToken,
       webNumber,
-      btnList,
+      // btnList,
     };
     setApiToken(token);
     setSelectEgm(selectEgm);
-    // getImg();
+
+    // 即將棄用
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/orientationchange_event
+    // window.addEventListener('orientationchange', e => {
+    //   console.log(e.target.screen.orientation.angle);
+    //   if (e.target.screen.orientation.angle === 0) setDirectionMode('portrait');
+    //   if (e.target.screen.orientation.angle === 90) setDirectionMode('landscape');
+    // });
+
+    // 實驗中的功能
+    // https://developer.mozilla.org/zh-TW/docs/Web/API/Screen/orientation
+    window.screen.orientation.addEventListener('change', function (e) {
+      if (e.currentTarget.type === 'landscape-primary') {
+        // landscape mode => angle 0
+        console.log('landscape');
+        setDirectionMode('landscape');
+      } else if (e.currentTarget.type === 'portrait-primary') {
+        // portrait mode => angle 0
+        console.log('portrait');
+        setDirectionMode('portrait');
+      }
+    });
+
+    window.addEventListener('beforeunload', function (e) {
+      // Cancel the event
+      e.preventDefault();
+      // Chrome requires returnValue to be set
+      e.returnValue = 'some text';
+    });
+
+    return () => {
+      // window.removeEventListen('change');
+      // window.removeEventListen('beforeunload');
+      // window.removeEventListen('orientationchange');
+    };
 
     // eslint-disable-next-line
   }, []);
@@ -272,9 +294,9 @@ const GamePlay = () => {
       if (String(el.egm) === selectEgm.egmSession && String(el.token) === apiToken) {
         setCloseWebRtcConnect(true);
         removeKickItem(el);
-        alert('閒置時間超過三分鐘，請重新登入');
-        localStorage.clear();
-        history.replace('/');
+        // alert('閒置時間超過三分鐘，請重新登入');
+        // localStorage.clear();
+        // history.replace('/');
       }
     });
   }, [kickList, selectEgm, apiToken, removeKickItem, history]);
@@ -289,18 +311,12 @@ const GamePlay = () => {
     spin(77);
     let timer = setInterval(() => {
       spin(77);
-    }, 4000);
+    }, 3500);
 
     return () => {
       clearInterval(timer);
     };
   }, [autoGame, credit, spin]);
-
-  // useEffect(() => {
-  //   getImg();
-
-  //   // eslint-disable-next-line
-  // }, [selectEgm]);
 
   useEffect(() => {
     let mainBtnTemp = [];
@@ -317,14 +333,15 @@ const GamePlay = () => {
     setSubBtn(subBtnTemp.reverse());
   }, [btnList]);
 
-  useEffect(() => {
-    if (btnList.length === 0) {
-      const btnList = JSON.parse(localStorage.getItem('btnList'));
-      setBtnList(btnList);
-    }
-    // eslint-disable-next-line
-  }, []);
+  // useEffect(() => {
+  //   if (btnList.length === 0) {
+  //     const btnList = JSON.parse(localStorage.getItem('btnList'));
+  //     setBtnList(btnList);
+  //   }
+  //   // eslint-disable-next-line
+  // }, []);
 
+  //==== Render Elements
   const mainBtnListEl = mainBtn.map(btn => {
     return (
       <Grid
@@ -339,71 +356,16 @@ const GamePlay = () => {
     );
   });
 
-  const refreshPage = () => {
-    socketClient.emit('refresh', selectEgm.webNumber);
-    socketClient.on('clientReload', () => {
-      console.log('client reload ==========');
-      window.location.reload();
-    });
-  };
-
-  window.addEventListener('beforeunload', function (e) {
-    // Cancel the event
-    e.preventDefault();
-    // Chrome requires returnValue to be set
-    e.returnValue = 'some text';
-  });
-
-  return (
-    <section className={classes.root}>
-      {/* Back Drop Loading... */}
-      <Backdrop className={styles.backdrop} open={open}>
-        <CircularProgress color="inherit" />
-        <p>結算中...</p>
-      </Backdrop>
-      <Review machine={selectEgm.mapId} leave={leave} userReview={userReview} token={apiToken} selectEgm={selectEgm} />
-
-      <Headers setReviewState={setReviewState} />
-
-      <div className={classes.slotMachine}>
-        <div className={classes.slotScreen}>
-          <Screen
-            setSocketClient={setSocketClient}
-            autoPlay={autoPlay}
-            setAutoPlay={setAutoPlay}
-            leave={leave}
-            closeWebRtcConnect={closeWebRtcConnect}
-            setCloseWebRtcConnect={setCloseWebRtcConnect}
-          />
-
-          {openSnack && <div onClick={handleAutoPlay} className={classes.snackBar}></div>}
-        </div>
-
-        {/* SubButton */}
-        <div className={classes.mainBtnBox}>
-          <Grid className={classes.girdContainer} spacing={0} container>
-            <Grid item xs={3} className={`${classes.rotatorBtnBox} ${classes.grid0}`} onClick={() => setAutoGame(!autoGame)}>
-              <SquareButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
-            </Grid>
-            {mainBtnListEl}
-          </Grid>
-        </div>
-      </div>
-
+  const portraitBtnHandleEl = () => {
+    return (
       <div className={classes.btnHandle}>
+        {/* 跑馬燈 */}
         <div className={classes.marquee}>
           <p>歡迎光臨～～</p>
         </div>
 
         <div className={classes.optionBtnBox}>
           {/* <div>
-            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary">
-              <MonetizationOnIcon fontSize="small" />
-            </IconButton>
-            <p style={{ color: 'white' }}>開分</p>
-          </div> */}
-
-          <div>
             <OpenPointHandle
               openPoint
               cashIn={cashIn}
@@ -413,7 +375,7 @@ const GamePlay = () => {
               credit={credit}
               setAutoGame={setAutoGame}
             />
-          </div>
+          </div> */}
 
           <div>
             <SubButtonHandle subBtn={subBtn} spin={spin} />
@@ -430,13 +392,6 @@ const GamePlay = () => {
             />
           </div>
 
-          {/* <div>
-            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary">
-              <AccountBalanceIcon fontSize="small" onClick={() => setAutoGame(false)} />
-            </IconButton>
-            <p style={{ color: 'white' }}>查詢餘額</p>
-          </div> */}
-
           <div>
             <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary" onClick={refreshPage}>
               <BuildIcon fontSize="small" />
@@ -444,41 +399,109 @@ const GamePlay = () => {
             <p style={{ color: 'white' }}>畫面優化</p>
           </div>
         </div>
-
-        {/* <div className={classes.box2}>
-          <div className={classes.creditBox}>
-            <div className={classes.moneyBox}>
-              <img className={classes.money} src={moneyImg} alt="money" />
-              <span className={classes.span}>CREDIT</span>
-            </div>
-
-            {creditLoading ? (
-              <div style={{ textAlign: 'center' }}>
-                <CircularProgress />
-              </div>
-            ) : (
-              <div className={classes.odometerBox}>
-                <Odometer format="(,ddd).dd" value={Number(credit)} />
-              </div>
-            )}
-          </div>
-
-          <div className={classes.inputBox}>
-            <div className={classes.goldBox}>
-              <img className={classes.gold} src={goldImg} alt="gold" />
-              <span className={classes.span}>開分</span>
-            </div>
-            <div className={classes.inputInnerBox}>
-              <input type="number" value={cashIn} onChange={handleChange} placeholder="點數" onWheel={event => event.currentTarget.blur()} />
-              <AddBoxIcon className={classes.slotIcon} onClick={() => pointCash(cashIn)} />
-            </div>
-          </div>
-        </div> */}
-
-        {/* <div className={classes.subBtnHandlerBox}>
-          <SubButtonHandle subBtn={subBtn} spin={spin} />
-        </div> */}
       </div>
+    );
+  };
+
+  const landscapeBtnHandleEl = () => {
+    return (
+      <Grid container spacing={3} className={classes.landscapeBtnHandle}>
+        <Grid item xs={12}>
+          <Box>
+            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary" onClick={refreshPage}>
+              <BuildIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Box>
+            <SubButtonHandle landscape subBtn={subBtn} spin={spin} />
+          </Box>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Box>
+            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary" onClick={refreshPage}>
+              <BuildIcon fontSize="small" />
+            </IconButton>
+            <span className={classes.span}>畫面優化</span>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Box>
+            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary" onClick={refreshPage}>
+              <BuildIcon fontSize="small" />
+            </IconButton>
+            <span className={classes.span}>畫面優化</span>
+          </Box>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  return (
+    <section className={classes.root}>
+      {/* Back Drop Loading... */}
+      <Backdrop className={styles.backdrop} open={open}>
+        <div>
+          <div style={{ textAlign: 'center' }}>
+            <CircularProgress color="inherit" />
+          </div>
+          <p>結算中，請稍候...</p>
+        </div>
+      </Backdrop>
+      <Review machine={selectEgm.mapId} leave={leave} userReview={userReview} token={apiToken} selectEgm={selectEgm} />
+
+      {/* 直向 */}
+      {directionMode === 'portrait' && (
+        <>
+          <Headers setReviewState={setReviewState} />
+          <div className={`${classes.slotMachine}`}>
+            <div className={`${classes.slotScreen}`}>
+              <Screen
+                setSocketClient={setSocketClient}
+                autoPlay={autoPlay}
+                setAutoPlay={setAutoPlay}
+                leave={leave}
+                closeWebRtcConnect={closeWebRtcConnect}
+                setCloseWebRtcConnect={setCloseWebRtcConnect}
+              />
+
+              {openSnack && <div onClick={handleAutoPlay} className={classes.snackBar}></div>}
+            </div>
+
+            {/* Main Button */}
+            <div className={classes.mainBtnBox}>
+              <Grid className={classes.girdContainer} spacing={0} container>
+                <Grid item xs={3} className={`${classes.rotatorBtnBox} ${classes.grid0}`} onClick={() => setAutoGame(!autoGame)}>
+                  <SquareButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
+                </Grid>
+                {mainBtnListEl}
+              </Grid>
+            </div>
+          </div>
+          {portraitBtnHandleEl()}
+        </>
+      )}
+
+      {/* 橫向 */}
+      {directionMode === 'landscape' && (
+        <Grid container spacing={3}>
+          <Grid item xs>
+            <Box className={classes.btnHandleLandscape}>{landscapeBtnHandleEl()}</Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box className={classes.slotMachineLandscape}>
+              <Box className={classes.slotScreenLandscape}></Box>
+            </Box>
+          </Grid>
+          <Grid item xs>
+            <Box className={classes.btnHandleLandscape}></Box>
+          </Grid>
+        </Grid>
+      )}
     </section>
   );
 };

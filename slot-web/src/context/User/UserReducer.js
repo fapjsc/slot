@@ -11,6 +11,8 @@ import {
   SET_KICK_LIST,
   REMOVE_KICK_ITEM,
   SET_REVIEW_STATE,
+  SET_LADING_URL,
+  SET_POINT_LOADING,
 } from '../type';
 
 const UserReducer = (state, action) => {
@@ -27,6 +29,13 @@ const UserReducer = (state, action) => {
       return {
         ...state,
         kickList: updateRemoveKickItems,
+      };
+
+    // SET POINT LOADING
+    case SET_POINT_LOADING:
+      return {
+        ...state,
+        pointLading: action.payload,
       };
 
     // Set Kick List
@@ -58,6 +67,12 @@ const UserReducer = (state, action) => {
       return {
         ...state,
         loginData: action.payload,
+      };
+
+    case SET_LADING_URL:
+      return {
+        ...state,
+        loadingUrl: action.payload,
       };
 
     // Button List

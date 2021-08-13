@@ -1,12 +1,14 @@
-import { apiUrl } from '../../api/config';
+import { apiUrl, apiCasinoUrl } from '../../api/config';
 
 import { useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import UserReducer from './UserReducer';
 import UserContext from './UserContext';
 
-import { w3cwebsocket as W3CWebsocket } from 'websocket';
+// import { w3cwebsocket as W3CWebsocket } from 'websocket';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+
+import { login } from '../../middleware/auth';
 
 import {
   SET_API_TOKEN,
@@ -21,6 +23,8 @@ import {
   SET_KICK_LIST,
   REMOVE_KICK_ITEM,
   SET_REVIEW_STATE,
+  SET_LADING_URL,
+  SET_POINT_LOADING,
 } from '../type';
 
 const UserState = props => {
@@ -41,14 +45,46 @@ const UserState = props => {
     btnList: [],
     kickList: [],
     reviewState: false,
+    loadingUrl: '',
+    pointLading: false,
   };
 
   // Get Http Header
-  const getHeaders = token => {
+  const getHeaders = (token = null) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `Bearer ${token}`);
     return headers;
+  };
+
+  // User Landing
+  const userLanding = async data => {
+    const headers = getHeaders();
+    if (!headers) return;
+
+    const url = `${apiCasinoUrl}/LoginApi`;
+
+    let reqData = {
+      PlayerAccount: data.name,
+      PlayerPwd: data.password,
+    };
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(reqData),
+      });
+      const resData = await res.json();
+      console.log(resData);
+      if (resData.code === 1000) {
+        setLoadingUrl(resData.supplierURL);
+        login(history, data, resData.supplierURL);
+        // login(history, data, resData.supplierURL);
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
 
   // User Review
@@ -73,6 +109,7 @@ const UserState = props => {
 
   // Choose Egm List
   const chooseEgm = async (data, machineDetails, apiToken) => {
+    setPointLoading(true);
     const { pc, casino, at } = data;
     const { mapId, egmIp, egmId, cameraId, audioId, cameraIndex, picName } = machineDetails;
 
@@ -120,14 +157,60 @@ const UserState = props => {
         localStorage.setItem('webNumber', cameraIndex);
         localStorage.setItem('btnList', JSON.stringify(resData.btnList));
 
-        history.replace('/gameStart');
+        // history.replace('/gameStart');
+        const pointData = {
+          egmSession: resData.egmSession,
+          checkSum: resData.checkSum,
+          cfgId: mapId,
+          egmId: egmId,
+          egmIP: egmIp,
+          inOrOut: 1,
+          moneyPoint: resData.walletBalance,
+        };
+        pointCash(pointData);
       } else {
         alert(resData.msg, '102');
-        // console.log(resData.msg);
+        setPointLoading(false);
       }
     } catch (error) {
       console.log(error, 'res');
+      setPointLoading(false);
     }
+  };
+
+  // Point Cash
+  const pointCash = async data => {
+    const token = localStorage.getItem('token');
+    const headers = getHeaders(token);
+
+    const url = `${apiUrl}/PointCashApi`;
+    const reqData = {
+      egmSession: data.egmSession,
+      checkSum: data.checkSum,
+      cfgId: data.cfgId,
+      egmId: data.egmId,
+      egmIP: data.egmIP,
+      inOrOut: 1,
+      moneyPoint: data.moneyPoint,
+    };
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(reqData),
+      });
+
+      const resData = await res.json();
+      console.log(resData);
+      if (resData.code === 3) {
+        history.replace('/gameStart');
+      }
+    } catch (error) {
+      alert(error);
+    }
+
+    setPointLoading(false);
   };
 
   // Get Egm List
@@ -338,6 +421,14 @@ const UserState = props => {
     dispatch({ type: SET_REVIEW_STATE, payload: value });
   };
 
+  const setLoadingUrl = url => {
+    dispatch({ type: SET_LADING_URL, payload: url });
+  };
+
+  const setPointLoading = value => {
+    dispatch({ type: SET_POINT_LOADING, payload: value });
+  };
+
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
   return (
@@ -356,6 +447,8 @@ const UserState = props => {
         loginData: state.loginData,
         kickList: state.kickList,
         reviewState: state.reviewState,
+        loadingUrl: state.loadingUrl,
+        pointLading: state.pointLading,
 
         setApiToken,
         setEgmList,
@@ -370,6 +463,7 @@ const UserState = props => {
         removeKickItem,
         setReviewState,
         userReview,
+        userLanding,
       }}
     >
       {props.children}
