@@ -462,14 +462,14 @@ const GamePlay = () => {
           <Headers setReviewState={setReviewState} />
           <div className={`${classes.slotMachine}`}>
             <div className={`${classes.slotScreen}`}>
-              {/* <Screen
+              <Screen
                 setSocketClient={setSocketClient}
                 autoPlay={autoPlay}
                 setAutoPlay={setAutoPlay}
                 leave={leave}
                 closeWebRtcConnect={closeWebRtcConnect}
                 setCloseWebRtcConnect={setCloseWebRtcConnect}
-              /> */}
+              />
 
               {openSnack && <div onClick={handleAutoPlay} className={classes.snackBar}></div>}
             </div>
