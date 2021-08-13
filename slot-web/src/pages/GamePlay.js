@@ -296,9 +296,9 @@ const GamePlay = () => {
       if (String(el.egm) === selectEgm.egmSession && String(el.token) === apiToken) {
         setCloseWebRtcConnect(true);
         removeKickItem(el);
-        // alert('閒置時間超過三分鐘，請重新登入');
-        // localStorage.clear();
-        // history.replace('/');
+        alert('閒置時間超過三分鐘，請重新登入');
+        localStorage.clear();
+        history.replace('/');
       }
     });
   }, [kickList, selectEgm, apiToken, removeKickItem, history]);
