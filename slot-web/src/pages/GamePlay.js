@@ -251,17 +251,19 @@ const GamePlay = () => {
 
     // 實驗中的功能
     // https://developer.mozilla.org/zh-TW/docs/Web/API/Screen/orientation
-    window.screen.orientation.addEventListener('change', function (e) {
-      if (e.currentTarget.type === 'landscape-primary') {
-        // landscape mode => angle 0
-        console.log('landscape');
-        setDirectionMode('landscape');
-      } else if (e.currentTarget.type === 'portrait-primary') {
-        // portrait mode => angle 0
-        console.log('portrait');
-        setDirectionMode('portrait');
-      }
-    });
+    if (window.screen) {
+      window.screen.orientation.addEventListener('change', function (e) {
+        if (e.currentTarget.type === 'landscape-primary') {
+          // landscape mode => angle 0
+          console.log('landscape');
+          setDirectionMode('landscape');
+        } else if (e.currentTarget.type === 'portrait-primary') {
+          // portrait mode => angle 0
+          console.log('portrait');
+          setDirectionMode('portrait');
+        }
+      });
+    }
 
     window.addEventListener('beforeunload', function (e) {
       // Cancel the event
@@ -460,14 +462,14 @@ const GamePlay = () => {
           <Headers setReviewState={setReviewState} />
           <div className={`${classes.slotMachine}`}>
             <div className={`${classes.slotScreen}`}>
-              <Screen
+              {/* <Screen
                 setSocketClient={setSocketClient}
                 autoPlay={autoPlay}
                 setAutoPlay={setAutoPlay}
                 leave={leave}
                 closeWebRtcConnect={closeWebRtcConnect}
                 setCloseWebRtcConnect={setCloseWebRtcConnect}
-              />
+              /> */}
 
               {openSnack && <div onClick={handleAutoPlay} className={classes.snackBar}></div>}
             </div>
