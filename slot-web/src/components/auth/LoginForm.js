@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { login } from '../../middleware/auth';
 
 //test
-// import useScreenOrientation from 'react-hook-screen-orientation';
+// import ScreenOrientationReact from 'screen-orientation-react';
 
 // Style
 import Avatar from '@material-ui/core/Avatar';
@@ -14,8 +14,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
-import styles from './LoginForm.module.scss';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -41,12 +39,6 @@ const useStyles = makeStyles(theme => ({
 const LoginForm = props => {
   const classes = useStyles();
 
-  // test
-  // const screenOrientation = useScreenOrientation();
-  // useEffect(() => {
-  //   console.log(screenOrientation);
-  // }, [screenOrientation]);
-
   // Init State
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -65,11 +57,6 @@ const LoginForm = props => {
 
     login(props, data);
   };
-
-  // const refreshPage = () => {
-  //   socketClient.emit('refresh', selectEgm.webNumber);
-  //   window.location.reload();
-  // };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -114,10 +101,6 @@ const LoginForm = props => {
           <Grid container></Grid>
         </form>
       </div>
-
-      {/* <div className={styles.box1}>1234</div>
-      <div className={styles.box2}>1234</div> */}
-      {/* <p>Screen orientation is: {screenOrientation}</p> */}
     </Container>
   );
 };

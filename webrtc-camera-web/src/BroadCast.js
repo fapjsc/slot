@@ -69,7 +69,7 @@ const BroadCast = () => {
 
   // 獲取本地選擇的stream
   const getSelectStream = async deviceId => {
-    console.log(window.stream);
+    // console.log(window.stream);
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
