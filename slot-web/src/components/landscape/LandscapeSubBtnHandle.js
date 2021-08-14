@@ -6,11 +6,12 @@ import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import IconButton from '@material-ui/core/IconButton';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
 
-import classes from './SubButtonHandle.module.scss';
+import classes from './LandscapeSubBtnHandle.module.scss';
 
 const useStyles = makeStyles({
   list: {
-    // width: '678px',
+    width: 130,
+    height: '100%',
     backgroundImage: 'linear-gradient(#2a2619, #a7a2a2, #2a2619)',
   },
   fullList: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-const SubButtonHandle = ({ subBtn, spin }) => {
+export default function LandscapeSubBtnHandle({ subBtn, spin }) {
   const styles = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -188,13 +189,6 @@ const SubButtonHandle = ({ subBtn, spin }) => {
           </div>
         );
 
-      // case 'TAKE':
-      //   return (
-      //     <div className={`${classes.subBtnBox}`}>
-      //       <button className={`${classes.subBtn} ${classes.take}`} />
-      //     </div>
-      //   );
-
       default:
         return null;
     }
@@ -214,29 +208,30 @@ const SubButtonHandle = ({ subBtn, spin }) => {
         [styles.fullList]: anchor === 'top' || anchor === 'bottom',
       })}
       role="presentation"
+      //   onClick={toggleDrawer(anchor, false)}
+      //   onKeyDown={toggleDrawer(anchor, false)}
     >
-      {subBtn.length > 0 ? (
-        <div className={classes.btnContainer}>{subBtnListEl}</div>
-      ) : (
-        <p style={{ textAlign: 'center' }}>No Button</p>
-      )}
+      <div className={classes.btnHandle}>{subBtnListEl}</div>
     </div>
   );
 
   return (
-    <>
-      {['bottom'].map(anchor => (
+    <div>
+      {['left'].map(anchor => (
         <React.Fragment key={anchor}>
           <IconButton
             style={{ backgroundColor: '#ddd' }}
-            color="primary"
             aria-label="add to shopping cart"
             onClick={toggleDrawer(anchor, true)}
+            fontSize="small"
+            color="primary"
           >
             <TouchAppIcon fontSize="small" />
-          </IconButton>{' '}
-          <p style={{ color: 'white', marginTop: 5 }}>操作</p>
+          </IconButton>
+          <p style={{ color: '#fff', marginTop: 5, fontSize: '12px' }}>操作</p>
+
           <SwipeableDrawer
+            BackdropProps={{ invisible: true }}
             anchor={anchor}
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
@@ -246,8 +241,6 @@ const SubButtonHandle = ({ subBtn, spin }) => {
           </SwipeableDrawer>
         </React.Fragment>
       ))}
-    </>
+    </div>
   );
-};
-
-export default SubButtonHandle;
+}

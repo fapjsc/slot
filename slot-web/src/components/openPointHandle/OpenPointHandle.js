@@ -33,7 +33,16 @@ const useStyles = makeStyles({
   },
 });
 
-const OpenPointHandle = ({ cashIn, handleChange, pointCash, credit, creditLoading, openPoint, setAutoGame }) => {
+const OpenPointHandle = ({
+  landscape,
+  cashIn,
+  handleChange,
+  pointCash,
+  credit,
+  creditLoading,
+  openPoint,
+  setAutoGame,
+}) => {
   const styles = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -63,7 +72,13 @@ const OpenPointHandle = ({ cashIn, handleChange, pointCash, credit, creditLoadin
           <span className={classes.span}>開分</span>
         </div>
         <div className={classes.inputInnerBox}>
-          <input type="number" value={cashIn} onChange={handleChange} placeholder="點數" onWheel={event => event.currentTarget.blur()} />
+          <input
+            type="number"
+            value={cashIn}
+            onChange={handleChange}
+            placeholder="點數"
+            onWheel={event => event.currentTarget.blur()}
+          />
           <AddBoxIcon className={classes.slotIcon} onClick={() => pointCash(cashIn)} />
         </div>
       </div>
@@ -100,11 +115,31 @@ const OpenPointHandle = ({ cashIn, handleChange, pointCash, credit, creditLoadin
     <>
       {['bottom'].map(anchor => (
         <React.Fragment key={anchor}>
-          <IconButton style={{ backgroundColor: '#ddd' }} color="primary" aria-label="add to shopping cart" onClick={toggleDrawer(anchor, true)}>
-            {openPoint ? <MonetizationOnIcon fontSize="small" /> : <AccountBalanceIcon fontSize="small" onClick={() => setAutoGame(false)} />}
+          <IconButton
+            style={{ backgroundColor: '#ddd' }}
+            color="primary"
+            aria-label="add to shopping cart"
+            onClick={toggleDrawer(anchor, true)}
+          >
+            {openPoint ? (
+              <MonetizationOnIcon fontSize="small" />
+            ) : (
+              <AccountBalanceIcon fontSize="small" onClick={() => setAutoGame(false)} />
+            )}
           </IconButton>
-          {openPoint ? <p style={{ color: 'white' }}>開分</p> : <p style={{ color: 'white' }}>查詢餘額</p>}
-          <SwipeableDrawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)} onOpen={toggleDrawer(anchor, true)}>
+          {openPoint ? <p style={{ color: 'white' }}>開分</p> : null}
+
+          {landscape ? (
+            <p style={{ color: 'white', marginTop: 5, fontSize: '12px' }}>查詢餘額</p>
+          ) : (
+            <p style={{ color: 'white', marginTop: 5 }}>查詢餘額</p>
+          )}
+          <SwipeableDrawer
+            anchor={anchor}
+            open={state[anchor]}
+            onClose={toggleDrawer(anchor, false)}
+            onOpen={toggleDrawer(anchor, true)}
+          >
             {openPoint ? list(anchor) : balanceList(anchor)}
           </SwipeableDrawer>
         </React.Fragment>

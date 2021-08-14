@@ -16,8 +16,12 @@ import SubButtonHandle from '../components/subButtonHandle/SubButtonHandle';
 import SquareButton from '../components/UI/button/SquareButton';
 import OpenPointHandle from '../components/openPointHandle/OpenPointHandle';
 
+// Landscape Component
+import LandscapeSubBtnHandle from '../components/landscape/LandscapeSubBtnHandle';
+
 // Layout
 import Headers from '../layout/Headers';
+import Nav from '../layout/Nav';
 
 // Style
 import classes from './GamePlay.module.scss';
@@ -31,6 +35,7 @@ import Box from '@material-ui/core/Box';
 
 // Icon
 import BuildIcon from '@material-ui/icons/Build';
+import ScreenRotationIcon from '@material-ui/icons/ScreenRotation';
 
 // Material Style
 const useStyles = makeStyles(theme => ({
@@ -89,6 +94,22 @@ const GamePlay = () => {
   const [openSnack, setOpenSnack] = useState(true);
   const [directionMode, setDirectionMode] = useState('portrait');
 
+  //
+  const [isOrientationVertical, setIsOrientationVertical] = useState(
+    window.innerHeight > window.innerWidth
+  );
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [innerHeight, setinnerHeight] = useState(window.innerHeight);
+
+  const reportWindowSize = () => {
+    let heightOutput = window.innerHeight;
+    let widthOutput = window.innerWidth;
+    setIsOrientationVertical(heightOutput > widthOutput);
+    setInnerWidth(widthOutput);
+    setinnerHeight(heightOutput);
+    console.log('reportWindowSize: ', 'width:', widthOutput, 'xheight: ', heightOutput);
+  };
+
   const handleAutoPlay = () => {
     setAutoPlay(true);
     setOpenSnack(false);
@@ -112,7 +133,13 @@ const GamePlay = () => {
     socketClient.emit('unsubscribe', selectEgm.webNumber);
     setCloseWebRtcConnect(true);
     try {
-      const responseData = await ApiController().endGameApi(mapId, egmId, egmIp, apiToken, egmSession);
+      const responseData = await ApiController().endGameApi(
+        mapId,
+        egmId,
+        egmIp,
+        apiToken,
+        egmSession
+      );
 
       if (responseData.code > 100000000) {
         alert(responseData.msg);
@@ -138,7 +165,14 @@ const GamePlay = () => {
         return;
       }
       try {
-        let responseData = await ApiController().pressSlotApi(mapId, egmId, egmIp, number, apiToken, egmSession);
+        let responseData = await ApiController().pressSlotApi(
+          mapId,
+          egmId,
+          egmIp,
+          number,
+          apiToken,
+          egmSession
+        );
 
         // 閒置時間太長
         if (responseData.code === 100000061) {
@@ -161,46 +195,46 @@ const GamePlay = () => {
     [mapId, egmId, egmIp, apiToken, egmSession, credit, history]
   );
 
-  const pointCash = async cash => {
-    if (cashIn === '' || cashIn <= 0) {
-      // alert('請輸入投幣點數');
-      alert('餘額不足');
-      return;
-    }
-    setCreditLoading(true);
-    // console.log(cash, 'cash');
-    setCashIn('');
-    try {
-      let responseData = await ApiController().pointCashCasinoApi(egmSession, checkSum, cash, casinoToken);
-      console.log(responseData);
-      if (responseData.code > 100000000) {
-        setCreditLoading(false);
+  // const pointCash = async cash => {
+  //   if (cashIn === '' || cashIn <= 0) {
+  //     // alert('請輸入投幣點數');
+  //     alert('餘額不足');
+  //     return;
+  //   }
+  //   setCreditLoading(true);
+  //   // console.log(cash, 'cash');
+  //   setCashIn('');
+  //   try {
+  //     let responseData = await ApiController().pointCashCasinoApi(egmSession, checkSum, cash, casinoToken);
+  //     console.log(responseData);
+  //     if (responseData.code > 100000000) {
+  //       setCreditLoading(false);
 
-        alert('ERROR!');
-      }
+  //       alert('ERROR!');
+  //     }
 
-      // 投幣成功
-      if (responseData.code === 1) {
-      }
+  //     // 投幣成功
+  //     if (responseData.code === 1) {
+  //     }
 
-      // 閒置時間太長
-      if (responseData.code === 100000061) {
-        setCloseWebRtcConnect(true);
-        alert(responseData.msg);
-        localStorage.clear();
-        history.replace('/');
-      }
+  //     // 閒置時間太長
+  //     if (responseData.code === 100000061) {
+  //       setCloseWebRtcConnect(true);
+  //       alert(responseData.msg);
+  //       localStorage.clear();
+  //       history.replace('/');
+  //     }
 
-      if (responseData.code < 100000000) {
-      }
-    } catch (error) {
-      alert('ERROR message: ', error);
-    }
+  //     if (responseData.code < 100000000) {
+  //     }
+  //   } catch (error) {
+  //     alert('ERROR message: ', error);
+  //   }
 
-    setTimeout(() => {
-      setCreditLoading(false);
-    }, 4000);
-  };
+  //   setTimeout(() => {
+  //     setCreditLoading(false);
+  //   }, 4000);
+  // };
 
   // UseEffect
   useEffect(() => {
@@ -265,6 +299,8 @@ const GamePlay = () => {
     //   });
     // }
 
+    window.addEventListener('resize', () => reportWindowSize());
+
     window.addEventListener('beforeunload', function (e) {
       // Cancel the event
       e.preventDefault();
@@ -273,6 +309,7 @@ const GamePlay = () => {
     });
 
     return () => {
+      window.removeEventListener('resize', reportWindowSize);
       // window.removeEventListen('change');
       // window.removeEventListen('beforeunload');
       // window.removeEventListen('orientationchange');
@@ -335,14 +372,6 @@ const GamePlay = () => {
     setSubBtn(subBtnTemp.reverse());
   }, [btnList]);
 
-  // useEffect(() => {
-  //   if (btnList.length === 0) {
-  //     const btnList = JSON.parse(localStorage.getItem('btnList'));
-  //     setBtnList(btnList);
-  //   }
-  //   // eslint-disable-next-line
-  // }, []);
-
   //==== Render Elements
   const mainBtnListEl = mainBtn.map(btn => {
     return (
@@ -350,11 +379,23 @@ const GamePlay = () => {
         item
         xs={3}
         key={btn.buttonNo}
-        className={btn.buttonTxt === 'SPIN' ? `${classes.rotatorBtnBox} ${classes.autoBtnGrid}` : classes.rotatorBtnBox}
+        className={
+          btn.buttonTxt === 'SPIN'
+            ? `${classes.rotatorBtnBox} ${classes.autoBtnGrid}`
+            : classes.rotatorBtnBox
+        }
         onClick={() => spin(btn.buttonNo)}
       >
         <SquareButton text={btn.buttonTxt} />
       </Grid>
+    );
+  });
+
+  const mainBtnListLandscapeEl = mainBtn.map(btn => {
+    return (
+      <div onClick={() => spin(btn.buttonNo)}>
+        <SquareButton text={btn.buttonTxt} />
+      </div>
     );
   });
 
@@ -387,7 +428,7 @@ const GamePlay = () => {
             <OpenPointHandle
               cashIn={cashIn}
               handleChange={handleChange}
-              pointCash={pointCash}
+              // pointCash={pointCash}
               creditLoading={creditLoading}
               credit={credit}
               setAutoGame={setAutoGame}
@@ -395,56 +436,45 @@ const GamePlay = () => {
           </div>
 
           <div>
-            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary" onClick={refreshPage}>
+            <IconButton
+              aria-label="rotation"
+              style={{ backgroundColor: '#ddd' }}
+              color="primary"
+              onClick={refreshPage}
+            >
               <BuildIcon fontSize="small" />
             </IconButton>
-            <p style={{ color: 'white' }}>畫面優化</p>
+            <p style={{ color: 'white', marginTop: 5 }}>畫面優化</p>
+          </div>
+
+          <div>
+            <IconButton
+              aria-label="rotation"
+              style={{ backgroundColor: '#ddd' }}
+              color="primary"
+              onClick={() => {
+                if (directionMode === 'portrait') setDirectionMode('landscape');
+                if (directionMode === 'landscape') setDirectionMode('portrait');
+              }}
+            >
+              <ScreenRotationIcon fontSize="small" />
+            </IconButton>
+            <p style={{ color: 'white', marginTop: 5 }}>轉向</p>
           </div>
         </div>
       </div>
     );
   };
 
-  const landscapeBtnHandleEl = () => {
-    return (
-      <Grid container spacing={3} className={classes.landscapeBtnHandle}>
-        <Grid item xs={12}>
-          <Box>
-            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary" onClick={refreshPage}>
-              <BuildIcon fontSize="small" />
-            </IconButton>
-          </Box>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Box>
-            <SubButtonHandle landscape subBtn={subBtn} spin={spin} />
-          </Box>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Box>
-            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary" onClick={refreshPage}>
-              <BuildIcon fontSize="small" />
-            </IconButton>
-            <span className={classes.span}>畫面優化</span>
-          </Box>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Box>
-            <IconButton aria-label="rotation" style={{ backgroundColor: '#ddd' }} color="primary" onClick={refreshPage}>
-              <BuildIcon fontSize="small" />
-            </IconButton>
-            <span className={classes.span}>畫面優化</span>
-          </Box>
-        </Grid>
-      </Grid>
-    );
-  };
-
   return (
-    <section className={classes.root}>
+    <section
+      className={classes.root}
+      // style={{
+      //   // transform: 'rotate(90deg)',
+      //   transform: !isOrientationVertical ? 'rotate(-90deg)' : '',
+      //   transition: 'transform 150ms ease', // smooth transition
+      // }}
+    >
       {/* Back Drop Loading... */}
       <Backdrop className={styles.backdrop} open={open}>
         <div>
@@ -454,7 +484,13 @@ const GamePlay = () => {
           <p>結算中，請稍候...</p>
         </div>
       </Backdrop>
-      <Review machine={selectEgm.mapId} leave={leave} userReview={userReview} token={apiToken} selectEgm={selectEgm} />
+      <Review
+        machine={selectEgm.mapId}
+        leave={leave}
+        userReview={userReview}
+        token={apiToken}
+        selectEgm={selectEgm}
+      />
 
       {/* 直向 */}
       {directionMode === 'portrait' && (
@@ -477,7 +513,12 @@ const GamePlay = () => {
             {/* Main Button */}
             <div className={classes.mainBtnBox}>
               <Grid className={classes.girdContainer} spacing={0} container>
-                <Grid item xs={3} className={`${classes.rotatorBtnBox} ${classes.grid0}`} onClick={() => setAutoGame(!autoGame)}>
+                <Grid
+                  item
+                  xs={3}
+                  className={`${classes.rotatorBtnBox} ${classes.grid0}`}
+                  onClick={() => setAutoGame(!autoGame)}
+                >
                   <SquareButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
                 </Grid>
                 {mainBtnListEl}
@@ -490,17 +531,87 @@ const GamePlay = () => {
 
       {/* 橫向 */}
       {directionMode === 'landscape' && (
-        <Grid container spacing={3}>
+        <Grid container spacing={0}>
           <Grid item xs>
-            <Box className={classes.btnHandleLandscape}>{landscapeBtnHandleEl()}</Box>
-          </Grid>
-          <Grid item xs={6}>
-            <Box className={classes.slotMachineLandscape}>
-              <Box className={classes.slotScreenLandscape}></Box>
+            <Box className={classes.optionBtnBoxLandscape}>
+              <div className={classes.iconBox}>
+                <LandscapeSubBtnHandle subBtn={subBtn} spin={spin} />
+              </div>
+              <div className={classes.iconBox}>
+                <IconButton
+                  aria-label="rotation"
+                  color="primary"
+                  onClick={refreshPage}
+                  classes={classes.icon}
+                  fontSize="small"
+                  style={{ backgroundColor: '#ddd' }}
+                >
+                  <BuildIcon fontSize="small" />
+                </IconButton>
+                <p className={classes.landscapeText}>畫面優化</p>
+              </div>
+
+              <div className={classes.iconBox}>
+                <OpenPointHandle
+                  cashIn={cashIn}
+                  handleChange={handleChange}
+                  // pointCash={pointCash}
+                  creditLoading={creditLoading}
+                  credit={credit}
+                  setAutoGame={setAutoGame}
+                  landscape
+                />
+              </div>
+
+              <div>
+                <IconButton
+                  aria-label="rotation"
+                  style={{ backgroundColor: '#ddd' }}
+                  color="primary"
+                  onClick={() => {
+                    if (directionMode === 'portrait') setDirectionMode('landscape');
+                    if (directionMode === 'landscape') setDirectionMode('portrait');
+                  }}
+                >
+                  <ScreenRotationIcon fontSize="small" />
+                </IconButton>
+                <p className={classes.landscapeText}>轉向</p>
+              </div>
             </Box>
           </Grid>
-          <Grid item xs>
-            <Box className={classes.btnHandleLandscape}></Box>
+
+          <Grid item xs={7}>
+            <Box className={classes.slotMachineLandscape}>
+              <Box className={classes.slotScreenLandscape}>
+                {openSnack && (
+                  <div onClick={handleAutoPlay} className={classes.snackBarLandscape}></div>
+                )}
+
+                <Screen
+                  setSocketClient={setSocketClient}
+                  autoPlay={autoPlay}
+                  setAutoPlay={setAutoPlay}
+                  leave={leave}
+                  closeWebRtcConnect={closeWebRtcConnect}
+                  setCloseWebRtcConnect={setCloseWebRtcConnect}
+                />
+              </Box>
+            </Box>
+          </Grid>
+
+          <Grid item xs={3}>
+            <Box className={classes.mainAndNavBoxLandscape}>
+              <div className={classes.navBox}>
+                <Nav setReviewState={setReviewState} />
+              </div>
+
+              <div className={classes.mainBtnHandleLandscape}>
+                {mainBtnListLandscapeEl}
+                <div onClick={() => setAutoGame(!autoGame)}>
+                  <SquareButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
+                </div>
+              </div>
+            </Box>
           </Grid>
         </Grid>
       )}

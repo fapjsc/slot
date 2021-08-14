@@ -205,6 +205,8 @@ const UserState = props => {
       console.log(resData);
       if (resData.code === 3) {
         history.replace('/gameStart');
+      } else {
+        alert(resData.msg);
       }
     } catch (error) {
       alert(error);
