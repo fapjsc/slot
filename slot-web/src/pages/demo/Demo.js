@@ -1,19 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import styles from './Demo.module.scss';
 import { Container, Box } from '@material-ui/core';
 
 import banner from '../../asset/demo/5-Dragons-Deluxe-new-1440x524.png';
 
-
 const Demo = () => {
-  const [isOrientationVertical, setIsOrientationVertical] = useState(window.innerHeight > window.innerWidth);
+  const [isOrientationVertical, setIsOrientationVertical] = useState(
+    window.innerHeight > window.innerWidth
+  );
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setinnerHeight] = useState(window.innerHeight);
   useEffect(() => {
     window.addEventListener('resize', () => reportWindowSize());
     return () => window.removeEventListener('resize', reportWindowSize);
   }, []);
-  
+
   const reportWindowSize = () => {
     let heightOutput = window.innerHeight;
     let widthOutput = window.innerWidth;
@@ -21,15 +22,15 @@ const Demo = () => {
     setInnerWidth(widthOutput);
     setinnerHeight(heightOutput);
     console.log('reportWindowSize: ', 'width:', widthOutput, 'xheight: ', heightOutput);
-  }
-  
+  };
+
   return (
     <>
       <main className={styles.root}>
-        <div 
+        <div
           style={{
-            // transform: 'rotate(90deg)', 
-            transform: isOrientationVertical ? 'rotate(90deg)' : '', 
+            // transform: 'rotate(90deg)',
+            transform: isOrientationVertical ? 'rotate(90deg)' : '',
             transition: 'transform 150ms ease', // smooth transition
           }}
         >

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 
 // Pages
 import { Auth, Home, GamePlay, LoadingScreen } from './pages/';

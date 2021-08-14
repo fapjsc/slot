@@ -73,7 +73,7 @@ const GamePlay = () => {
     webSocketHandler,
   } = userContext;
 
-  const { mapId, egmId, egmIp, egmSession, checkSum, casinoToken } = selectEgm;
+  const { mapId, egmId, egmIp, egmSession } = selectEgm;
 
   const styles = useStyles();
 
@@ -88,26 +88,30 @@ const GamePlay = () => {
   const [autoPlay, setAutoPlay] = useState(false);
   const [autoGame, setAutoGame] = useState(false);
   const [credit, setCredit] = useState(0);
-  const [creditLoading, setCreditLoading] = useState(false);
+  const [creditLoading] = useState(false);
   const [mainBtn, setMainBtn] = useState([]);
   const [subBtn, setSubBtn] = useState([]);
   const [openSnack, setOpenSnack] = useState(true);
   const [directionMode, setDirectionMode] = useState('portrait');
 
-  //
   const [isOrientationVertical, setIsOrientationVertical] = useState(
     window.innerHeight > window.innerWidth
   );
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
-  const [innerHeight, setinnerHeight] = useState(window.innerHeight);
+  // const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  // const [innerHeight, setinnerHeight] = useState(window.innerHeight);
 
   const reportWindowSize = () => {
-    let heightOutput = window.innerHeight;
-    let widthOutput = window.innerWidth;
-    setIsOrientationVertical(heightOutput > widthOutput);
-    setInnerWidth(widthOutput);
-    setinnerHeight(heightOutput);
-    console.log('reportWindowSize: ', 'width:', widthOutput, 'xheight: ', heightOutput);
+    // console.log(isOrientationVertical);
+    // console.log(window.innerHeight);
+    // console.log(window.innerWidth);
+    if (window.innerHeight > window.innerWidth) setIsOrientationVertical(true);
+    if (window.innerHeight < window.innerWidth) setIsOrientationVertical(false);
+    // let heightOutput = window.innerHeight;
+    // let widthOutput = window.innerWidth;
+    // setIsOrientationVertical(heightOutput > widthOutput);
+    // setInnerWidth(widthOutput);
+    // setinnerHeight(heightOutput);
+    // console.log('reportWindowSize: ', 'width:', widthOutput, 'xheight: ', heightOutput);
   };
 
   const handleAutoPlay = () => {
@@ -444,7 +448,7 @@ const GamePlay = () => {
             >
               <BuildIcon fontSize="small" />
             </IconButton>
-            <p style={{ color: 'white', marginTop: 5 }}>畫面優化</p>
+            <p className={classes.portraitText}>畫面優化</p>
           </div>
 
           <div>
@@ -459,7 +463,7 @@ const GamePlay = () => {
             >
               <ScreenRotationIcon fontSize="small" />
             </IconButton>
-            <p style={{ color: 'white', marginTop: 5 }}>轉向</p>
+            <p className={classes.portraitText}>轉向</p>
           </div>
         </div>
       </div>
@@ -467,14 +471,7 @@ const GamePlay = () => {
   };
 
   return (
-    <section
-      className={classes.root}
-      // style={{
-      //   // transform: 'rotate(90deg)',
-      //   transform: !isOrientationVertical ? 'rotate(-90deg)' : '',
-      //   transition: 'transform 150ms ease', // smooth transition
-      // }}
-    >
+    <section className={classes.root}>
       {/* Back Drop Loading... */}
       <Backdrop className={styles.backdrop} open={open}>
         <div>
@@ -531,89 +528,109 @@ const GamePlay = () => {
 
       {/* 橫向 */}
       {directionMode === 'landscape' && (
-        <Grid container spacing={0}>
-          <Grid item xs>
-            <Box className={classes.optionBtnBoxLandscape}>
-              <div className={classes.iconBox}>
-                <LandscapeSubBtnHandle subBtn={subBtn} spin={spin} />
-              </div>
-              <div className={classes.iconBox}>
-                <IconButton
-                  aria-label="rotation"
-                  color="primary"
-                  onClick={refreshPage}
-                  classes={classes.icon}
-                  fontSize="small"
-                  style={{ backgroundColor: '#ddd' }}
-                >
-                  <BuildIcon fontSize="small" />
-                </IconButton>
-                <p className={classes.landscapeText}>畫面優化</p>
-              </div>
-
-              <div className={classes.iconBox}>
-                <OpenPointHandle
-                  cashIn={cashIn}
-                  handleChange={handleChange}
-                  // pointCash={pointCash}
-                  creditLoading={creditLoading}
-                  credit={credit}
-                  setAutoGame={setAutoGame}
-                  landscape
-                />
-              </div>
-
-              <div>
-                <IconButton
-                  aria-label="rotation"
-                  style={{ backgroundColor: '#ddd' }}
-                  color="primary"
-                  onClick={() => {
-                    if (directionMode === 'portrait') setDirectionMode('landscape');
-                    if (directionMode === 'landscape') setDirectionMode('portrait');
-                  }}
-                >
-                  <ScreenRotationIcon fontSize="small" />
-                </IconButton>
-                <p className={classes.landscapeText}>轉向</p>
-              </div>
-            </Box>
-          </Grid>
-
-          <Grid item xs={7}>
-            <Box className={classes.slotMachineLandscape}>
-              <Box className={classes.slotScreenLandscape}>
-                {openSnack && (
-                  <div onClick={handleAutoPlay} className={classes.snackBarLandscape}></div>
-                )}
-
-                <Screen
-                  setSocketClient={setSocketClient}
-                  autoPlay={autoPlay}
-                  setAutoPlay={setAutoPlay}
-                  leave={leave}
-                  closeWebRtcConnect={closeWebRtcConnect}
-                  setCloseWebRtcConnect={setCloseWebRtcConnect}
-                />
-              </Box>
-            </Box>
-          </Grid>
-
-          <Grid item xs={3}>
-            <Box className={classes.mainAndNavBoxLandscape}>
-              <div className={classes.navBox}>
-                <Nav setReviewState={setReviewState} />
-              </div>
-
-              <div className={classes.mainBtnHandleLandscape}>
-                {mainBtnListLandscapeEl}
-                <div onClick={() => setAutoGame(!autoGame)}>
-                  <SquareButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
+        <div className={isOrientationVertical && classes.rotatorEl}>
+          <Grid container spacing={0}>
+            <Grid item xs>
+              <Box
+                className={
+                  !isOrientationVertical
+                    ? classes.optionBtnBoxLandscape
+                    : `${classes.rotatorHight} ${classes.optionBtnBoxLandscape}`
+                }
+              >
+                <div className={classes.iconBox}>
+                  <LandscapeSubBtnHandle subBtn={subBtn} spin={spin} />
                 </div>
-              </div>
-            </Box>
+                <div className={classes.iconBox}>
+                  <IconButton
+                    aria-label="rotation"
+                    color="primary"
+                    onClick={refreshPage}
+                    classes={classes.icon}
+                    fontSize="small"
+                    style={{ backgroundColor: '#ddd' }}
+                  >
+                    <BuildIcon fontSize="small" />
+                  </IconButton>
+                  <p className={classes.landscapeText}>畫面優化</p>
+                </div>
+
+                <div className={classes.iconBox}>
+                  <OpenPointHandle
+                    cashIn={cashIn}
+                    handleChange={handleChange}
+                    // pointCash={pointCash}
+                    creditLoading={creditLoading}
+                    credit={credit}
+                    setAutoGame={setAutoGame}
+                    landscape
+                  />
+                </div>
+
+                <div>
+                  <IconButton
+                    aria-label="rotation"
+                    style={{ backgroundColor: '#ddd' }}
+                    color="primary"
+                    onClick={() => {
+                      if (directionMode === 'portrait') setDirectionMode('landscape');
+                      if (directionMode === 'landscape') setDirectionMode('portrait');
+                    }}
+                  >
+                    <ScreenRotationIcon fontSize="small" />
+                  </IconButton>
+                  <p className={classes.landscapeText}>轉向</p>
+                </div>
+              </Box>
+            </Grid>
+
+            <Grid item xs={7}>
+              <Box
+                className={
+                  !isOrientationVertical
+                    ? classes.slotMachineLandscape
+                    : `${classes.rotatorHight} ${classes.slotMachineLandscape}`
+                }
+              >
+                <Box className={classes.slotScreenLandscape}>
+                  {/* <div onClick={handleAutoPlay} className={classes.snackBarLandscape}></div> */}
+                  {openSnack && (
+                    <div onClick={handleAutoPlay} className={classes.snackBarLandscape}></div>
+                  )}
+                  <Screen
+                    setSocketClient={setSocketClient}
+                    autoPlay={autoPlay}
+                    setAutoPlay={setAutoPlay}
+                    leave={leave}
+                    closeWebRtcConnect={closeWebRtcConnect}
+                    setCloseWebRtcConnect={setCloseWebRtcConnect}
+                  />
+                </Box>
+              </Box>
+            </Grid>
+
+            <Grid item xs={3}>
+              <Box
+                className={
+                  !isOrientationVertical
+                    ? classes.mainAndNavBoxLandscape
+                    : `${classes.rotatorHight} ${classes.mainAndNavBoxLandscape}`
+                }
+              >
+                <div className={classes.navBox}>
+                  <Nav setReviewState={setReviewState} />
+                </div>
+
+                <div className={classes.mainBtnHandleLandscape}>
+                  {mainBtnListLandscapeEl}
+                  <div onClick={() => setAutoGame(!autoGame)}>
+                    <SquareButton autoGame={autoGame} text={autoGame ? 'STOP' : 'AUTO'} />
+                  </div>
+                </div>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
       )}
     </section>
   );

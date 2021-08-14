@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 
 // Context
 import UserContext from '../../context/User/UserContext';
@@ -147,7 +147,9 @@ export default function MachineItem(props) {
   useEffect(() => {
     if (!egmCreditList.length) return;
     const arr = egmCreditList.filter(el => Number(el.credit) > 0);
-    const existingIndex = arr.findIndex(el => Number(el.map) === Number(props.machineDetails.mapId));
+    const existingIndex = arr.findIndex(
+      el => Number(el.map) === Number(props.machineDetails.mapId)
+    );
     existingIndex !== -1 ? setHasCredit(true) : setHasCredit(false);
     // eslint-disable-next-line
   }, [egmCreditList]);
@@ -185,10 +187,16 @@ export default function MachineItem(props) {
           title={props.title ? props.title : 'ARUZE雄狼'}
           subheader={props.subHeader ? props.subHeader : 'September 14, 2021'}
         />
-        <CardMedia className={classes.media} image={imgObj ? imgObj : machineIcon} title="Paella dish" />
+        <CardMedia
+          className={classes.media}
+          image={imgObj ? imgObj : machineIcon}
+          title="Paella dish"
+        />
         <CardContent style={{ height: 90 }}>
           <Typography variant="body2" color="textSecondary" component="p">
-            {props.description ? props.description : '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'}
+            {props.description
+              ? props.description
+              : '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'}
           </Typography>
         </CardContent>
         <CardActions disableSpacing style={{ justifyContent: 'center' }}>

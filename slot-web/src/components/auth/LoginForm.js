@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { login } from '../../middleware/auth';
+// import { login } from '../../middleware/auth';
 
 // Context
 import UserContext from '../../context/User/UserContext';
@@ -99,7 +99,13 @@ const LoginForm = props => {
             autoComplete="current-password"
           />
           {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="記住我" /> */}
-          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
             確定
           </Button>
           <Grid container></Grid>

@@ -1,42 +1,42 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import ButtonBase from "@material-ui/core/ButtonBase";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+// import Container from "@material-ui/core/Container";
+import Typography from '@material-ui/core/Typography';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    justifyContent: "center",
-    justifySelf: "center",
-    justifyItems: "center",
+    justifyContent: 'center',
+    justifySelf: 'center',
+    justifyItems: 'center',
   },
   paper: {
-    backgroundColor: "red",
+    backgroundColor: 'red',
     paddingTop: theme.spacing(2),
     paddingRight: theme.spacing(1),
     paddingLeft: theme.spacing(1),
     paddingBottom: theme.spacing(2),
-    margin: "4px",
+    margin: '4px',
   },
   image: {
     width: 138,
     height: 138,
   },
   img: {
-    margin: "auto",
-    display: "block",
-    maxWidth: "100%",
-    maxHeight: "100%",
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%',
   },
   gridControl: {
-    backgroundColor: "#43f",
+    backgroundColor: '#43f',
   },
   gridControl2: {
-    backgroundColor: "#f97",
-    alignItems: "center",
+    backgroundColor: '#f97',
+    alignItems: 'center',
   },
 }));
 
@@ -68,7 +68,7 @@ export default function HomeLevel() {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="body2" style={{ cursor: "pointer" }}>
+                <Typography variant="body2" style={{ cursor: 'pointer' }}>
                   按鈕
                 </Typography>
               </Grid>
@@ -99,7 +99,7 @@ export default function HomeLevel() {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="body2" style={{ cursor: "pointer" }}>
+                <Typography variant="body2" style={{ cursor: 'pointer' }}>
                   按鈕
                 </Typography>
               </Grid>

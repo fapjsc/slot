@@ -5,6 +5,7 @@
   background-size: cover;
   background-position: top;
   text-align: center;
+  position: relative;
 }
 
 .slotMachine {
@@ -219,6 +220,8 @@
     background-image: url(../asset/snack.jpg);
     background-position: center;
     background-size: cover;
+    position: absolute;
+    z-index: 2;
   }
 }
 
@@ -264,4 +267,23 @@
   color: #fff;
   margin-top: 5px;
   font-size: 12px;
+}
+
+.portraitText {
+  color: #fff;
+  margin-top: 5px;
+}
+
+.rotatorEl {
+  transition: transform 150ms ease;
+  height: 100vw;
+  width: 100vh;
+  transform: rotate(90deg);
+  transform-origin: bottom left;
+  position: absolute;
+  top: -100vw;
+}
+
+.rotatorHight {
+  height: 100vw;
 }

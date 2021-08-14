@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 // Components
 import MachineList from '../components/gameMachine/machineList';
-import Dialog from '../components/UI/Dialog';
+// import Dialog from '../components/UI/Dialog';
 import ThePadding from '../components/UI/padding/ThePadding';
 
 // Context
@@ -55,7 +55,17 @@ const Home = () => {
 
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, setApiToken, egmList, getEgmList, webSocketHandler, onActionEgmList, egmConnectList, wsClient, setLoginData } = userContext;
+  const {
+    apiToken,
+    setApiToken,
+    egmList,
+    getEgmList,
+    webSocketHandler,
+    onActionEgmList,
+    egmConnectList,
+    wsClient,
+    setLoginData,
+  } = userContext;
 
   // Init State
   const [showList, setShowList] = useState(false);
