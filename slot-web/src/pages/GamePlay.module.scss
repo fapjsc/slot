@@ -1,6 +1,7 @@
 .root {
   min-height: 100vh;
-  background-image: linear-gradient(to right bottom, rgba(2, 1, 48, 0.7), rgba(0, 0, 0, 0.7)), url(../asset/casino-bg.jpg);
+  background-image: linear-gradient(to right bottom, rgba(2, 1, 48, 0.7), rgba(0, 0, 0, 0.7)),
+    url(../asset/casino-bg.jpg);
   background-size: cover;
   background-position: top;
   text-align: center;
@@ -11,7 +12,7 @@
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
-  min-height: 70vh;
+  min-height: 70vw;
   max-width: 678px;
   margin: 0px auto;
   background-size: 100% 100%;
@@ -211,18 +212,56 @@
   position: absolute;
   top: 10%;
   left: 4%;
-}
 
-.btnHandleLandscape {
-  height: 100vh;
-}
-
-.landscapeBtnHandle {
-  height: 100%;
-  padding-top: 1rem;
-
-  .span {
-    color: #fff;
-    margin-left: 10px;
+  .snackBarLandscape {
+    height: 100%;
+    width: 100%;
+    background-image: url(../asset/snack.jpg);
+    background-position: center;
+    background-size: cover;
   }
+}
+
+.optionBtnBoxLandscape {
+  height: 100vh;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 10px;
+
+  .iconBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+  }
+}
+
+.mainAndNavBoxLandscape {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.navBox {
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.mainBtnHandleLandscape {
+  align-self: center;
+  width: 70%;
+  margin-bottom: 15%;
+}
+
+.landscapeText {
+  color: #fff;
+  margin-top: 5px;
+  font-size: 12px;
 }
