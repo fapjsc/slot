@@ -64,7 +64,7 @@ const MachineList = props => {
           <div style={{ textAlign: 'center' }}>
             <CircularProgress color="inherit" />
           </div>
-          <p>開分中，請稍候...</p>
+          {/* <p>開分中，請稍候...</p> */}
         </div>
       </Backdrop>
 
