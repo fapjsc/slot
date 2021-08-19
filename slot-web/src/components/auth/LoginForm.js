@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react';
-// import { login } from '../../middleware/auth';
 
 // Context
 import UserContext from '../../context/User/UserContext';

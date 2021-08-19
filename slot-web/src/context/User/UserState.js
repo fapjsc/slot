@@ -27,6 +27,7 @@ import {
   SET_POINT_LOADING,
   SET_USER_INFO,
   MACHINE_DISPLAY_HORIZONTAL_MODE,
+  SET_GAME_LOADING,
 } from '../type';
 
 const UserState = props => {
@@ -52,6 +53,7 @@ const UserState = props => {
     userInfo: null,
     machineDisplayHorizontal: false,
     showPadding: true,
+    isGameLoading: false,
   };
 
   // Get Http Header
@@ -138,6 +140,7 @@ const UserState = props => {
   // Choose Egm List
   const chooseEgm = async (data, machineDetails, apiToken) => {
     setPointLoading(true);
+    setGameLoading(true);
     const { pc, casino, at } = data;
     const { mapId, egmIp, egmId, cameraId, audioId, cameraIndex, picName } = machineDetails;
 
@@ -201,10 +204,12 @@ const UserState = props => {
       } else {
         alert(resData.msg, '102');
         setPointLoading(false);
+        setGameLoading(false);
       }
     } catch (error) {
       console.log(error, 'res');
       setPointLoading(false);
+      setGameLoading(false);
     }
   };
 
@@ -243,6 +248,7 @@ const UserState = props => {
     }
 
     setPointLoading(false);
+    setGameLoading(false);
   };
 
   // Get Egm List
@@ -469,6 +475,10 @@ const UserState = props => {
     dispatch({ type: MACHINE_DISPLAY_HORIZONTAL_MODE, payload: value });
   };
 
+  const setGameLoading = value => {
+    dispatch({ type: SET_GAME_LOADING, payload: value });
+  };
+
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
   return (
@@ -491,6 +501,7 @@ const UserState = props => {
         pointLading: state.pointLading,
         userInfo: state.userInfo,
         machineDisplayHorizontal: state.machineDisplayHorizontal,
+        isGameLoading: state.isGameLoading,
 
         setApiToken,
         setEgmList,

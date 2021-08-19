@@ -14,9 +14,9 @@ const Headers = ({ setReviewState }) => {
         </div> */}
       </div>
 
-      <div className={classes.userBox}>
+      {/* <div className={classes.userBox}>
         <div className={classes.user}>UserName</div>
-      </div>
+      </div> */}
       <div className={classes.navBox}>
         <Nav setReviewState={setReviewState} />
       </div>

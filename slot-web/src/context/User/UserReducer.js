@@ -15,10 +15,18 @@ import {
   SET_POINT_LOADING,
   SET_USER_INFO,
   MACHINE_DISPLAY_HORIZONTAL_MODE,
+  SET_GAME_LOADING,
 } from '../type';
 
 const UserReducer = (state, action) => {
   switch (action.type) {
+    // SET GAME LOADING
+    case SET_GAME_LOADING:
+      return {
+        ...state,
+        isGameLoading: action.payload,
+      };
+
     // MACHINE DISPLAY MODE
     case MACHINE_DISPLAY_HORIZONTAL_MODE:
       return {

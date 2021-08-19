@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext, useState, Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 
 // Components
@@ -6,6 +6,7 @@ import MachineList from '../components/gameMachine/machineList';
 import Carousels from '../components/Carousels';
 import ThePadding from '../components/UI/padding/ThePadding';
 import Dialog from '../components/UI/Dialog';
+import GameLoadingCard from '../components/UI/GameLoadingCard';
 
 // Layout
 import HomeHeader from '../layout/HomeHeader';
@@ -49,6 +50,12 @@ const useStyles = makeStyles(theme => ({
     margin: 'auto',
     marginBottom: '100rem',
   },
+  gameLoadingBox: {
+    height: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 }));
 
 const Home = () => {
@@ -70,6 +77,7 @@ const Home = () => {
     setLoginData,
     getUserInfo,
     userInfo,
+    isGameLoading,
   } = userContext;
 
   // Init State
@@ -136,26 +144,34 @@ const Home = () => {
 
   return (
     <div className={classes.root}>
-      {/* 遊戲載入中 */}
-      <ThePadding show={showPadding} />
-
-      {/* 客服系統通知 */}
-      {!localStorage.getItem('isShow') && <Dialog />}
-
-      <Box className={classes.rootList}>
-        <Box style={{ padding: 20, display: 'flex', justifyContent: 'flex-end' }}>
-          <HomeHeader
-            handleLogout={handleLogout}
-            user={userInfo && userInfo.playerCode}
-            money={userInfo && userInfo.walletMoney}
-          />
+      {isGameLoading ? (
+        <Box className={classes.gameLoadingBox}>
+          <GameLoadingCard />
         </Box>
+      ) : (
+        <Fragment>
+          {/* 等待遊戲開始玩狀態 */}
+          <ThePadding show={showPadding} />
 
-        {/* 輪播圖 */}
-        <Carousels />
+          {/* 客服系統通知 */}
+          {!localStorage.getItem('isShow') && <Dialog />}
 
-        <div>{egmList && showList && <MachineList egmList={egmList} token={apiToken} />}</div>
-      </Box>
+          <Box className={classes.rootList}>
+            <Box style={{ padding: 20, display: 'flex', justifyContent: 'flex-end' }}>
+              <HomeHeader
+                handleLogout={handleLogout}
+                user={userInfo && userInfo.playerCode}
+                money={userInfo && userInfo.walletMoney}
+              />
+            </Box>
+
+            {/* 輪播圖 */}
+            <Carousels />
+
+            <div>{egmList && showList && <MachineList egmList={egmList} token={apiToken} />}</div>
+          </Box>
+        </Fragment>
+      )}
     </div>
   );
 };
