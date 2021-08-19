@@ -144,7 +144,7 @@ const Home = () => {
 
   return (
     <div className={classes.root}>
-      {isGameLoading ? (
+      {!isGameLoading ? (
         <Box className={classes.gameLoadingBox}>
           <GameLoadingCard />
         </Box>
