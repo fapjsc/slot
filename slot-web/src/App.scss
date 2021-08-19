@@ -1,0 +1,139 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  /* background-color: black;
+  background-image: url('./asset/5dde4f6dc409c1574850413996.jpg');
+  background-size: cover;
+  background-position: center; */
+}
+
+.MuiBackdrop-root {
+  /* background-color: red !important; */
+}
+
+.MuiDialog-paper {
+  /* background-image: linear-gradient(to top, #09203f 0%, #537895 100%); */
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0.15) 100%),
+    radial-gradient(at top center, rgba(255, 255, 255, 0.4) 0%, rgba(0, 0, 0, 0.4) 120%) #989898;
+  background-blend-mode: multiply, multiply;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.odometer-value {
+  color: #fff;
+}
+
+.odometer-inside {
+  padding: 0 0.4rem;
+  font-family: 'Roboto', sans-serif;
+  color: #fff;
+}
+
+/* .odometer-inside {
+  display: flex;
+  align-items: center;
+} */
+
+.slider-contain
+  > .awssld
+  > .awssld__wrapper
+  > .awssld__container
+  > .awssld__box
+  > .awssld__content
+  > img {
+  object-fit: contain;
+}
+
+.MuiAppBar-root {
+  background-color: rgba(66, 7, 105, 0.911) !important;
+}
+
+.paginationBox {
+  // background-color: red;
+  margin-top: 2.2rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 700px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pagination {
+  list-style: none;
+  display: block;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  width: 100%;
+
+  li {
+    display: inline;
+    text-align: center;
+    border-radius: 100%;
+  }
+  a {
+    float: left;
+    display: block;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 5px 12px;
+    color: #fff;
+    margin-left: -1px;
+    border: 1px solid transparent;
+    line-height: 1.5;
+    cursor: pointer;
+
+    &.active {
+      cursor: default;
+    }
+    &:active {
+      outline: none;
+    }
+  }
+}
+
+.modal {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 100%;
+  height: 30px;
+  width: 30px;
+
+  // &:hover {
+  //   background-color: #7116ad;
+  // }
+  &.active,
+  &:active {
+    background-color: #7116ad;
+  }
+}
+
+.paginationActive {
+  background-color: #7116ad;
+}
+
+.previous {
+}
+
+.next {
+}

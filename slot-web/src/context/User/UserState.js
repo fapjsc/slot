@@ -25,6 +25,8 @@ import {
   SET_REVIEW_STATE,
   SET_LADING_URL,
   SET_POINT_LOADING,
+  SET_USER_INFO,
+  MACHINE_DISPLAY_HORIZONTAL_MODE,
 } from '../type';
 
 const UserState = props => {
@@ -47,6 +49,9 @@ const UserState = props => {
     reviewState: false,
     loadingUrl: '',
     pointLading: false,
+    userInfo: null,
+    machineDisplayHorizontal: false,
+    showPadding: true,
   };
 
   // Get Http Header
@@ -57,7 +62,7 @@ const UserState = props => {
     return headers;
   };
 
-  // User Landing
+  // User Landing (loginForm 登入時call)
   const userLanding = async data => {
     const headers = getHeaders();
     if (!headers) return;
@@ -81,9 +86,32 @@ const UserState = props => {
         setLoadingUrl(resData.supplierURL);
         login(history, data, resData.supplierURL);
         // login(history, data, resData.supplierURL);
+      } else {
+        alert('此帳號暫時無法登入，請稍後再試');
       }
     } catch (error) {
       alert(error);
+    }
+  };
+
+  // User Info
+  const getUserInfo = async (token, data) => {
+    const headers = getHeaders(token, data);
+    const url = `${apiUrl}PlayerDataApi?casino=${data.casino}&pc=${data.pc}`;
+
+    console.log(url);
+
+    try {
+      const res = await fetch(url, {
+        headers,
+      });
+
+      const resData = await res.json();
+      console.log(resData);
+
+      if (resData.code === 35) setUserInfo(resData.playerObj);
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -144,6 +172,7 @@ const UserState = props => {
           picName,
           audioId,
           cameraIndex,
+          btnStyle: resData.btnStyle,
         });
 
         localStorage.setItem('egmId', Number(egmId));
@@ -156,6 +185,7 @@ const UserState = props => {
         localStorage.setItem('checkSum', resData.checkSum);
         localStorage.setItem('webNumber', cameraIndex);
         localStorage.setItem('btnList', JSON.stringify(resData.btnList));
+        localStorage.setItem('btnStyle', resData.btnStyle);
 
         // history.replace('/gameStart');
         const pointData = {
@@ -431,6 +461,14 @@ const UserState = props => {
     dispatch({ type: SET_POINT_LOADING, payload: value });
   };
 
+  const setUserInfo = userInfo => {
+    dispatch({ type: SET_USER_INFO, payload: userInfo });
+  };
+
+  const setMachineDisplayHorizontal = value => {
+    dispatch({ type: MACHINE_DISPLAY_HORIZONTAL_MODE, payload: value });
+  };
+
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
   return (
@@ -451,6 +489,8 @@ const UserState = props => {
         reviewState: state.reviewState,
         loadingUrl: state.loadingUrl,
         pointLading: state.pointLading,
+        userInfo: state.userInfo,
+        machineDisplayHorizontal: state.machineDisplayHorizontal,
 
         setApiToken,
         setEgmList,
@@ -466,6 +506,8 @@ const UserState = props => {
         setReviewState,
         userReview,
         userLanding,
+        getUserInfo,
+        setMachineDisplayHorizontal,
       }}
     >
       {props.children}

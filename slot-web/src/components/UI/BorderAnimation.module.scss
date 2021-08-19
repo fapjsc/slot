@@ -5,6 +5,9 @@
   background-color: #f2f2f2;
   border-radius: 10px;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .glow::before,
@@ -13,13 +16,27 @@
   position: absolute;
   left: -2px;
   top: -2px;
-  background: linear-gradient(45deg, #e6fb04, #ff6600, #00ff66, #00ffff, #ff00ff, #ff0099, #6e0dd0, #ff3300, #099fff);
+  background: linear-gradient(
+    45deg,
+    #e6fb04,
+    #ff6600,
+    #00ff66,
+    #00ffff,
+    #ff00ff,
+    #ff0099,
+    #6e0dd0,
+    #ff3300,
+    #099fff
+  );
   background-size: 400%;
   width: calc(100% + 4px);
   height: calc(100% + 4px);
   z-index: -1;
   animation: animate 20s linear infinite;
   border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 @keyframes animate {
@@ -38,4 +55,7 @@
 
 .glow::after {
   filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }

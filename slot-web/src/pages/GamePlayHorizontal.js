@@ -1,4 +1,4 @@
-import classes from './GamePlayHorizontal.module.scss';
+// import classes from './GamePlayHorizontal.module.scss';
 
 const GamePlayHorizontal = () => {
   return (

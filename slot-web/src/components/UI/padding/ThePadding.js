@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function TransitionsModal({ show, showList }) {
+export default function TransitionsModal({ show }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(show);
 
@@ -38,13 +38,13 @@ export default function TransitionsModal({ show, showList }) {
   //     setOpen(true);
   //   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
 
   useEffect(() => {
-    if (showList) handleClose();
-  }, [showList]);
+    setOpen(show);
+  }, [show]);
 
   return (
     <div>

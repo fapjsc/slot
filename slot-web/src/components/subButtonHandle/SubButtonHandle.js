@@ -5,199 +5,32 @@ import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 
 import IconButton from '@material-ui/core/IconButton';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 import classes from './SubButtonHandle.module.scss';
 
+// Button Components
+import ButtonGroup from '../buttonType/ButtonGroup';
+
 const useStyles = makeStyles({
   list: {
-    // width: '678px',
+    height: '10rem',
     backgroundImage: 'linear-gradient(#2a2619, #a7a2a2, #2a2619)',
   },
   fullList: {
-    width: 'auto',
+    // width: 'auto',
   },
 });
 
-const SubButtonHandle = ({ subBtn, spin }) => {
+const SubButtonHandle = ({ subBtn, spin, btnStyle }) => {
+  console.log(subBtn);
+
   const styles = useStyles();
   const [state, setState] = React.useState({
     top: false,
     left: false,
-    bottom: false,
+    bottom: true,
     right: false,
-  });
-
-  const subBtnListEl = subBtn.map(btn => {
-    switch (btn.buttonTxt) {
-      // 貴族
-      case '1-1':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.credit1}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case '1-2':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.credit3}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case '1-3':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.credit7}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case '1-4':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.credit15}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case '1-5':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.credit25}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case 'x1':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.bet1}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case 'x2':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.bet2}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case 'x5':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.bet5}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case 'x10':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.bet10}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case 'x15':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.bet15}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      // 雄狼
-      // case '25':
-      //   return (
-      //     <div className={`${classes.subBtnBox}`}>
-      //       <button className={`${classes.subBtn} ${classes.aruze25}`} onClick={() => spin(btn.buttonNo)} />
-      //     </div>
-      //   );
-
-      case '50':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.aruze50}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case '100':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.aruze100}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case '150':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.aruze150}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case '250':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.aruze250}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      case '500':
-        return (
-          <div className={`${classes.subBtnBox}`}>
-            <button
-              className={`${classes.subBtn} ${classes.aruze500}`}
-              onClick={() => spin(btn.buttonNo)}
-            />
-          </div>
-        );
-
-      // case 'TAKE':
-      //   return (
-      //     <div className={`${classes.subBtnBox}`}>
-      //       <button className={`${classes.subBtn} ${classes.take}`} />
-      //     </div>
-      //   );
-
-      default:
-        return null;
-    }
   });
 
   const toggleDrawer = (anchor, open) => event => {
@@ -215,11 +48,16 @@ const SubButtonHandle = ({ subBtn, spin }) => {
       })}
       role="presentation"
     >
-      {subBtn.length > 0 ? (
-        <div className={classes.btnContainer}>{subBtnListEl}</div>
-      ) : (
-        <p style={{ textAlign: 'center' }}>No Button</p>
-      )}
+      {/* <div className={classes.arrDown}>
+        <ArrowDownwardIcon onClick={() => setState({ ...state, bottom: false })} />
+      </div> */}
+
+      <div className={classes.btnContainer}>
+        <div className={classes.arrDown}>
+          <ArrowDownwardIcon onClick={() => setState({ ...state, bottom: false })} />
+        </div>
+        <ButtonGroup spin={spin} subBtn={subBtn} btnStyle={btnStyle} />
+      </div>
     </div>
   );
 
@@ -241,6 +79,7 @@ const SubButtonHandle = ({ subBtn, spin }) => {
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
             onOpen={toggleDrawer(anchor, true)}
+            BackdropProps={{ invisible: true }}
           >
             {list(anchor)}
           </SwipeableDrawer>
@@ -250,4 +89,4 @@ const SubButtonHandle = ({ subBtn, spin }) => {
   );
 };
 
-export default SubButtonHandle;
+export default React.memo(SubButtonHandle);

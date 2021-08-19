@@ -1,10 +1,14 @@
-import { useEffect, useContext, Fragment, useState } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 // Components
 import MachineList from '../components/gameMachine/machineList';
-// import Dialog from '../components/UI/Dialog';
+import Carousels from '../components/Carousels';
 import ThePadding from '../components/UI/padding/ThePadding';
+import Dialog from '../components/UI/Dialog';
+
+// Layout
+import HomeHeader from '../layout/HomeHeader';
 
 // Context
 import UserContext from '../context/User/UserContext';
@@ -14,7 +18,6 @@ import { wsUri } from '../api/config';
 
 // Style
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
 
 // Image
@@ -35,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     height: '100%',
-    paddingBottom: '60vh',
+    paddingBottom: '3rem',
   },
   paper: {
     maxWidth: 450,
@@ -65,16 +68,30 @@ const Home = () => {
     egmConnectList,
     wsClient,
     setLoginData,
+    getUserInfo,
+    userInfo,
   } = userContext;
 
   // Init State
   const [showList, setShowList] = useState(false);
+  const [showPadding, setShowPadding] = useState(true);
 
   useEffect(() => {
     const egmStateWebSocketUri = `${wsUri}stateQuote`;
     webSocketHandler(egmStateWebSocketUri);
     let token = localStorage.getItem('token');
+    let player = localStorage.getItem('player');
+    let casino = localStorage.getItem('casino');
+
+    const data = {
+      casino,
+      pc: player,
+    };
     setApiToken(token);
+
+    getUserInfo(token, data);
+
+    // localStorage.setItem('isShow', true);
 
     return () => {
       if (egmList === undefined) {
@@ -89,7 +106,10 @@ const Home = () => {
 
   useEffect(() => {
     egmConnectList.forEach(el => {
-      if (el.state === 1) setShowList(true);
+      if (el.state === 1) {
+        setShowList(true);
+        setShowPadding(false);
+      }
     });
     // console.log(egmConnectList);
   }, [egmConnectList]);
@@ -116,21 +136,25 @@ const Home = () => {
 
   return (
     <div className={classes.root}>
+      {/* 遊戲載入中 */}
+      <ThePadding show={showPadding} />
+
+      {/* 客服系統通知 */}
+      {!localStorage.getItem('isShow') && <Dialog />}
+
       <Box className={classes.rootList}>
         <Box style={{ padding: 20, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button onClick={handleLogout} variant="contained" color="secondary">
-            登出
-          </Button>
+          <HomeHeader
+            handleLogout={handleLogout}
+            user={userInfo && userInfo.playerCode}
+            money={userInfo && userInfo.walletMoney}
+          />
         </Box>
 
-        <ThePadding show={true} showList={showList} />
-        {/* <ThePadding show={true} /> */}
+        {/* 輪播圖 */}
+        <Carousels />
 
-        {egmList && showList && (
-          <Fragment>
-            <MachineList egmList={egmList} token={apiToken} />
-          </Fragment>
-        )}
+        <div>{egmList && showList && <MachineList egmList={egmList} token={apiToken} />}</div>
       </Box>
     </div>
   );

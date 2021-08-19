@@ -1,8 +1,9 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
+import ReactPaginate from 'react-paginate';
 
 // Components
 import MachineItemNew from './machineItemNew';
-import Dialog from '../../components/UI/Dialog';
+import MachineItemHorizontal from './machineItemHorizontal';
 
 // Style
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,13 +20,18 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     padding: 50,
+    margin: '0 auto',
+    maxWidth: '678px',
   },
-  box: {
-    padding: theme.spacing(2),
-    color: theme.palette.text.secondary,
-    maxWidth: '20rem',
+  rootHorizontal: {
+    padding: '60px 12px 0px 12px',
+    maxWidth: '678px',
     margin: '0 auto',
   },
+  containerHorizontal: {
+    justifyContent: 'center',
+  },
+
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
@@ -33,32 +39,73 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const MachineList = props => {
-  // console.log(props.egmList);
   const classes = useStyles();
 
-  // User Context
-  const { pointLading } = useContext(UserContext);
+  // Init State
+  const { egmList } = props;
+  const [pageCount, setPageCount] = useState(0); //總共多少頁
+  const [pageNumber, setPageNumber] = useState(0); //當前選擇的頁數
+  const dataPerPage = 3; // 一頁4筆資料
+  const pagesVisited = pageNumber * dataPerPage;
 
-  const renderMachineList = props.egmList.map((item, index) => {
-    return (
-      <Grid className={classes.grid} key={index} item md={3} sm={6} xs={12}>
-        <Box className={classes.box}>
-          <BorderAnimation>
-            <MachineItemNew index={index} title={item.gameName} description={item.gameDesc} picName={item.picName} machineDetails={item} token={props.token} />
+  // User Context
+  const { pointLading, machineDisplayHorizontal } = useContext(UserContext);
+
+  const renderMachineList = props.egmList
+    .slice(pagesVisited, pagesVisited + dataPerPage)
+    .map((item, index) => {
+      return (
+        <Grid key={index} item md={12} xs={12} style={{ margin: '0 auto', maxWidth: '20rem' }}>
+          <Box>
+            <BorderAnimation>
+              <MachineItemNew
+                index={index}
+                title={item.gameName}
+                description={item.gameDesc}
+                picName={item.picName}
+                machineDetails={item}
+                token={props.token}
+                pageNumber={pageNumber}
+              />
+            </BorderAnimation>
+          </Box>
+        </Grid>
+      );
+    });
+
+  const renderMachineListHorizontal = props.egmList
+    .slice(pagesVisited, pagesVisited + dataPerPage)
+    .map((item, index) => {
+      return (
+        <Grid key={index} item md={10} sm={12}>
+          <BorderAnimation key={index}>
+            <MachineItemHorizontal
+              index={index}
+              title={item.gameName}
+              description={item.gameDesc}
+              picName={item.picName}
+              machineDetails={item}
+              token={props.token}
+              pageNumber={pageNumber}
+            />
           </BorderAnimation>
-        </Box>
-      </Grid>
-    );
-  });
+        </Grid>
+      );
+    });
+
+  const changePage = ({ selected }) => {
+    setPageNumber(selected);
+  };
 
   useEffect(() => {
-    // eslint-disable-next-line
-  }, []);
+    if (egmList) {
+      let num = Math.ceil(egmList.length / 3);
+      setPageCount(num);
+    }
+  }, [egmList]);
 
   return (
-    <div className={classes.root}>
-      {localStorage.getItem('isShow') && <Dialog />}
-
+    <div className={machineDisplayHorizontal ? classes.rootHorizontal : classes.root}>
       <Backdrop className={classes.backdrop} open={pointLading}>
         <div>
           <div style={{ textAlign: 'center' }}>
@@ -68,9 +115,31 @@ const MachineList = props => {
         </div>
       </Backdrop>
 
-      <Grid container spacing={4} className={classes.container}>
-        {renderMachineList}
-      </Grid>
+      {machineDisplayHorizontal ? (
+        <Grid container spacing={3} className={classes.containerHorizontal}>
+          {renderMachineListHorizontal}
+        </Grid>
+      ) : (
+        <Grid container className={classes.container} spacing={3}>
+          {renderMachineList}
+        </Grid>
+      )}
+
+      <div className="paginationBox">
+        <ReactPaginate
+          previousLabel={'<<'}
+          nextLabel={'>>'}
+          breakLabel={'...'}
+          pageCount={pageCount} // 總共多少頁
+          containerClassName={'pagination'}
+          pageLinkClassName={'modal'}
+          onPageChange={changePage}
+          initialPage={pageNumber}
+          activeClassName={'paginationActive'}
+          previousLinkClassName={'previous'}
+          nextLinkClassName={'next'}
+        />
+      </div>
     </div>
   );
 };

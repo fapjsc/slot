@@ -17,7 +17,7 @@ import HomeLevel from './pages/demo/HomeLevel';
 import HomeVertical from './pages/demo/HomeVertical';
 
 // Style
-import './App.css';
+import './App.scss';
 
 const App = () => {
   return (

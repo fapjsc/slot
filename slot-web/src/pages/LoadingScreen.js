@@ -67,7 +67,7 @@ const LoadingScreen = () => {
       }
       if (responseData.code < 100000000) {
         localStorage.setItem('token', responseData.apiToken);
-        localStorage.setItem('casinoToken', responseData.casinoToken);
+        localStorage.setItem('casino', responseData.casinoCode);
         history.replace('/home');
       }
     } catch (error) {

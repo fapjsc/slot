@@ -13,10 +13,26 @@ import {
   SET_REVIEW_STATE,
   SET_LADING_URL,
   SET_POINT_LOADING,
+  SET_USER_INFO,
+  MACHINE_DISPLAY_HORIZONTAL_MODE,
 } from '../type';
 
 const UserReducer = (state, action) => {
   switch (action.type) {
+    // MACHINE DISPLAY MODE
+    case MACHINE_DISPLAY_HORIZONTAL_MODE:
+      return {
+        ...state,
+        machineDisplayHorizontal: action.payload,
+      };
+
+    // SET USER INFO
+    case SET_USER_INFO:
+      return {
+        ...state,
+        userInfo: action.payload,
+      };
+
     // Client Review State
     case SET_REVIEW_STATE:
       return {
@@ -25,7 +41,9 @@ const UserReducer = (state, action) => {
       };
     // Remove Kick Item
     case REMOVE_KICK_ITEM:
-      let updateRemoveKickItems = state.kickList.filter(el => el.egm !== action.payload.egm && el.token !== action.payload.token);
+      let updateRemoveKickItems = state.kickList.filter(
+        el => el.egm !== action.payload.egm && el.token !== action.payload.token
+      );
       return {
         ...state,
         kickList: updateRemoveKickItems,
@@ -85,7 +103,9 @@ const UserReducer = (state, action) => {
     // Egm Credit State
     case SET_EMG_CREDIT_STATE_LIST:
       const { egmCreditList } = state;
-      const existingEgmItemIndex = state.egmCreditList.findIndex(item => item.map === action.payload.map);
+      const existingEgmItemIndex = state.egmCreditList.findIndex(
+        item => item.map === action.payload.map
+      );
       const existingItem = egmCreditList[existingEgmItemIndex];
       let updateItems;
 
@@ -108,7 +128,9 @@ const UserReducer = (state, action) => {
     // Set Egm Connect State
     case SET_EGM_CONNECT_STATE_LIST:
       const { egmConnectList } = state;
-      const existingEgmConnectIndex = egmConnectList.findIndex(item => item.map === action.payload.map);
+      const existingEgmConnectIndex = egmConnectList.findIndex(
+        item => item.map === action.payload.map
+      );
       const existingEgmConnectItem = egmConnectList[existingEgmConnectIndex];
       let updateEgmConnectList;
       if (existingEgmConnectItem) {
