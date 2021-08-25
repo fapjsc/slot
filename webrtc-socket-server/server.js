@@ -1,22 +1,11 @@
 const express = require('express');
+// const https = require('https');
 const http = require('http');
-const https = require('https');
 const fs = require('fs');
 const options = {
-  key: fs.readFileSync('./192.168.10.109-key.pem'),
-  cert: fs.readFileSync('./192.168.10.109.pem'),
+  // key: fs.readFileSync('./192.168.10.101-key.pem'),
+  // cert: fs.readFileSync('./192.168.10.101.pem'),
 };
-
-const app = express();
-
-const httpsServer = https.createServer(options, app);
-
-const io = require('socket.io')(httpsServer, {
-  cors: {
-    origin: 'https://192.168.10.105:3000',
-    methods: ['GET', 'POST'],
-  },
-});
 
 const app = express();
 const httpsServer = http.createServer(options, app);
