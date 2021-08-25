@@ -15,7 +15,14 @@ const pcConfig = {
 };
 let peerConnection;
 
-const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, setAutoPlay, setSocketClient }) => {
+const Viewer = ({
+  closeWebRtcConnect,
+  setCloseWebRtcConnect,
+  leave,
+  autoPlay,
+  setAutoPlay,
+  setSocketClient,
+}) => {
   const remoteCamera = useRef();
 
   // Router Props
@@ -124,7 +131,9 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
 
     // 接收對方的 candidate 並加入自己的 RTCPeerConnection
     socket.on('candidate', (id, candidate) => {
-      peerConnection.addIceCandidate(new RTCIceCandidate(candidate)).catch(e => console.log(e, 'can not find'));
+      peerConnection
+        .addIceCandidate(new RTCIceCandidate(candidate))
+        .catch(e => console.log(e, 'can not find'));
     });
 
     socket.on('cameraErr', () => {
@@ -173,7 +182,15 @@ const Viewer = ({ closeWebRtcConnect, setCloseWebRtcConnect, leave, autoPlay, se
   }, [remoteCamera]);
 
   // return <video ref={remoteCamera} autoPlay playsInline style={{ width: '100%', height: '100%' }} />;
-  return <video onClick={videoPlay} ref={remoteCamera} autoPlay playsInline style={{ width: '100%', height: '100%' }} />;
+  return (
+    <video
+      onClick={videoPlay}
+      ref={remoteCamera}
+      autoPlay
+      playsInline
+      style={{ width: '100%', height: '100%' }}
+    />
+  );
 };
 
 export default Viewer;
