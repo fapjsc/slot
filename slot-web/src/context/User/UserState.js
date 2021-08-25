@@ -167,6 +167,7 @@ const UserState = props => {
 
       if (resData.code < 100000000) {
         setBtnList(resData.btnList);
+        console.log(resData.btnList, 'res');
         setSelectEgm({
           mapId: Number(mapId),
           egmId: Number(egmId),
@@ -253,6 +254,7 @@ const UserState = props => {
 
   // Get Egm List
   const getEgmList = async data => {
+    console.log('get egmlist');
     const { pc, casino, token } = data;
     const uri = `${apiUrl}EgmApi?pc=${pc}&casino=${casino}&tk=${token}`;
     // console.log(uri);
@@ -274,7 +276,13 @@ const UserState = props => {
         history.replace('/');
       }
 
-      if (resData.code === 17) setEgmList(resData.egmList);
+      if (resData.code === 17) {
+        setEgmList(resData.egmList);
+      } else {
+        alert(resData.msg);
+        localStorage.clear();
+        history.replace('/');
+      }
     } catch (error) {
       console.log(error);
       alert('發生錯誤，請重新登入 134');
@@ -298,15 +306,12 @@ const UserState = props => {
 
     // 收到server回復
     client.onmessage = message => {
-      // console.log(message.data);
-      // const dataFromServer = JSON.parse(message);
       if (client.readyState === client.OPEN) {
         const data = {
           messageType: 'message',
           token: localStorage.getItem('token'),
           egmSession: localStorage.getItem('egmSession'),
         };
-        // console.log(data);
 
         client.send(JSON.stringify(data));
       }
@@ -316,7 +321,6 @@ const UserState = props => {
         let str = message.data.replace('KickEgmNotify*>>*', '').replace('*^**>>*', '*^*');
 
         let strArr = str.split('*^*');
-        // console.log(strArr, 'str');
 
         strArr.forEach(el => {
           let kickObj = {};

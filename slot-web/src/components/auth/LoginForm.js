@@ -37,6 +37,7 @@ const useStyles = makeStyles(theme => ({
 
 const LoginForm = props => {
   const classes = useStyles();
+  console.log('login');
 
   // UserContext
   const { userLanding } = useContext(UserContext);
@@ -60,6 +61,11 @@ const LoginForm = props => {
     // login(props, data);
     userLanding(data);
   };
+
+  window.history.pushState(null, document.title, window.location.href);
+  window.addEventListener('popstate', function (event) {
+    window.history.pushState(null, document.title, window.location.href);
+  });
 
   return (
     <Container component="main" maxWidth="xs">

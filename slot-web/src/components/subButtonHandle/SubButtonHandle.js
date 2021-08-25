@@ -23,8 +23,6 @@ const useStyles = makeStyles({
 });
 
 const SubButtonHandle = ({ subBtn, spin, btnStyle }) => {
-  console.log(subBtn);
-
   const styles = useStyles();
   const [state, setState] = React.useState({
     top: false,

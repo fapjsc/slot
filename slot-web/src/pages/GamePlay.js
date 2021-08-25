@@ -190,11 +190,15 @@ const GamePlay = () => {
     [mapId, egmId, egmIp, apiToken, egmSession, credit, history]
   );
 
-  // UseEffect
-  useEffect(() => {
+  const handleFullScreen = () => {
     if (screenfull.enabled) {
       screenfull.request();
     }
+  };
+
+  // UseEffect
+  useEffect(() => {
+    handleFullScreen();
 
     if (!btnList.length) {
       const btnList = JSON.parse(localStorage.getItem('btnList'));
@@ -233,41 +237,17 @@ const GamePlay = () => {
     setApiToken(token);
     setSelectEgm(selectEgm);
 
-    // 即將棄用
-    // https://developer.mozilla.org/en-US/docs/Web/API/Window/orientationchange_event
-    // window.addEventListener('orientationchange', e => {
-    //   console.log(e.target.screen.orientation.angle);
-    //   if (e.target.screen.orientation.angle === 0) setDirectionMode('portrait');
-    //   if (e.target.screen.orientation.angle === 90) setDirectionMode('landscape');
-    // });
-
-    // 實驗中的功能
-    // https://developer.mozilla.org/zh-TW/docs/Web/API/Screen/orientation
-    // if (window.screen) {
-    //   window.screen.orientation.addEventListener('change', function (e) {
-    //     if (e.currentTarget.type === 'landscape-primary') {
-    //       // landscape mode => angle 0
-    //       console.log('landscape');
-    //       setDirectionMode('landscape');
-    //     } else if (e.currentTarget.type === 'portrait-primary') {
-    //       // portrait mode => angle 0
-    //       console.log('portrait');
-    //       setDirectionMode('portrait');
-    //     }
-    //   });
-    // }
-
     window.addEventListener('resize', () => reportWindowSize());
 
-    window.addEventListener('beforeunload', function (e) {
-      // Cancel the event
-      e.preventDefault();
-      // Chrome requires returnValue to be set
-      e.returnValue = 'some text';
+    // 防止 user 按到上一頁
+    window.history.pushState(null, document.title, window.location.href);
+    window.addEventListener('popstate', function (event) {
+      window.history.pushState(null, document.title, window.location.href);
     });
 
     return () => {
       window.removeEventListener('resize', reportWindowSize);
+      // window.removeEventListener('popstate');
     };
 
     // eslint-disable-next-line
@@ -315,6 +295,7 @@ const GamePlay = () => {
   useEffect(() => {
     let mainBtnTemp = [];
     let subBtnTemp = [];
+
     btnList.forEach(btn => {
       if (btn.buttonNo === 77 || btn.buttonNo === 99 || btn.buttonNo === 55) {
         mainBtnTemp.push(btn);
@@ -324,19 +305,33 @@ const GamePlay = () => {
     });
 
     setMainBtn(mainBtnTemp.reverse());
+
     if (btnStyle === 'igt-poker') {
       setSubBtn(subBtnTemp);
+    } else if (btnStyle === 'igt-cashcove') {
+      subBtnTemp.sort((a, b) => {
+        if (a.buttonNo < b.buttonNo) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+      setSubBtn(subBtnTemp.sort());
     } else {
       setSubBtn(subBtnTemp.reverse());
     }
   }, [btnList, btnStyle]);
+
+  useEffect(() => {
+    if (!isOrientationVertical) handleFullScreen();
+  }, [isOrientationVertical]);
 
   //==== Render Elements
 
   const backDrop = () => (
     <Backdrop className={styles.backdrop} open={open}>
       <div>
-        <div style={{ textAlign: 'center' }}>
+        <div>
           <CircularProgress color="inherit" />
         </div>
         <p>結算中，請稍候...</p>

@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 
 // Components
@@ -8,7 +8,6 @@ import MachineItemHorizontal from './machineItemHorizontal';
 // Style
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import BorderAnimation from '../UI/BorderAnimation';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -29,6 +28,10 @@ const useStyles = makeStyles(theme => ({
     margin: '0 auto',
   },
   containerHorizontal: {
+    justifyContent: 'center',
+  },
+
+  container: {
     justifyContent: 'center',
   },
 
@@ -55,20 +58,18 @@ const MachineList = props => {
     .slice(pagesVisited, pagesVisited + dataPerPage)
     .map((item, index) => {
       return (
-        <Grid key={index} item md={12} xs={12} style={{ margin: '0 auto', maxWidth: '20rem' }}>
-          <Box>
-            <BorderAnimation>
-              <MachineItemNew
-                index={index}
-                title={item.gameName}
-                description={item.gameDesc}
-                picName={item.picName}
-                machineDetails={item}
-                token={props.token}
-                pageNumber={pageNumber}
-              />
-            </BorderAnimation>
-          </Box>
+        <Grid key={index} item md={12} style={{ margin: '0 auto', maxWidth: '20rem' }}>
+          <BorderAnimation>
+            <MachineItemNew
+              index={index}
+              title={item.gameName}
+              description={item.gameDesc}
+              picName={item.picName}
+              machineDetails={item}
+              token={props.token}
+              pageNumber={pageNumber}
+            />
+          </BorderAnimation>
         </Grid>
       );
     });
@@ -120,7 +121,7 @@ const MachineList = props => {
           {renderMachineListHorizontal}
         </Grid>
       ) : (
-        <Grid container className={classes.container} spacing={3}>
+        <Grid container spacing={0}>
           {renderMachineList}
         </Grid>
       )}

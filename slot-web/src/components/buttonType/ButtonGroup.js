@@ -24,8 +24,8 @@ const ButtonGroup = ({ subBtn, btnStyle, spin, LandscapeMode, isOrientationVerti
     newPathArr.length = subBtn.length;
 
     imgPath.forEach(el => {
-      let str = el.split('/')[2].split('.')[0];
-      let btnIndex = subBtn.findIndex(btn => btn.buttonTxt === str);
+      let str = el.split('/')[2].split('.')[0].toLowerCase();
+      let btnIndex = subBtn.findIndex(btn => btn.buttonTxt.toLowerCase() === str);
       newPathArr[btnIndex] = el;
     });
 

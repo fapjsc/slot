@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState, Fragment } from 'react';
+import React, { useEffect, useContext, useState, Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 
 // Components
@@ -10,6 +10,7 @@ import GameLoadingCard from '../components/UI/GameLoadingCard';
 
 // Layout
 import HomeHeader from '../layout/HomeHeader';
+import Footer from '../layout/Footer';
 
 // Context
 import UserContext from '../context/User/UserContext';
@@ -19,6 +20,7 @@ import { wsUri } from '../api/config';
 
 // Style
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
 
 // Image
@@ -26,7 +28,6 @@ import backgroundImg from '../asset/5dde4f6dc409c1574850413996.jpg';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    // backgroundImage: `url(${backImg})`,
     backgroundImage: `url(${backgroundImg})`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
@@ -34,12 +35,11 @@ const useStyles = makeStyles(theme => ({
     minHeight: '100vh',
   },
   rootList: {
-    // backgroundImage: `url(${backgroundImg})`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     height: '100%',
-    paddingBottom: '3rem',
+    // paddingBottom: '3rem',
   },
   paper: {
     maxWidth: 450,
@@ -60,7 +60,6 @@ const useStyles = makeStyles(theme => ({
 
 const Home = () => {
   const classes = useStyles();
-
   const history = useHistory();
 
   // User Context
@@ -99,14 +98,12 @@ const Home = () => {
 
     getUserInfo(token, data);
 
-    // localStorage.setItem('isShow', true);
+    window.history.pushState(null, document.title, window.location.href);
+    window.addEventListener('popstate', function (event) {
+      window.history.pushState(null, document.title, window.location.href);
+    });
 
     return () => {
-      if (egmList === undefined) {
-        // alert('無法獲取EGM，請重新登入');
-        // history.replace('/');
-        // localStorage.clear();
-      }
       if (wsClient) wsClient.close();
     };
     // eslint-disable-next-line
@@ -119,7 +116,6 @@ const Home = () => {
         setShowPadding(false);
       }
     });
-    // console.log(egmConnectList);
   }, [egmConnectList]);
 
   useEffect(() => {
@@ -141,6 +137,24 @@ const Home = () => {
     localStorage.clear();
     history.replace('/');
   };
+
+  //==== JSX Elements ====//
+
+  const noEgmList = (
+    <Box style={{ margin: '6rem auto', textAlign: 'center' }}>
+      <Button
+        style={{ backgroundColor: 'rgba(66, 7, 105, 0.911)' }}
+        type="button"
+        variant="contained"
+        color="primary"
+        onClick={handleLogout}
+      >
+        請重新登入
+      </Button>
+    </Box>
+  );
+
+  console.log(egmList);
 
   return (
     <div className={classes.root}>
@@ -168,7 +182,13 @@ const Home = () => {
             {/* 輪播圖 */}
             <Carousels />
 
-            <div>{egmList && showList && <MachineList egmList={egmList} token={apiToken} />}</div>
+            {/* Egm List */}
+            {/* <div>{egmList && showList && <MachineList egmList={egmList} token={apiToken} />}</div> */}
+            {egmList && showList ? <MachineList egmList={egmList} token={apiToken} /> : noEgmList}
+
+            <Box style={{ color: '#fff', textAlign: 'center' }}>
+              <Footer />
+            </Box>
           </Box>
         </Fragment>
       )}

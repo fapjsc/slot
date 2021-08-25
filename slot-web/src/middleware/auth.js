@@ -18,7 +18,13 @@ export const login = (history, data, url) => {
     (data.name === '00016' && data.password === '00016') ||
     (data.name === '00017' && data.password === '00017') ||
     (data.name === '00018' && data.password === '00018') ||
-    (data.name === '00019' && data.password === '00019')
+    (data.name === '00019' && data.password === '00019') ||
+    (data.name === '00020' && data.password === '00020') ||
+    (data.name === '00021' && data.password === '00021') ||
+    (data.name === '00022' && data.password === '00022') ||
+    (data.name === '00023' && data.password === '00023') ||
+    (data.name === '00024' && data.password === '00024') ||
+    (data.name === '00025' && data.password === '00025')
   ) {
     localStorage.setItem('auth', data);
     history.push(url);
