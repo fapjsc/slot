@@ -15,7 +15,7 @@ import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 // Image
-import logo from '../asset/tga-logo2.png';
+// import logo from '../asset/tga-logo2.png';
 
 // Context
 import UserContext from '../context/User/UserContext';
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     // flexGrow: 1,
     // padding: 0,
     // marginTop: 0,
-    maxWidth: '678px',
+    width: '100%',
     margin: '0 auto',
     display: 'flex',
     justifyContent: 'center',
@@ -74,7 +74,7 @@ const HomeHeader = props => {
     <div className={classes.root}>
       <AppBar position="static">
         {/* Toolbar style 在 App.scss */}
-        <Toolbar>
+        <Toolbar style={{ display: 'flex', justifyContent: 'space-around' }}>
           {/* <div className={classes.title}>
             <img src={logo} alt="logo" style={{ width: '1.8rem', height: '1.8rem' }} />
           </div> */}
@@ -173,7 +173,7 @@ const HomeHeader = props => {
 
 const spanText = {
   fontSize: '10px',
-  marginLeft: '3px',
+  marginLeft: '4px',
 };
 
 const buttonStyle = {

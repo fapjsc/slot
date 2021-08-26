@@ -1,6 +1,6 @@
 import { apiUrl, apiCasinoUrl } from '../../api/config';
 
-import { useReducer } from 'react';
+import { useReducer, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import UserReducer from './UserReducer';
 import UserContext from './UserContext';
@@ -292,11 +292,11 @@ const UserState = props => {
   };
 
   // WebSocket Handler
-  const webSocketHandler = uri => {
+  const webSocketHandler = useCallback(uri => {
     // const client = new W3CWebsocket(uri);
     const client = new ReconnectingWebSocket(uri);
 
-    let stateArr = [];
+    // let stateArr = [];
 
     // 1.建立連接
     client.onopen = () => {
@@ -306,35 +306,30 @@ const UserState = props => {
 
     // 收到server回復
     client.onmessage = message => {
+      // console.log(message);
       if (client.readyState === client.OPEN) {
         const data = {
           messageType: 'message',
           token: localStorage.getItem('token'),
           egmSession: localStorage.getItem('egmSession'),
         };
-
         client.send(JSON.stringify(data));
       }
-
       // Kick State
       if (message.data.includes('KickEgmNotify')) {
         let str = message.data.replace('KickEgmNotify*>>*', '').replace('*^**>>*', '*^*');
-
         let strArr = str.split('*^*');
-
         strArr.forEach(el => {
           let kickObj = {};
           if (el !== '') {
             let arr = el.split('*|*');
             kickObj.egm = arr[0];
             kickObj.token = arr[1];
-
             setKickList(kickObj);
           }
         });
       }
-
-      // Egm Create State
+      // // Egm Create State
       if (message.data.includes('EgmCredit')) {
         let obj = {};
         let strArr = message.data.split('*|*');
@@ -344,7 +339,6 @@ const UserState = props => {
           id: strArr[2],
           credit: strArr[4],
         };
-
         setEgmCreditList(obj);
       }
 
@@ -358,18 +352,16 @@ const UserState = props => {
           id: Number(strArr[2]),
           state: Number(strArr[4]),
         };
-
         setEgmConnectList(obj);
       }
-
       // console.log(stateArr, 'egm connect success');
-      setEgmConnectList(stateArr);
+      // setEgmConnectList(stateArr);
+      // console.log(stateArr, 'arr');
 
-      // Egm Playing State
+      // // Egm Playing State
       if (message.data.includes('EgmPlayingState')) {
         // console.log(message.data);
         let stateList = [];
-
         let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**>>*', '*^*');
         let strArr = str.split('*^*');
         strArr.forEach(el => {
@@ -383,7 +375,6 @@ const UserState = props => {
           }
           stateList.push(obj);
         });
-
         if (stateList.length > 0) {
           let arr = [];
           stateList.forEach(el => {
@@ -394,7 +385,6 @@ const UserState = props => {
               // console.log(el.ip, '可以玩');
             }
           });
-
           console.log(arr, 'isPlaying...');
           arr.length > 0 ? setOnActionEgmList(arr) : setOnActionEgmList([]);
           // console.log(props.egmList);
@@ -412,7 +402,7 @@ const UserState = props => {
       console.log('Client Closed');
       console.log(e);
     };
-  };
+  }, []);
 
   const setApiToken = token => {
     dispatch({ type: SET_API_TOKEN, payload: token });

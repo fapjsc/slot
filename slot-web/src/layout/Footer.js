@@ -62,7 +62,7 @@ const footerStyle = {
   justifyContent: 'space-around',
   alignItems: 'center',
   backgroundColor: 'rgba(66, 7, 105, 0.911)',
-  maxWidth: '678px',
+  width: '100%',
 };
 
 export default Footer;

@@ -80,12 +80,12 @@ const Home = () => {
   } = userContext;
 
   // Init State
-  const [showList, setShowList] = useState(false);
-  const [showPadding, setShowPadding] = useState(true);
+  const [showList, setShowList] = useState(true);
+  const [showPadding, setShowPadding] = useState(false);
 
   useEffect(() => {
-    const egmStateWebSocketUri = `${wsUri}stateQuote`;
-    webSocketHandler(egmStateWebSocketUri);
+    // const egmStateWebSocketUri = `${wsUri}stateQuote`;
+    // webSocketHandler(egmStateWebSocketUri);
     let token = localStorage.getItem('token');
     let player = localStorage.getItem('player');
     let casino = localStorage.getItem('casino');
@@ -103,10 +103,15 @@ const Home = () => {
       window.history.pushState(null, document.title, window.location.href);
     });
 
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    const egmStateWebSocketUri = `${wsUri}stateQuote`;
+    webSocketHandler(egmStateWebSocketUri);
     return () => {
       if (wsClient) wsClient.close();
     };
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -154,7 +159,7 @@ const Home = () => {
     </Box>
   );
 
-  console.log(egmList);
+  // console.log(egmList);
 
   return (
     <div className={classes.root}>
@@ -171,7 +176,7 @@ const Home = () => {
           {!localStorage.getItem('isShow') && <Dialog />}
 
           <Box className={classes.rootList}>
-            <Box style={{ padding: 20, display: 'flex', justifyContent: 'flex-end' }}>
+            <Box style={headerBox}>
               <HomeHeader
                 handleLogout={handleLogout}
                 user={userInfo && userInfo.playerCode}
@@ -186,7 +191,7 @@ const Home = () => {
             {/* <div>{egmList && showList && <MachineList egmList={egmList} token={apiToken} />}</div> */}
             {egmList && showList ? <MachineList egmList={egmList} token={apiToken} /> : noEgmList}
 
-            <Box style={{ color: '#fff', textAlign: 'center' }}>
+            <Box style={footerBox}>
               <Footer />
             </Box>
           </Box>
@@ -196,4 +201,17 @@ const Home = () => {
   );
 };
 
-export default Home;
+const headerBox = {
+  maxWidth: '678px',
+  margin: '0px auto 10px auto',
+};
+
+const footerBox = {
+  color: '#fff',
+  display: 'flex',
+  justifyContent: 'center',
+  maxWidth: '678px',
+  margin: '0 auto',
+};
+
+export default React.memo(Home);

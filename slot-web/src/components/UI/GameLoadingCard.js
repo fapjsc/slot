@@ -6,7 +6,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Fade from '@material-ui/core/Fade';
+// import Fade from '@material-ui/core/Fade';
 
 import gameLoadingBg from '../../asset/gameLoading.jpg';
 import Loading from './Loading';

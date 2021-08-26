@@ -36,7 +36,8 @@ const BroadCast = () => {
 
   // Device Context
   const deviceContext = useContext(DeviceContext);
-  const { setDeviceMap, getEgmList, egmList, setDeviceIsChange, deviceIsChange, deviceMap } = deviceContext;
+  const { setDeviceMap, getEgmList, egmList, setDeviceIsChange, deviceIsChange, deviceMap } =
+    deviceContext;
 
   // Camera Dom
   const camera = useRef();
@@ -150,7 +151,15 @@ const BroadCast = () => {
     setSelectEgm(e.target.value);
   };
 
-  const handleDeviceMap = (egm, cameraId, deviceLabel, egmIp, audioLabel, audioDeviceId, webNumber) => {
+  const handleDeviceMap = (
+    egm,
+    cameraId,
+    deviceLabel,
+    egmIp,
+    audioLabel,
+    audioDeviceId,
+    webNumber
+  ) => {
     const deviceObj = {
       egm,
       cameraId,
@@ -217,6 +226,10 @@ const BroadCast = () => {
         };
 
         // 創建offer以及設定local description
+        //pc.createOffer({offerToReceiveVideo: true})  ==> Old
+        peerConnection.addTransceiver('video');
+        // this step seems to be optional:
+        peerConnection.getTransceivers().forEach(t => (t.direction = 'recvonly'));
         peerConnection
           .createOffer()
           .then(sdp => peerConnection.setLocalDescription(sdp))
@@ -320,7 +333,12 @@ const BroadCast = () => {
                 Web Number
               </Form.Label>
               <Col sm="8" className="">
-                <Form.Control vlaue={webNumber} onChange={handleWebNumberChange} type="number" placeholder="Web Number" />
+                <Form.Control
+                  vlaue={webNumber}
+                  onChange={handleWebNumberChange}
+                  type="number"
+                  placeholder="Web Number"
+                />
               </Col>
             </Form.Group>
 
@@ -363,7 +381,11 @@ const BroadCast = () => {
               <Col sm="8" className="">
                 <Form.Control as="select" onChange={handleChangeDevice} defaultValue="選擇攝影機">
                   <option disabled>選擇攝影機</option>
-                  {allVideo.length ? allVideo.map(el => <option key={el.deviceId}>{el.deviceId}</option>) : <option>找不到設備</option>}
+                  {allVideo.length ? (
+                    allVideo.map(el => <option key={el.deviceId}>{el.deviceId}</option>)
+                  ) : (
+                    <option>找不到設備</option>
+                  )}
                 </Form.Control>
               </Col>
               <Col sm="2" className="">
@@ -381,7 +403,11 @@ const BroadCast = () => {
               <Col sm="8" className="">
                 <Form.Control as="select" onChange={handleChangeDevice} defaultValue="選擇音頻">
                   <option disabled>選擇音頻</option>
-                  {allAudio.length ? allAudio.map(el => <option key={el.deviceId}>{el.deviceId}</option>) : <option>找不到設備</option>}
+                  {allAudio.length ? (
+                    allAudio.map(el => <option key={el.deviceId}>{el.deviceId}</option>)
+                  ) : (
+                    <option>找不到設備</option>
+                  )}
                 </Form.Control>
               </Col>
               <Col sm="2" className="">
@@ -405,7 +431,15 @@ const BroadCast = () => {
                 className="w-25 p-2"
                 variant="primary"
                 onClick={() =>
-                  handleDeviceMap(+selectEgm, currentDevice.deviceId, currentDevice.label, egmIp, currentAudio.label, currentAudio.deviceId, webNumber)
+                  handleDeviceMap(
+                    +selectEgm,
+                    currentDevice.deviceId,
+                    currentDevice.label,
+                    egmIp,
+                    currentAudio.label,
+                    currentAudio.deviceId,
+                    webNumber
+                  )
                 }
               >
                 確定

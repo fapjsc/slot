@@ -308,7 +308,7 @@ const GamePlay = () => {
 
     if (btnStyle === 'igt-poker') {
       setSubBtn(subBtnTemp);
-    } else if (btnStyle === 'igt-cashcove') {
+    } else if (btnStyle === 'igt-cashcove' || btnStyle === 'igt-cleopatra') {
       subBtnTemp.sort((a, b) => {
         if (a.buttonNo < b.buttonNo) {
           return -1;
@@ -316,7 +316,7 @@ const GamePlay = () => {
           return 1;
         }
       });
-      setSubBtn(subBtnTemp.sort());
+      setSubBtn(subBtnTemp);
     } else {
       setSubBtn(subBtnTemp.reverse());
     }
