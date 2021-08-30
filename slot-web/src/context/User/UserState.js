@@ -83,7 +83,7 @@ const UserState = props => {
         body: JSON.stringify(reqData),
       });
       const resData = await res.json();
-      console.log(resData);
+      // console.log(resData);
       if (resData.code === 1000) {
         setLoadingUrl(resData.supplierURL);
         login(history, data, resData.supplierURL);
@@ -101,7 +101,7 @@ const UserState = props => {
     const headers = getHeaders(token, data);
     const url = `${apiUrl}PlayerDataApi?casino=${data.casino}&pc=${data.pc}`;
 
-    console.log(url);
+    // console.log(url);
 
     try {
       const res = await fetch(url, {
@@ -109,7 +109,7 @@ const UserState = props => {
       });
 
       const resData = await res.json();
-      console.log(resData);
+      // console.log(resData);
 
       if (resData.code === 35) setUserInfo(resData.playerObj);
     } catch (error) {
@@ -385,7 +385,7 @@ const UserState = props => {
               // console.log(el.ip, '可以玩');
             }
           });
-          console.log(arr, 'isPlaying...');
+          // console.log(arr, 'isPlaying...');
           arr.length > 0 ? setOnActionEgmList(arr) : setOnActionEgmList([]);
           // console.log(props.egmList);
         } else {

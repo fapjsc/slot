@@ -33,10 +33,11 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url(../asset/snack.jpg);
+    // background-image: url(../asset/snack.jpg);
     height: 100%;
     width: 100%;
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
     background-position: center;
   }
 }
@@ -222,10 +223,11 @@
   .snackBarLandscape {
     height: 100%;
     width: 100%;
-    background-image: url(../asset/snack.jpg);
+    // background-image: url(../asset/snack.jpg);
     background-position: center;
-    background-size: cover;
+    background-size: contain;
     position: absolute;
+    background-repeat: no-repeat;
     z-index: 2;
   }
 }

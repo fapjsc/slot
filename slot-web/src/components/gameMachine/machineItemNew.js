@@ -55,7 +55,7 @@ export default function MachineItem(props) {
   // 動態加載圖片
   const getImg = useCallback(() => {
     // webPack api 獲取圖片資料夾的上下文，遞歸尋找符合jpg的圖片
-    const imgContext = require.context('../../asset', true, /\.jpg|.png/);
+    const imgContext = require.context('../../asset', false, /\.jpg|.png/);
     // 過濾符合props給的picName
     const imgPath = imgContext.keys().filter(path => path.includes(props.picName));
     // 轉成 es6 import obj
@@ -132,21 +132,44 @@ export default function MachineItem(props) {
     <>
       <Card className={`${classes.root}`}>
         <CardHeader
-          avatar={
-            <Avatar aria-label="recipe" className={classes.avatar}>
-              {props.magnification ? props.magnification : 'X2'}
-            </Avatar>
-          }
+          // avatar={
+          //   <Avatar aria-label="recipe" className={classes.avatar}>
+          //     {props.magnification ? props.magnification : 'X2'}
+          //   </Avatar>
+          // }
           title={props.title ? props.title : 'ARUZE雄狼'}
-          subheader={props.subHeader ? props.subHeader : 'September 14, 2021'}
+          // subheader={props.subHeader ? props.subHeader : 'September 14, 2021'}
         />
         <CardMedia className={classes.media} image={imgObj ? imgObj : null} title="Paella dish" />
         <CardContent style={{ height: 90 }}>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            component="p"
+            style={{ fontSize: '18px' }}
+          >
             {props.description
-              ? props.description
+              ? `${props.description.split('¢')[0]}¢`
               : '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'}
           </Typography>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            component="p"
+            style={{ fontSize: '18px' }}
+          >
+            {props.description
+              ? props.description.split('¢')[1]
+              : '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'}
+          </Typography>
+
+          {/* {props.description ? (
+            <Typography variant="body2" color="textSecondary" component="p">
+              desc1
+            </Typography>
+          ) : (
+            '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'
+          )} */}
         </CardContent>
         <CardActions disableSpacing style={{ justifyContent: 'center' }}>
           {!isConn || noConnState ? (

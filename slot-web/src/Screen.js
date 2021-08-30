@@ -45,7 +45,7 @@ const Viewer = ({
   };
 
   const videoPlay = () => {
-    console.log(remoteCamera);
+    // console.log(remoteCamera);
     remoteCamera.current.play();
   };
 
@@ -93,6 +93,7 @@ const Viewer = ({
     socket.on('offer', (id, description) => {
       console.log('get offer', id);
       peerConnection = new RTCPeerConnection(pcConfig);
+
       peerConnection
         .setRemoteDescription(description)
         .then(() => peerConnection.createAnswer())
@@ -100,8 +101,9 @@ const Viewer = ({
         .then(() => {
           socket.emit('answer', id, peerConnection.localDescription);
         });
+
       peerConnection.ontrack = event => {
-        console.log(remoteCamera);
+        console.log(remoteCamera, 'ontrack');
         if (!remoteCamera.current) return;
         if (remoteCamera.current.srcObject !== event.streams[0]) {
           remoteCamera.current.srcObject = event.streams[0];
@@ -111,6 +113,7 @@ const Viewer = ({
 
       // 當找到自己的candiDate後，發送給server，包含自己的socket id
       peerConnection.onicecandidate = event => {
+        console.log(event, 'oniceCandidate');
         if (event.candidate) {
           socket.emit('candidate', id, event.candidate);
           console.log('candiDate', event.candidate.candidate);
@@ -119,7 +122,7 @@ const Viewer = ({
       };
 
       peerConnection.onconnectionstatechange = event => {
-        console.log(event.currentTarget.iceConnectionState);
+        console.log(event.currentTarget, 'onconnectionstatechange');
         if (event.currentTarget.iceConnectionState === 'disconnected') {
           peerConnection.close();
           socket.emit('joinRoom', webNumber, cameraId, audioId);

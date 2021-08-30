@@ -35,6 +35,9 @@ import IconButton from '@material-ui/core/IconButton';
 import 'odometer/themes/odometer-theme-train-station.css';
 import Box from '@material-ui/core/Box';
 
+// Image
+import SnackBarBasicImage from '../asset/snack.jpg';
+
 // Icon
 import BuildIcon from '@material-ui/icons/Build';
 import ScreenRotationIcon from '@material-ui/icons/ScreenRotation';
@@ -95,6 +98,7 @@ const GamePlay = () => {
   const [subBtn, setSubBtn] = useState([]);
   const [openSnack, setOpenSnack] = useState(true);
   const [directionMode, setDirectionMode] = useState('portrait');
+  const [snackBarPic, setSnackBarPic] = useState();
 
   const [isOrientationVertical, setIsOrientationVertical] = useState(
     window.innerHeight > window.innerWidth
@@ -121,6 +125,20 @@ const GamePlay = () => {
       window.location.reload();
     });
   };
+
+  const getSnackImg = useCallback(picName => {
+    // webPack api 獲取圖片資料夾的上下文，遞歸尋找符合jpg的圖片
+    const imgContext = require.context('../asset/gameDesc', false, /\.jpg|.png/);
+    // 過濾符合props給的picName
+    const imgPath = imgContext.keys().filter(path => path.includes(picName));
+    // 轉成 es6 import obj
+    const images = imgPath.map(path => imgContext(path));
+    console.log(images, '1234');
+    // return react 可以用的src obj
+    if (images[0]) setSnackBarPic(images[0].default);
+
+    // return react 可以用的src obj
+  }, []);
 
   const leave = async () => {
     setOpen(true);
@@ -245,6 +263,8 @@ const GamePlay = () => {
       window.history.pushState(null, document.title, window.location.href);
     });
 
+    getSnackImg(picName);
+
     return () => {
       window.removeEventListener('resize', reportWindowSize);
       // window.removeEventListener('popstate');
@@ -327,7 +347,6 @@ const GamePlay = () => {
   }, [isOrientationVertical]);
 
   //==== Render Elements
-
   const backDrop = () => (
     <Backdrop className={styles.backdrop} open={open}>
       <div>
@@ -351,10 +370,19 @@ const GamePlay = () => {
         setCloseWebRtcConnect={setCloseWebRtcConnect}
       />
 
-      {openSnack && <div onClick={handleAutoPlay} className={classes.snackBar}></div>}
+      {openSnack && (
+        <div
+          onClick={handleAutoPlay}
+          style={{
+            backgroundImage: snackBarPic ? `url(${snackBarPic})` : `url(${SnackBarBasicImage})`,
+          }}
+          className={classes.snackBar}
+        ></div>
+      )}
     </div>
   );
 
+  // Button -P
   const portraitMainBtnListEl = mainBtn.map(btn => {
     return (
       <Grid
@@ -457,7 +485,15 @@ const GamePlay = () => {
       }
     >
       <Box className={classes.slotScreenLandscape}>
-        {openSnack && <div onClick={handleAutoPlay} className={classes.snackBarLandscape}></div>}
+        {openSnack && (
+          <div
+            onClick={handleAutoPlay}
+            style={{
+              backgroundImage: snackBarPic ? `url(${snackBarPic})` : `url(${SnackBarBasicImage})`,
+            }}
+            className={classes.snackBarLandscape}
+          ></div>
+        )}
         <Screen
           setSocketClient={setSocketClient}
           autoPlay={autoPlay}
@@ -574,7 +610,7 @@ const GamePlay = () => {
       {/* 直向 */}
       {directionMode === 'portrait' && (
         <>
-          <Headers setReviewState={setReviewState} />
+          <Headers mapId={mapId} setReviewState={setReviewState} />
 
           <div className={`${classes.slotMachine}`}>
             {/* Screen */}

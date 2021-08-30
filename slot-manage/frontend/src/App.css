@@ -1,0 +1,27 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  box-sizing: border-box;
+}
+
+.main {
+  min-height: 80vh;
+}
+
+tr {
+  cursor: pointer;
+}
+
+table {
+  font-size: 1.3rem;
+}

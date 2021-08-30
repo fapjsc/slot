@@ -202,7 +202,7 @@ const BroadCast = () => {
       console.log(`Camera: ${cameraId} Audio: ${audioId}`);
       try {
         const stream = await remoteStream(cameraId, audioId);
-        console.log(stream.getTracks());
+        console.log(stream.getTracks(), 'stream');
 
         const peerConnection = new RTCPeerConnection(pcConfig);
         peerConnections[socketId] = peerConnection;
@@ -214,6 +214,7 @@ const BroadCast = () => {
 
         // 將 stream 和 media track 加到 peerConnection
         stream.getTracks().forEach(track => {
+          console.log('addtrack', track, stream);
           peerConnection.addTrack(track, stream);
         });
 
@@ -227,9 +228,9 @@ const BroadCast = () => {
 
         // 創建offer以及設定local description
         //pc.createOffer({offerToReceiveVideo: true})  ==> Old
-        peerConnection.addTransceiver('video');
+        // peerConnection.addTransceiver('video');
         // this step seems to be optional:
-        peerConnection.getTransceivers().forEach(t => (t.direction = 'recvonly'));
+        // peerConnection.getTransceivers().forEach(t => (t.direction = 'recvonly'));
         peerConnection
           .createOffer()
           .then(sdp => peerConnection.setLocalDescription(sdp))

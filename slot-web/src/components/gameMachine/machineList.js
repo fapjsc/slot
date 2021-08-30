@@ -58,7 +58,7 @@ const MachineList = props => {
     .slice(pagesVisited, pagesVisited + dataPerPage)
     .map((item, index) => {
       return (
-        <Grid key={index} item md={12} style={{ margin: '0 auto', maxWidth: '20rem' }}>
+        <Grid key={index} item md={12} style={{ margin: '0 auto', width: '20rem' }}>
           <BorderAnimation>
             <MachineItemNew
               index={index}
