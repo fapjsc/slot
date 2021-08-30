@@ -61,7 +61,7 @@ const MachineItemHorizontal = props => {
   // 動態加載圖片
   const getImg = useCallback(() => {
     // webPack api 獲取圖片資料夾的上下文，遞歸尋找符合jpg的圖片
-    const imgContext = require.context('../../asset', true, /\.jpg$/);
+    const imgContext = require.context('../../asset', false, /\.jpg$/);
     // 過濾符合props給的picName
     const imgPath = imgContext.keys().filter(path => path.includes(props.picName));
     // 轉成 es6 import obj
