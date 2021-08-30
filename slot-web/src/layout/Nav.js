@@ -8,7 +8,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 
 const Nav = ({ setReviewState, snackBarPic }) => {
-  console.log(snackBarPic, '222');
   const [open, setOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
