@@ -2,7 +2,7 @@ import classes from './Headers.module.scss';
 // import FlipCameraAndroidIcon from '@material-ui/icons/FlipCameraAndroid';
 import Nav from './Nav';
 
-const Headers = ({ setReviewState, mapId }) => {
+const Headers = ({ setReviewState, mapId, snackBarPic, directionMode }) => {
   return (
     <header className={classes.header}>
       <div className={classes.infoBox}>
@@ -18,7 +18,7 @@ const Headers = ({ setReviewState, mapId }) => {
         <div className={classes.user}>UserName</div>
       </div> */}
       <div className={classes.navBox}>
-        <Nav setReviewState={setReviewState} />
+        <Nav setReviewState={setReviewState} snackBarPic={snackBarPic} />
       </div>
     </header>
   );

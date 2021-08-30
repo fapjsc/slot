@@ -36,7 +36,7 @@ import 'odometer/themes/odometer-theme-train-station.css';
 import Box from '@material-ui/core/Box';
 
 // Image
-import SnackBarBasicImage from '../asset/snack.jpg';
+// import SnackBarBasicImage from '../asset/snack.jpg';
 
 // Icon
 import BuildIcon from '@material-ui/icons/Build';
@@ -373,9 +373,9 @@ const GamePlay = () => {
       {openSnack && (
         <div
           onClick={handleAutoPlay}
-          style={{
-            backgroundImage: snackBarPic ? `url(${snackBarPic})` : `url(${SnackBarBasicImage})`,
-          }}
+          // style={{
+          //   backgroundImage: `url(${SnackBarBasicImage})`,
+          // }}
           className={classes.snackBar}
         ></div>
       )}
@@ -488,9 +488,9 @@ const GamePlay = () => {
         {openSnack && (
           <div
             onClick={handleAutoPlay}
-            style={{
-              backgroundImage: snackBarPic ? `url(${snackBarPic})` : `url(${SnackBarBasicImage})`,
-            }}
+            // style={{
+            //   backgroundImage: `url(${SnackBarBasicImage})`,
+            // }}
             className={classes.snackBarLandscape}
           ></div>
         )}
@@ -581,7 +581,11 @@ const GamePlay = () => {
       }
     >
       <div className={classes.navBox}>
-        <Nav setReviewState={setReviewState} />
+        <Nav
+          setReviewState={setReviewState}
+          snackBarPic={snackBarPic}
+          directionMode={directionMode}
+        />
       </div>
 
       <div className={classes.mainBtnHandleLandscape}>
@@ -610,7 +614,7 @@ const GamePlay = () => {
       {/* 直向 */}
       {directionMode === 'portrait' && (
         <>
-          <Headers mapId={mapId} setReviewState={setReviewState} />
+          <Headers mapId={mapId} setReviewState={setReviewState} snackBarPic={snackBarPic} />
 
           <div className={`${classes.slotMachine}`}>
             {/* Screen */}
