@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { useEffect } from 'react';
 
 // Layout
 import Header from './layout/Header';
@@ -15,7 +16,14 @@ import 'bootswatch/dist/morph/bootstrap.min.css';
 import './App.css';
 import { Container } from 'react-bootstrap';
 
+// Socket
+import { connectWithWss } from './utils/wssConnection';
+
 const App = () => {
+  useEffect(() => {
+    connectWithWss();
+  }, []);
+
   return (
     <Router>
       <Header />

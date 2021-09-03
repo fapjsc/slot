@@ -8,6 +8,13 @@ import ThePadding from '../components/UI/padding/ThePadding';
 import Dialog from '../components/UI/Dialog';
 import GameLoadingCard from '../components/UI/GameLoadingCard';
 
+// Hooks
+import useHttp from '../hooks/useHttp';
+
+// Lib
+import { getEgmList } from '../lib/api';
+import { connectWithWebSocket } from '../lib/wssConnect';
+
 // Layout
 import HomeHeader from '../layout/HomeHeader';
 import Footer from '../layout/Footer';
@@ -16,7 +23,7 @@ import Footer from '../layout/Footer';
 import UserContext from '../context/User/UserContext';
 
 // Api
-import { wsUri } from '../api/config';
+// import { wsUri } from '../api/config';
 
 // Style
 import Box from '@material-ui/core/Box';
@@ -62,30 +69,22 @@ const Home = () => {
   const classes = useStyles();
   const history = useHistory();
 
+  // Init State
+  const [showGameLoading, setShowGameLoading] = useState(false);
+
+  // Hooks
+  const {
+    status,
+    data: egmData,
+    error,
+    sendRequest: getEgmListRequest,
+  } = useHttp(getEgmList, true);
+
   // User Context
   const userContext = useContext(UserContext);
-  const {
-    apiToken,
-    setApiToken,
-    egmList,
-    getEgmList,
-    webSocketHandler,
-    onActionEgmList,
-    egmConnectList,
-    wsClient,
-    setLoginData,
-    getUserInfo,
-    userInfo,
-    isGameLoading,
-  } = userContext;
-
-  // Init State
-  const [showList, setShowList] = useState(true);
-  const [showPadding, setShowPadding] = useState(false);
+  const { apiToken, setApiToken, wsClient, getUserInfo, userInfo } = userContext;
 
   useEffect(() => {
-    // const egmStateWebSocketUri = `${wsUri}stateQuote`;
-    // webSocketHandler(egmStateWebSocketUri);
     let token = localStorage.getItem('token');
     let player = localStorage.getItem('player');
     let casino = localStorage.getItem('casino');
@@ -95,7 +94,6 @@ const Home = () => {
       pc: player,
     };
     setApiToken(token);
-
     getUserInfo(token, data);
 
     window.history.pushState(null, document.title, window.location.href);
@@ -107,35 +105,17 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const egmStateWebSocketUri = `${wsUri}stateQuote`;
-    webSocketHandler(egmStateWebSocketUri);
-    return () => {
-      if (wsClient) wsClient.close();
-    };
+    connectWithWebSocket();
   }, []);
 
   useEffect(() => {
-    egmConnectList.forEach(el => {
-      if (el.state === 1) {
-        setShowList(true);
-        setShowPadding(false);
-      }
-    });
-  }, [egmConnectList]);
-
-  useEffect(() => {
-    if (!apiToken) return;
-
-    const data = {
+    const reqData = {
       pc: localStorage.getItem('pc'),
       casino: localStorage.getItem('casino'),
       token: localStorage.getItem('token'),
     };
-    getEgmList(data);
-    setLoginData(data);
-
-    // eslint-disable-next-line
-  }, [apiToken, onActionEgmList]);
+    getEgmListRequest(reqData); // redux
+  }, [getEgmListRequest]);
 
   const handleLogout = () => {
     if (wsClient) wsClient.close();
@@ -144,7 +124,6 @@ const Home = () => {
   };
 
   //==== JSX Elements ====//
-
   const noEgmList = (
     <Box style={{ margin: '6rem auto', textAlign: 'center' }}>
       <Button
@@ -159,19 +138,29 @@ const Home = () => {
     </Box>
   );
 
-  // console.log(egmList);
+  const fetchEgmErrorEl = (
+    <div style={errorBox}>
+      <p>{error}</p>
+      <Button
+        style={{ backgroundColor: 'rgba(66, 7, 105, 0.911)' }}
+        type="button"
+        variant="contained"
+        color="primary"
+        onClick={handleLogout}
+      >
+        請重新登入
+      </Button>
+    </div>
+  );
 
   return (
     <div className={classes.root}>
-      {isGameLoading ? (
+      {showGameLoading ? (
         <Box className={classes.gameLoadingBox}>
-          <GameLoadingCard />
+          <GameLoadingCard setShowGameLoading={setShowGameLoading} />
         </Box>
       ) : (
         <Fragment>
-          {/* 等待遊戲開始玩狀態 */}
-          <ThePadding show={showPadding} />
-
           {/* 客服系統通知 */}
           {!localStorage.getItem('isShow') && <Dialog />}
 
@@ -188,8 +177,19 @@ const Home = () => {
             <Carousels />
 
             {/* Egm List */}
-            {/* <div>{egmList && showList && <MachineList egmList={egmList} token={apiToken} />}</div> */}
-            {egmList && showList ? <MachineList egmList={egmList} token={apiToken} /> : noEgmList}
+            {status === 'pending' && <ThePadding show={true} />}
+
+            {status === 'completed' && !error && egmData.egmList.length > 0 && (
+              <MachineList
+                egmList={egmData.egmList}
+                token={apiToken}
+                setShowGameLoading={setShowGameLoading}
+              />
+            )}
+
+            {status === 'completed' && !error && egmData.egmList.length === 0 && noEgmList}
+
+            {status === 'completed' && error && fetchEgmErrorEl}
 
             <Box style={footerBox}>
               <Footer />
@@ -212,6 +212,16 @@ const footerBox = {
   justifyContent: 'center',
   maxWidth: '678px',
   margin: '0 auto',
+};
+
+const errorBox = {
+  color: '#ddd',
+  height: '20vh',
+  marginTop: '5rem',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
 };
 
 export default React.memo(Home);

@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState, useContext } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import io from 'socket.io-client';
 
+import { useSelector } from 'react-redux';
+
 // Context
-import UserContext from './context/User/UserContext';
+// import UserContext from './context/User/UserContext';
 
 // peerConnection Options
 const pcConfig = {
@@ -30,12 +32,16 @@ const Viewer = ({
 
   const [socket, setSocket] = useState();
 
+  // Redux
+  const { selectEgmData } = useSelector(state => state.egm);
+  const { cameraIndex: webNumber, cameraID: cameraId, audioID: audioId } = selectEgmData;
+
   // User Context
-  const userContext = useContext(UserContext);
-  const { selectEgm } = userContext;
-  let cameraId = selectEgm.cameraId;
-  let audioId = selectEgm.audioId;
-  const webNumber = selectEgm.webNumber;
+  // const userContext = useContext(UserContext);
+  // const { selectEgm } = userContext;
+  // let cameraId = selectEgm.cameraId;
+  // let audioId = selectEgm.audioId;
+  // const webNumber = selectEgm.webNumber;
 
   const handleSocket = () => {
     const socketConnect = io.connect(process.env.REACT_APP_SOCKET_CONNECT);
@@ -74,7 +80,11 @@ const Viewer = ({
 
     socket.on('connect', () => {
       console.log('connection', socket.id);
+      const webNumber = localStorage.getItem('webNumber');
+      const audioId = localStorage.getItem('audioID');
+      const cameraId = localStorage.getItem('cameraID');
       socket.emit('joinRoom', webNumber, cameraId, audioId);
+      console.log(webNumber, cameraId, audioId);
       // socket.emit('remoteUserSelectDevice', 'fbeeb7e467a9f690700523a7079e26205fb76d1ddcdef79075b9378602d3f65e', '75a59ed289aa13f5abcf465cc75583efccb2c744fd61e1c24f7c5362540b26dc');
       // console.log(audioId);
 

@@ -9,11 +9,17 @@ import MachineItemHorizontal from './machineItemHorizontal';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import BorderAnimation from '../UI/BorderAnimation';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
+// import Backdrop from '@material-ui/core/Backdrop';
+// import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Context
 import UserContext from '../../context/User/UserContext';
+
+// Hooks
+import useHttp from '../../hooks/useHttp';
+
+// Api
+import { chooseEgm } from '../../lib/api';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,21 +50,58 @@ const useStyles = makeStyles(theme => ({
 const MachineList = props => {
   const classes = useStyles();
 
+  // Hooks
+  // choose egm
+  const {
+    status: chooseEgmStatus,
+    error: chooseEgmError,
+    data: chooseEgmData,
+    sendRequest: chooseEgmRequest,
+  } = useHttp(chooseEgm);
+
+  // // 開分
+  // const {
+  //   status: pointCashStatus,
+  //   error: pointCashError,
+  //   data: pointCashData,
+  //   sendRequest: pointCashRequest,
+  // } = useHttp(pointCash);
+
+  const { egmList, setShowGameLoading } = props;
+
   // Init State
-  const { egmList } = props;
   const [pageCount, setPageCount] = useState(0); //總共多少頁
   const [pageNumber, setPageNumber] = useState(0); //當前選擇的頁數
+
   const dataPerPage = 3; // 一頁4筆資料
   const pagesVisited = pageNumber * dataPerPage;
 
   // User Context
   const { pointLading, machineDisplayHorizontal } = useContext(UserContext);
 
+  const changePage = ({ selected }) => {
+    setPageNumber(selected);
+  };
+
+  useEffect(() => {
+    if (chooseEgmStatus !== 'completed') return;
+
+    if (chooseEgmError) {
+      alert(chooseEgmError);
+      return;
+    }
+
+    if (chooseEgmData.code === 2) {
+      setShowGameLoading(true);
+    }
+  }, [chooseEgmData, chooseEgmError, chooseEgmStatus, setShowGameLoading]);
+
+  //=== Jsx Element ====//
   const renderMachineList = props.egmList
     .slice(pagesVisited, pagesVisited + dataPerPage)
     .map((item, index) => {
       return (
-        <Grid key={index} item md={12} style={{ margin: '0 auto', width: '20rem' }}>
+        <Grid key={index} item sm={12} style={{ margin: '0 auto', maxWidth: '20rem' }}>
           <BorderAnimation>
             <MachineItemNew
               index={index}
@@ -68,6 +111,7 @@ const MachineList = props => {
               machineDetails={item}
               token={props.token}
               pageNumber={pageNumber}
+              chooseEgmRequest={chooseEgmRequest}
             />
           </BorderAnimation>
         </Grid>
@@ -88,15 +132,12 @@ const MachineList = props => {
               machineDetails={item}
               token={props.token}
               pageNumber={pageNumber}
+              chooseEgmRequest={chooseEgmRequest}
             />
           </BorderAnimation>
         </Grid>
       );
     });
-
-  const changePage = ({ selected }) => {
-    setPageNumber(selected);
-  };
 
   useEffect(() => {
     if (egmList) {
@@ -107,14 +148,14 @@ const MachineList = props => {
 
   return (
     <div className={machineDisplayHorizontal ? classes.rootHorizontal : classes.root}>
-      <Backdrop className={classes.backdrop} open={pointLading}>
+      {/* <Backdrop className={classes.backdrop} open={pointLading}>
         <div>
           <div style={{ textAlign: 'center' }}>
             <CircularProgress color="inherit" />
           </div>
-          {/* <p>開分中，請稍候...</p> */}
+          <p>開分中，請稍候...</p>
         </div>
-      </Backdrop>
+      </Backdrop> */}
 
       {machineDisplayHorizontal ? (
         <Grid container spacing={3} className={classes.containerHorizontal}>

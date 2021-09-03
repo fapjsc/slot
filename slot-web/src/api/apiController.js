@@ -16,7 +16,7 @@ const ApiController = () => {
       return await apiPost('PlayerChooseEgmApi', body, token);
     },
 
-    // 玩遊戲
+    // 玩遊戲 (spin)
     pressSlotApi: async (cfgId, egmId, egmIP, buttonNo, token, egmSession) => {
       let body = {
         cfgId: cfgId,

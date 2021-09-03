@@ -3,13 +3,26 @@ import ApiController from '../api/apiController';
 import { useContext, useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 
+// Redux
+import { useSelector, useDispatch } from 'react-redux';
+
+// Actions
+import { setSelectEgmData } from '../actions/egmActions';
+
 import screenfull from 'screenfull';
 
 // Context
 import UserContext from '../context/User/UserContext';
 
+// WebSocket
+import { connectWithWebSocket } from '../lib/wssConnect';
+
 // Api
-import { wsUri } from '../api/config';
+// import { wsUri } from '../api/config';
+import { pressSlot, getCurrentEgm } from '../lib/api';
+
+// Hooks
+import useHttp from '../hooks/useHttp';
 
 // Components
 import Screen from '../Screen';
@@ -59,31 +72,48 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+let checkTimer;
+
 const GamePlay = () => {
   // User Context
   const userContext = useContext(UserContext);
   const {
     apiToken,
-    selectEgm,
+    // selectEgm,
     setApiToken,
-    setSelectEgm,
-    setBtnList,
-    btnList,
-    kickList,
-    removeKickItem,
-    egmCreditList,
+    // setSelectEgm,
+    // setBtnList,
+    // btnList,
+    // kickList,
+    // removeKickItem,
     setReviewState,
     userReview,
-    wsClient,
-    webSocketHandler,
   } = userContext;
-
-  const { mapId, egmId, egmIp, egmSession, btnStyle } = selectEgm;
 
   const styles = useStyles();
 
   // Router Props
   const history = useHistory();
+
+  // Redux
+  const { egmCreditList, selectEgmData, kickList } = useSelector(state => state.egm);
+  const {
+    btnList,
+    btnStyle,
+    egmSession,
+    mapId,
+    egmId,
+    egmIP,
+    cameraIndex: webNumber,
+    picName,
+  } = selectEgmData;
+
+  // Actions
+  const dispatch = useDispatch();
+  // Hooks
+  const { error: spinError, data: spinData, sendRequest: spinButtonRequest } = useHttp(pressSlot);
+
+  const { sendRequest: getCurrentEgmRequest } = useHttp(getCurrentEgm);
 
   // Init State
   const [cashIn, setCashIn] = useState('');
@@ -119,7 +149,7 @@ const GamePlay = () => {
   };
 
   const refreshPage = () => {
-    socketClient.emit('refresh', selectEgm.webNumber);
+    socketClient.emit('refresh', webNumber);
     socketClient.on('clientReload', () => {
       console.log('client reload ==========');
       window.location.reload();
@@ -143,13 +173,13 @@ const GamePlay = () => {
   const leave = async () => {
     setOpen(true);
     setAutoGame(false);
-    socketClient.emit('unsubscribe', selectEgm.webNumber);
+    socketClient.emit('unsubscribe', webNumber);
     setCloseWebRtcConnect(true);
     try {
       const responseData = await ApiController().endGameApi(
         mapId,
         egmId,
-        egmIp,
+        egmIP,
         apiToken,
         egmSession
       );
@@ -157,56 +187,35 @@ const GamePlay = () => {
       if (responseData.code > 100000000) {
         alert(responseData.msg);
         setOpen(false);
+        handleLogout();
       }
 
       if (responseData.code === 6 || responseData.code === 5) {
         history.replace('/home');
         setOpen(false);
+        dispatch(setSelectEgmData({}));
+        localStorage.removeItem('mapId');
+        localStorage.removeItem('egmId');
+        localStorage.removeItem('ses');
+        localStorage.removeItem('egmIP');
+        localStorage.removeItem('audioID');
+        localStorage.removeItem('cameraID');
+        localStorage.removeItem('webNumber');
+        localStorage.removeItem('expirationTime');
       }
     } catch (error) {
-      alert('ERROR message: ', error);
+      alert('ERROR message: 發生錯誤');
       setOpen(false);
+      handleLogout();
     }
   };
 
-  const spin = useCallback(
-    async number => {
-      console.log('call spin', number);
-      if (!credit || credit === '' || credit <= 50) {
-        setAutoGame(false);
-        alert('credit 不足');
-        return;
-      }
-      try {
-        let responseData = await ApiController().pressSlotApi(
-          mapId,
-          egmId,
-          egmIp,
-          number,
-          apiToken,
-          egmSession
-        );
-
-        // 閒置時間太長
-        if (responseData.code === 100000061) {
-          setCloseWebRtcConnect(true);
-          alert(responseData.msg);
-          localStorage.clear();
-          history.replace('/');
-        }
-
-        if (responseData.code > 100000000) {
-          console.log('ERROR!');
-        }
-        if (responseData.code < 100000000) {
-          // console.log(responseData);
-        }
-      } catch (error) {
-        console.log('ERROR message: ', error);
-      }
-    },
-    [mapId, egmId, egmIp, apiToken, egmSession, credit, history]
-  );
+  const handleLogout = useCallback(() => {
+    localStorage.clear();
+    history.replace('/');
+    dispatch(setSelectEgmData({}));
+    clearInterval(checkTimer);
+  }, [dispatch, history]);
 
   const handleFullScreen = () => {
     if (screenfull.enabled) {
@@ -214,46 +223,47 @@ const GamePlay = () => {
     }
   };
 
-  // UseEffect
+  const calculateRemainingTime = expirationTime => {
+    const currentTime = new Date().getTime();
+    const adjExpirationTime = new Date(expirationTime).getTime();
+    const remainingDuration = adjExpirationTime - currentTime;
+    return remainingDuration;
+  };
+
+  const updateExpirationTime = () => {
+    // 現在時間加上三分鐘
+    const expirationTime = new Date(new Date().getTime() + 60 * 1000 * 3);
+    localStorage.setItem('expirationTime', expirationTime);
+  };
+
+  const checkRemainingTime = useCallback(() => {
+    const expirationTime = localStorage.getItem('expirationTime');
+    if (!expirationTime) return;
+
+    // console.log('checking...');
+
+    const remainingTime = calculateRemainingTime(expirationTime);
+
+    if (remainingTime <= 0) {
+      // alert('閒置超過三分鐘');
+      alert('閒置過久, 請重新登入');
+      handleLogout();
+    }
+  }, [handleLogout]);
+
+  window.onfocus = () => {
+    checkRemainingTime();
+  };
+
+  window.onblur = () => {
+    checkRemainingTime();
+  };
+
+  // 未分類
   useEffect(() => {
     handleFullScreen();
-
-    if (!btnList.length) {
-      const btnList = JSON.parse(localStorage.getItem('btnList'));
-      setBtnList(btnList);
-    }
-    if (!wsClient) {
-      const egmStateWebSocketUri = `${wsUri}stateQuote`;
-      webSocketHandler(egmStateWebSocketUri);
-    }
     const token = localStorage.getItem('token');
-    const casinoToken = localStorage.getItem('casinoToken');
-    const egmId = Number(localStorage.getItem('egmId'));
-    const egmIp = localStorage.getItem('egmIp');
-    const mapId = Number(localStorage.getItem('mapId'));
-    const cameraId = localStorage.getItem('cameraId');
-    const audioId = localStorage.getItem('audioId');
-    const picName = localStorage.getItem('picName');
-    const egmSession = localStorage.getItem('egmSession');
-    const checkSum = localStorage.getItem('checkSum');
-    const webNumber = localStorage.getItem('webNumber');
-    const btnStyle = localStorage.getItem('btnStyle');
-    const selectEgm = {
-      egmId,
-      egmIp,
-      mapId,
-      cameraId,
-      audioId,
-      picName,
-      egmSession,
-      checkSum,
-      casinoToken,
-      webNumber,
-      btnStyle,
-      // btnList,
-    };
     setApiToken(token);
-    setSelectEgm(selectEgm);
 
     window.addEventListener('resize', () => reportWindowSize());
 
@@ -263,8 +273,6 @@ const GamePlay = () => {
       window.history.pushState(null, document.title, window.location.href);
     });
 
-    getSnackImg(picName);
-
     return () => {
       window.removeEventListener('resize', reportWindowSize);
       // window.removeEventListener('popstate');
@@ -273,28 +281,75 @@ const GamePlay = () => {
     // eslint-disable-next-line
   }, []);
 
+  // 遊戲說明
+  useEffect(() => {
+    getSnackImg(picName);
+  }, [picName, getSnackImg]);
+
+  useEffect(() => {
+    checkTimer = setInterval(() => {
+      checkRemainingTime();
+    }, 3000);
+
+    return () => {
+      clearInterval(checkTimer);
+    };
+  });
+
+  // get current egm daa
+  useEffect(() => {
+    if (selectEgmData.mapId) return;
+    connectWithWebSocket();
+    const mapId = localStorage.getItem('mapId');
+    const egmId = localStorage.getItem('egmId');
+    const ses = localStorage.getItem('ses');
+    const apiToken = localStorage.getItem('token');
+    const egmIP = localStorage.getItem('egmIP');
+
+    const reqData = {
+      mapId,
+      egmId,
+      egmIP,
+      ses,
+      apiToken,
+    };
+    getCurrentEgmRequest(reqData);
+  }, [getCurrentEgmRequest, selectEgmData]);
+
+  //==== Credit handle ====//
   useEffect(() => {
     if (!egmCreditList.length) return;
-    let credit = egmCreditList.find(el => Number(el.map) === selectEgm.mapId);
+    let creditItem = egmCreditList.find(el => el.map === Number(selectEgmData.mapId));
+    if (!creditItem) return;
+    setCredit(creditItem.credit);
+  }, [egmCreditList, selectEgmData]);
 
-    if (!credit) return;
-    setCredit(credit.credit);
-  }, [egmCreditList, selectEgm]);
-
-  useEffect(() => {
-    if (!kickList.length) return;
-
-    kickList.forEach(el => {
-      if (String(el.egm) === selectEgm.egmSession && String(el.token) === apiToken) {
-        setCloseWebRtcConnect(true);
-        removeKickItem(el);
-        alert('閒置時間超過三分鐘，請重新登入');
-        localStorage.clear();
-        history.replace('/');
+  //====  Spin Handler ====//
+  // Spin
+  const spin = useCallback(
+    buttonNo => {
+      checkRemainingTime();
+      if (!credit || credit === '' || credit <= 50) {
+        setAutoGame(false);
+        alert('credit 不足');
+        return;
       }
-    });
-  }, [kickList, selectEgm, apiToken, removeKickItem, history]);
 
+      const slotReqData = {
+        cfgId: mapId,
+        egmId,
+        egmIP,
+        buttonNo,
+        egmSession,
+        apiToken,
+      };
+
+      spinButtonRequest(slotReqData);
+    },
+    [apiToken, credit, egmIP, egmId, egmSession, mapId, spinButtonRequest, checkRemainingTime]
+  );
+
+  // Auto Spin
   useEffect(() => {
     if (!autoGame) return;
     if (!credit || credit === '' || credit <= 50) {
@@ -312,7 +367,42 @@ const GamePlay = () => {
     };
   }, [autoGame, credit, spin]);
 
+  // Check Spin Status
   useEffect(() => {
+    if (!spinData) return;
+
+    // 閒置過久被踢掉
+    if (spinData.code === 100000061) {
+      alert('閒置過久, 請重新登入');
+      handleLogout();
+      return;
+    }
+
+    if (spinError) {
+      alert(spinError);
+    }
+
+    if (spinData.code === 4) {
+      updateExpirationTime();
+    }
+  }, [spinData, history, spinError, handleLogout]);
+
+  useEffect(() => {
+    if (!kickList) return;
+
+    const token = localStorage.getItem('token');
+
+    kickList.forEach(el => {
+      if (String(el.egm) === egmSession && String(el.token) === token) {
+        alert('閒置過久, 請重新登入');
+        handleLogout();
+      }
+    });
+  }, [kickList, egmSession, handleLogout]);
+
+  // Button Handle
+  useEffect(() => {
+    if (!btnList) return;
     let mainBtnTemp = [];
     let subBtnTemp = [];
 
@@ -342,6 +432,7 @@ const GamePlay = () => {
     }
   }, [btnList, btnStyle]);
 
+  // 確認手機方向
   useEffect(() => {
     if (!isOrientationVertical) handleFullScreen();
   }, [isOrientationVertical]);
@@ -604,11 +695,11 @@ const GamePlay = () => {
 
       {/* Review */}
       <Review
-        machine={selectEgm.mapId}
+        machine={mapId}
         leave={leave}
         userReview={userReview}
         token={apiToken}
-        selectEgm={selectEgm}
+        // selectEgm={selectEgm}
       />
 
       {/* 直向 */}

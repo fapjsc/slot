@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 // Context
 import UserContext from '../../context/User/UserContext';
@@ -38,19 +39,21 @@ export default function MachineItem(props) {
   // Style
   const classes = useStyles();
 
-  const { pageNumber } = props;
+  const { pageNumber, machineDetails, chooseEgmRequest } = props;
+
+  // Redux
+  const { egmConnectFailList, egmPlayingList, egmCreditList } = useSelector(state => state.egm);
 
   // Init State
   const [imgObj, setImgObj] = useState();
+  const [loginData, setLoginData] = useState(null);
+  const [hasConnect, setHasConnect] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasCredit, setHasCredit] = useState(false);
-  const [isConn, setIsConn] = useState(true);
-  const [loginData, setLoginData] = useState(null);
-  const [noConnState, setNoConnState] = useState(false);
 
   // User Context
   const userContext = useContext(UserContext);
-  const { onActionEgmList, egmCreditList, egmConnectList, chooseEgm, apiToken } = userContext;
+  const { apiToken } = userContext;
 
   // 動態加載圖片
   const getImg = useCallback(() => {
@@ -64,15 +67,21 @@ export default function MachineItem(props) {
     if (images[0]) setImgObj(images[0].default);
   }, [props.picName]);
 
-  const handlePlayStartClick = () => {
-    setIsPlaying(true);
-    // console.log('chooseEgm input: ', props.machineDetails);
-    // console.log('chooseEgm token: ', props.token);
-    // console.log(loginData, 'login data');
-    chooseEgm(loginData, props.machineDetails, apiToken);
-    // selectMachine();
+  const chooseEgmHandler = () => {
+    // setIsPlaying(true);
+    const reqData = {
+      mapId: machineDetails.mapId,
+      egmId: machineDetails.egmId,
+      egmIP: machineDetails.egmIp,
+      picName: machineDetails.pinName,
+      apiToken,
+    };
+    chooseEgmRequest(reqData);
   };
 
+  useEffect(() => {}, []);
+
+  // setLoginData
   useEffect(() => {
     const data = {
       pc: localStorage.getItem('pc'),
@@ -82,8 +91,6 @@ export default function MachineItem(props) {
     };
 
     setLoginData(data);
-    // getImg();
-
     // eslint-disable-next-line
   }, []);
 
@@ -91,55 +98,82 @@ export default function MachineItem(props) {
     getImg();
   }, [pageNumber, getImg]);
 
+  // has connection
   useEffect(() => {
-    const temp = onActionEgmList.find(el => el === props.machineDetails.egmIp);
-    temp ? setIsPlaying(true) : setIsPlaying(false);
-    // eslint-disable-next-line
-  }, [onActionEgmList]);
+    egmConnectFailList.forEach(el => {
+      if (el === machineDetails.mapId) setHasConnect(false);
+    });
 
+    return () => {
+      setHasConnect(true);
+    };
+  }, [machineDetails, egmConnectFailList]);
+
+  // Playing
   useEffect(() => {
-    if (!egmCreditList.length) return;
-    const arr = egmCreditList.filter(el => Number(el.credit) > 0);
-    const existingIndex = arr.findIndex(
-      el => Number(el.map) === Number(props.machineDetails.mapId)
-    );
-    existingIndex !== -1 ? setHasCredit(true) : setHasCredit(false);
-    // eslint-disable-next-line
-  }, [egmCreditList]);
+    egmPlayingList.forEach(el => {
+      if (el === machineDetails.mapId) setIsPlaying(true);
+    });
 
+    return () => {
+      setIsPlaying(false);
+    };
+  }, [egmPlayingList, machineDetails]);
+
+  // has credit
   useEffect(() => {
-    if (!egmConnectList.length) return;
-    // console.log(egmConnectList, 'egm connect list');
+    egmCreditList.forEach(el => {
+      if (el.map === machineDetails.mapId && el.credit > 0) setHasCredit(true);
+    });
 
-    const arr = egmConnectList.filter(el => el.state !== 1);
+    return () => {
+      setHasCredit(false);
+    };
+  }, [egmCreditList, machineDetails]);
 
-    // console.log(egmConnectList, 'egm connect list');
+  //==== Jsx Element //====
+  const cardActionsElement = (
+    <CardActions disableSpacing style={{ justifyContent: 'center' }}>
+      {/* 結算中 */}
+      {hasCredit && !isPlaying && hasConnect && (
+        <span style={disableBtnStyle}>
+          <Button disabled style={{ color: '#f2f2f2' }}>
+            結算中
+          </Button>
+        </span>
+      )}
 
-    // arr.forEach(el => {
-    //   el.map === Number(props.machineDetails.mapId) ? setIsConn(false) : setIsConn(true);
-    // });
+      {/* 可以遊戲 */}
+      {hasConnect && !isPlaying && !hasCredit && (
+        <Button variant="contained" color="primary" onClick={chooseEgmHandler}>
+          {props.buttonName ? props.buttonName : '開始玩'}
+        </Button>
+      )}
 
-    const stateIndex = arr.findIndex(el => el.map === props.machineDetails.mapId); // state 等於2，無法連練
-    const existingItem = egmConnectList.findIndex(el => el.map === props.machineDetails.mapId); // 沒有在egmConnectList裡面，無法連線
+      {/* 遊戲中 */}
+      {isPlaying && (
+        <span style={disableBtnStyle}>
+          <Button disabled style={{ color: '#f2f2f2' }}>
+            遊戲中...
+          </Button>
+        </span>
+      )}
 
-    existingItem === -1 ? setNoConnState(true) : setNoConnState(false);
-    stateIndex !== -1 ? setIsConn(false) : setIsConn(true);
-
-    // eslint-disable-next-line
-  }, [egmConnectList]);
+      {/* 連線中 */}
+      {!hasConnect && (
+        <span style={disableBtnStyle}>
+          <Button disabled style={{ color: '#f2f2f2' }}>
+            連線中
+          </Button>
+        </span>
+      )}
+    </CardActions>
+  );
 
   return (
     <>
       <Card className={`${classes.root}`}>
-        <CardHeader
-          // avatar={
-          //   <Avatar aria-label="recipe" className={classes.avatar}>
-          //     {props.magnification ? props.magnification : 'X2'}
-          //   </Avatar>
-          // }
-          title={props.title ? props.title : 'ARUZE雄狼'}
-          // subheader={props.subHeader ? props.subHeader : 'September 14, 2021'}
-        />
+        <CardHeader title={props.title ? props.title : 'ARUZE雄狼'} />
         <CardMedia className={classes.media} image={imgObj ? imgObj : null} title="Paella dish" />
         <CardContent style={{ height: 90 }}>
           <Typography
@@ -162,41 +196,9 @@ export default function MachineItem(props) {
               ? props.description.split('¢')[1]
               : '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'}
           </Typography>
-
-          {/* {props.description ? (
-            <Typography variant="body2" color="textSecondary" component="p">
-              desc1
-            </Typography>
-          ) : (
-            '機種類型：ART TYPE（含擬似BONUS）、純增2.8枚/G 50枚約可遊技轉數：32G'
-          )} */}
         </CardContent>
-        <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-          {!isConn || noConnState ? (
-            <span style={disableBtnStyle}>
-              <Button disabled style={{ color: '#f2f2f2' }}>
-                連線中
-              </Button>
-            </span>
-          ) : isPlaying && props.machineDetails.isPlaying ? (
-            <span style={disableBtnStyle}>
-              <Button disabled style={{ color: '#f2f2f2' }}>
-                遊戲中...
-              </Button>
-            </span>
-          ) : // hasCredit
-          hasCredit ? (
-            <span style={disableBtnStyle}>
-              <Button disabled style={{ color: '#f2f2f2' }}>
-                結算中...
-              </Button>
-            </span>
-          ) : (
-            <Button variant="contained" color="primary" style={{}} onClick={handlePlayStartClick}>
-              {props.buttonName ? props.buttonName : '開始玩'}
-            </Button>
-          )}
-        </CardActions>
+
+        {cardActionsElement}
       </Card>
     </>
   );

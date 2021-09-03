@@ -38,7 +38,7 @@ const ButtonGroup = ({ subBtn, btnStyle, spin, LandscapeMode, isOrientationVerti
       arr[index] = el.default;
     });
 
-    // return react 可以用的src obj
+    // react 可以用的src obj
     setImgObj(arr);
   }, [btnStyle, subBtn]);
 

@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 const MachineItemHorizontal = props => {
   const classes = useStyles();
 
-  const { pageNumber } = props;
+  const { pageNumber, chooseEgmRequest, machineDetails } = props;
 
   // Init State
   const [imgObj, setImgObj] = useState();
@@ -56,7 +56,7 @@ const MachineItemHorizontal = props => {
 
   // User Context
   const userContext = useContext(UserContext);
-  const { onActionEgmList, egmCreditList, egmConnectList, chooseEgm, apiToken } = userContext;
+  const { onActionEgmList, egmCreditList, egmConnectList, apiToken } = userContext;
 
   // 動態加載圖片
   const getImg = useCallback(() => {
@@ -70,9 +70,15 @@ const MachineItemHorizontal = props => {
     if (images[0]) setImgObj(images[0].default);
   }, [props.picName]);
 
-  const handlePlayStartClick = () => {
-    setIsPlaying(true);
-    chooseEgm(loginData, props.machineDetails, apiToken);
+  const chooseEgmHandler = () => {
+    // setIsPlaying(true);
+    const reqData = {
+      mapId: machineDetails.mapId,
+      egmId: machineDetails.egmId,
+      egmIP: machineDetails.egmIp,
+      apiToken,
+    };
+    chooseEgmRequest(reqData);
   };
 
   useEffect(() => {
@@ -172,7 +178,7 @@ const MachineItemHorizontal = props => {
                         variant="contained"
                         color="primary"
                         style={{}}
-                        onClick={handlePlayStartClick}
+                        onClick={chooseEgmHandler}
                       >
                         {props.buttonName ? props.buttonName : '開始玩'}
                       </Button>
