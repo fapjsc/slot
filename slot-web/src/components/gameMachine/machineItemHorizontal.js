@@ -53,9 +53,9 @@ const MachineItemHorizontal = props => {
   const [imgObj, setImgObj] = useState();
   // const [isPlaying, setIsPlaying] = useState(false);
   // const [hasCredit, setHasCredit] = useState(false);
-  const [isConn, setIsConn] = useState(true);
+  // const [isConn, setIsConn] = useState(true);
   const [loginData, setLoginData] = useState(null);
-  const [noConnState, setNoConnState] = useState(false);
+  // const [noConnState, setNoConnState] = useState(false);
 
   const [hasConnect, setHasConnect] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -63,7 +63,7 @@ const MachineItemHorizontal = props => {
 
   // User Context
   const userContext = useContext(UserContext);
-  const { onActionEgmList, egmConnectList, apiToken } = userContext;
+  const { apiToken } = userContext;
 
   // 動態加載圖片
   const getImg = useCallback(() => {

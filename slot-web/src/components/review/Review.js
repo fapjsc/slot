@@ -46,7 +46,7 @@ const Review = ({ machine, leave, userReview, selectEgm, token }) => {
       comment: reviewText,
       mapId: selectEgm.mapId,
       egmId: selectEgm.egmId,
-      egmIP: selectEgm.egmIp,
+      egmIP: selectEgm.egmIP,
     };
     setReviewState(false);
     leave();
@@ -71,7 +71,15 @@ const Review = ({ machine, leave, userReview, selectEgm, token }) => {
             </div>
           </DialogContentText>
 
-          <TextField value={reviewText} onChange={handleReviewText} fullWidth id="outlined-textarea" label="建議" multiline variant="outlined" />
+          <TextField
+            value={reviewText}
+            onChange={handleReviewText}
+            fullWidth
+            id="outlined-textarea"
+            label="建議"
+            multiline
+            variant="outlined"
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSubmit} color="primary">

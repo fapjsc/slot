@@ -700,7 +700,7 @@ const GamePlay = () => {
         leave={leave}
         userReview={userReview}
         token={apiToken}
-        // selectEgm={selectEgm}
+        selectEgm={selectEgmData}
       />
 
       {/* 直向 */}
