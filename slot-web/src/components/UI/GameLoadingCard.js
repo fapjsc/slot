@@ -108,10 +108,16 @@ const GameLoadingCard = ({ setShowGameLoading }) => {
       alert(pointCashError);
       setShowGameLoading(false);
     }
-  }, [pointCashError, setShowGameLoading]);
+  }, [pointCashError, setShowGameLoading, history]);
 
   useEffect(() => {
     if (pointCashStatus !== 'completed') return;
+
+    if (pointCashData === null) {
+      localStorage.clear();
+      history.replace('/');
+      return;
+    }
 
     if (pointCashData.code === 3) {
       history.replace('/gameStart');
