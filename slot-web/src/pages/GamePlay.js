@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Actions
-import { setSelectEgmData } from '../actions/egmActions';
+import { setSelectEgmData, removeIsPlaying } from '../actions/egmActions';
 
 import screenfull from 'screenfull';
 
@@ -47,9 +47,6 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import 'odometer/themes/odometer-theme-train-station.css';
 import Box from '@material-ui/core/Box';
-
-// Image
-// import SnackBarBasicImage from '../asset/snack.jpg';
 
 // Icon
 import BuildIcon from '@material-ui/icons/Build';
@@ -193,6 +190,7 @@ const GamePlay = () => {
       if (responseData.code === 6 || responseData.code === 5) {
         history.replace('/home');
         setOpen(false);
+        dispatch(removeIsPlaying(mapId));
         dispatch(setSelectEgmData({}));
         localStorage.removeItem('mapId');
         localStorage.removeItem('egmId');
@@ -213,9 +211,10 @@ const GamePlay = () => {
   const handleLogout = useCallback(() => {
     localStorage.clear();
     history.replace('/');
+    dispatch(removeIsPlaying(mapId));
     dispatch(setSelectEgmData({}));
     clearInterval(checkTimer);
-  }, [dispatch, history]);
+  }, [dispatch, history, mapId]);
 
   const handleFullScreen = () => {
     if (screenfull.enabled) {
@@ -432,7 +431,7 @@ const GamePlay = () => {
     }
   }, [btnList, btnStyle]);
 
-  // 確認手機方向
+  // 手機方向
   useEffect(() => {
     if (!isOrientationVertical) handleFullScreen();
   }, [isOrientationVertical]);

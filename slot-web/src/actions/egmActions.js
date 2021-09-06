@@ -6,6 +6,7 @@ import {
   EGM_SET_EGM_CREDIT_LIST,
   EGM_SET_SELECT_EGM_DATA,
   EGM_SET_KICK_LIST,
+  EGM_REMOVE_IS_PLAYING,
 } from '../constants/egmConstants';
 
 export const setEgmList = egmList => dispatch => {
@@ -54,5 +55,12 @@ export const setKickList = egmKickItem => dispatch => {
   dispatch({
     type: EGM_SET_KICK_LIST,
     egmKickItem,
+  });
+};
+
+export const removeIsPlaying = playingItem => dispatch => {
+  dispatch({
+    type: EGM_REMOVE_IS_PLAYING,
+    playingItem,
   });
 };

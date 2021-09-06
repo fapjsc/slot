@@ -6,6 +6,7 @@ import {
   EGM_SET_EGM_CREDIT_LIST,
   EGM_SET_SELECT_EGM_DATA,
   EGM_SET_KICK_LIST,
+  EGM_REMOVE_IS_PLAYING,
 } from '../constants/egmConstants';
 
 const egmListInitState = {
@@ -96,6 +97,12 @@ export const egmListReducers = (state = egmListInitState, action) => {
           kickList: [...state.kickList, kickItem],
         };
       }
+
+    case EGM_REMOVE_IS_PLAYING:
+      return {
+        ...state,
+        egmPlayingList: state.egmPlayingList.filter(el => el !== action.playingItem),
+      };
 
     default:
       return state;
