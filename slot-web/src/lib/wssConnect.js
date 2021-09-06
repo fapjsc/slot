@@ -21,9 +21,11 @@ let egmConnectSuccessArrTmp = [];
 let egmConnectFailArrTmp = [];
 let egmCreditArrTmp = [];
 
+let client;
+
 export const connectWithWebSocket = () => {
   const egmStateWebSocketUri = `${wsUri}stateQuote`;
-  const client = new ReconnectingWebSocket(egmStateWebSocketUri);
+  client = new ReconnectingWebSocket(egmStateWebSocketUri);
 
   // 1.建立連接
   client.onopen = () => {
@@ -32,7 +34,6 @@ export const connectWithWebSocket = () => {
 
   // 收到server回復
   client.onmessage = message => {
-    // console.log(message.data, 'kick');
     if (client.readyState === client.OPEN) {
       if (store.getState().egm.selectEgmData.egmSession) {
         const egmSession = store.getState().egm.selectEgmData.egmSession;

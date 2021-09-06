@@ -621,6 +621,7 @@ const GamePlay = () => {
           btnStyle={btnStyle}
         />
       </div>
+
       <div className={classes.iconBox}>
         <IconButton
           aria-label="rotation"

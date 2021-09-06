@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 // Context
 import UserContext from '../../context/User/UserContext';
@@ -46,17 +47,23 @@ const MachineItemHorizontal = props => {
 
   const { pageNumber, chooseEgmRequest, machineDetails } = props;
 
+  const { egmConnectFailList, egmPlayingList, egmCreditList } = useSelector(state => state.egm);
+
   // Init State
   const [imgObj, setImgObj] = useState();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hasCredit, setHasCredit] = useState(false);
+  // const [isPlaying, setIsPlaying] = useState(false);
+  // const [hasCredit, setHasCredit] = useState(false);
   const [isConn, setIsConn] = useState(true);
   const [loginData, setLoginData] = useState(null);
   const [noConnState, setNoConnState] = useState(false);
 
+  const [hasConnect, setHasConnect] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasCredit, setHasCredit] = useState(false);
+
   // User Context
   const userContext = useContext(UserContext);
-  const { onActionEgmList, egmCreditList, egmConnectList, apiToken } = userContext;
+  const { onActionEgmList, egmConnectList, apiToken } = userContext;
 
   // 動態加載圖片
   const getImg = useCallback(() => {
@@ -99,28 +106,62 @@ const MachineItemHorizontal = props => {
     getImg();
   }, [pageNumber, getImg]);
 
-  useEffect(() => {
-    const temp = onActionEgmList.find(el => el === props.machineDetails.egmIp);
-    temp ? setIsPlaying(true) : setIsPlaying(false);
-  }, [onActionEgmList, props.machineDetails]);
+  // Playing
+  // useEffect(() => {
+  //   const temp = onActionEgmList.find(el => el === props.machineDetails.egmIp);
+  //   temp ? setIsPlaying(true) : setIsPlaying(false);
+  // }, [onActionEgmList, props.machineDetails]);
 
+  // has connection
   useEffect(() => {
-    if (!egmCreditList.length) return;
-    const arr = egmCreditList.filter(el => Number(el.credit) > 0);
-    const existingIndex = arr.findIndex(
-      el => Number(el.map) === Number(props.machineDetails.mapId)
-    );
-    existingIndex !== -1 ? setHasCredit(true) : setHasCredit(false);
-  }, [egmCreditList, props.machineDetails]);
+    egmConnectFailList.forEach(el => {
+      if (el === machineDetails.mapId) setHasConnect(false);
+    });
 
+    return () => {
+      setHasConnect(true);
+    };
+  }, [machineDetails, egmConnectFailList]);
+
+  // Playing
   useEffect(() => {
-    if (!egmConnectList.length) return;
-    const arr = egmConnectList.filter(el => el.state !== 1);
-    const stateIndex = arr.findIndex(el => el.map === props.machineDetails.mapId); // state 等於2，無法連練
-    const existingItem = egmConnectList.findIndex(el => el.map === props.machineDetails.mapId); // 沒有在egmConnectList裡面，無法連線
-    existingItem === -1 ? setNoConnState(true) : setNoConnState(false);
-    stateIndex !== -1 ? setIsConn(false) : setIsConn(true);
-  }, [egmConnectList, props.machineDetails]);
+    egmPlayingList.forEach(el => {
+      if (el === machineDetails.mapId) setIsPlaying(true);
+    });
+
+    return () => {
+      setIsPlaying(false);
+    };
+  }, [egmPlayingList, machineDetails]);
+
+  // useEffect(() => {
+  //   if (!egmCreditList.length) return;
+  //   const arr = egmCreditList.filter(el => Number(el.credit) > 0);
+  //   const existingIndex = arr.findIndex(
+  //     el => Number(el.map) === Number(props.machineDetails.mapId)
+  //   );
+  //   existingIndex !== -1 ? setHasCredit(true) : setHasCredit(false);
+  // }, [egmCreditList, props.machineDetails]);
+
+  // has credit
+  useEffect(() => {
+    egmCreditList.forEach(el => {
+      if (el.map === machineDetails.mapId && el.credit > 0) setHasCredit(true);
+    });
+
+    return () => {
+      setHasCredit(false);
+    };
+  }, [egmCreditList, machineDetails]);
+
+  // useEffect(() => {
+  //   if (!egmConnectList.length) return;
+  //   const arr = egmConnectList.filter(el => el.state !== 1);
+  //   const stateIndex = arr.findIndex(el => el.map === props.machineDetails.mapId); // state 等於2，無法連練
+  //   const existingItem = egmConnectList.findIndex(el => el.map === props.machineDetails.mapId); // 沒有在egmConnectList裡面，無法連線
+  //   existingItem === -1 ? setNoConnState(true) : setNoConnState(false);
+  //   stateIndex !== -1 ? setIsConn(false) : setIsConn(true);
+  // }, [egmConnectList, props.machineDetails]);
 
   return (
     <Grid container>
@@ -153,7 +194,31 @@ const MachineItemHorizontal = props => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                  {/* 可以遊戲 */}
+                  {hasConnect && !isPlaying && !hasCredit && (
+                    <Button variant="contained" color="primary" onClick={chooseEgmHandler}>
+                      {props.buttonName ? props.buttonName : '開始玩'}
+                    </Button>
+                  )}
+
+                  {/* 遊戲中 */}
+                  {isPlaying && (
+                    <span style={disableBtnStyle}>
+                      <Button disabled style={{ color: '#f2f2f2' }}>
+                        遊戲中...
+                      </Button>
+                    </span>
+                  )}
+
+                  {/* 連線中 */}
+                  {!hasConnect && (
+                    <span style={disableBtnStyle}>
+                      <Button disabled style={{ color: '#f2f2f2' }}>
+                        連線中
+                      </Button>
+                    </span>
+                  )}
+                  {/* <Typography variant="body2" style={{ cursor: 'pointer' }}>
                     {!isConn || noConnState ? (
                       <span style={disableBtnStyle}>
                         <Button disabled style={{ color: '#f2f2f2' }}>
@@ -183,7 +248,7 @@ const MachineItemHorizontal = props => {
                         {props.buttonName ? props.buttonName : '開始玩'}
                       </Button>
                     )}
-                  </Typography>
+                  </Typography> */}
                 </Grid>
               </Grid>
             </Grid>
