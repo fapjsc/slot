@@ -18,7 +18,7 @@ const EgmList = ({ egmList, onClickHandler }) => {
       </thead>
       <tbody>
         {egmList.map((egm, index) => (
-          <tr key={egm.configId} className="" onClick={() => onClickHandler(egm.mapId)}>
+          <tr key={egm.configId} className="" onClick={() => onClickHandler(egm.configId)}>
             <td>{index + 1}</td>
             <td>{egm.gameName || 'null'}</td>
             <td>{egm.configId || 'null'}</td>

@@ -1,0 +1,2 @@
+export const EGM_SET_PLAYING_LIST = 'EGM_SET_PLAYING_LIST';
+export const EGM_SET_EGM_LIST = 'EGM_SET_EGM_LIST';

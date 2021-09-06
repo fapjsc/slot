@@ -415,9 +415,17 @@ const GamePlay = () => {
     });
 
     setMainBtn(mainBtnTemp.reverse());
+    console.log(btnStyle, 'btn');
 
     // IGT subButton
     if (btnStyle === 'igt-poker') {
+      subBtnTemp.sort((a, b) => {
+        if (a.buttonNo < b.buttonNo) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
       setSubBtn(subBtnTemp);
     } else if (btnStyle === 'igt-cashcove' || btnStyle === 'igt-cleopatra') {
       subBtnTemp.sort((a, b) => {
@@ -430,7 +438,7 @@ const GamePlay = () => {
       setSubBtn(subBtnTemp);
     }
 
-    // 貴族SubButton
+    // 貴族 SubButton
     if (btnStyle === 'Aristocrat') {
       subBtnTemp.sort((a, b) => {
         if (a.buttonNo < b.buttonNo) {
@@ -440,7 +448,18 @@ const GamePlay = () => {
         }
       });
       setSubBtn(subBtnTemp);
-      console.log(subBtnTemp, 'btn');
+    }
+
+    //Aruze SubButton
+    if (btnStyle === 'Aruze') {
+      subBtnTemp.sort((a, b) => {
+        if (a.buttonNo < b.buttonNo) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+      setSubBtn(subBtnTemp);
     }
   }, [btnList, btnStyle]);
 

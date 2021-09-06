@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 // Actions
-import { setEgmList } from '../actions/egmAction';
+import { setEgmList } from '../store/actions/egmAction';
 
 // Components
 import EgmList from '../components/EgmList';
@@ -36,11 +36,6 @@ const EgmScreen = () => {
   useEffect(() => {
     getEgmList();
   }, [getEgmList]);
-
-  useEffect(() => {
-    if (!egmData) return;
-    dispatch(setEgmList(egmData.propConfigList));
-  }, [dispatch, egmData]);
 
   return (
     <div>

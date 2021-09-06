@@ -1,3 +1,6 @@
+import store from '../store';
+import { setEgmList } from '../store/actions/egmAction';
+
 const AGENT_URL = 'http://220.135.67.240:8000';
 const LOCAL_SERVER = '192.168.10.60';
 
@@ -13,6 +16,8 @@ export const getEgmProps = async () => {
   if (data.code !== 14) {
     throw new Error(data.msg || 'Could not fetch egm.');
   }
+
+  store.dispatch(setEgmList(data.propConfigList));
 
   return data;
 };
