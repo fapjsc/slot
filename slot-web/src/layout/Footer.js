@@ -52,7 +52,7 @@ const Footer = () => {
           {speed && !testSpeed ? `${speed} MB/s` : 'checking...'}
         </span>
       </IconButton>
-      <p>v F.0.2.0.B.0.1.0</p>
+      <p>v-f.0.2.0-b.0.1.0</p>
     </footer>
   );
 };
