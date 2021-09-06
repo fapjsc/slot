@@ -406,6 +406,7 @@ const GamePlay = () => {
     let subBtnTemp = [];
 
     btnList.forEach(btn => {
+      // 99 => MAX, 77 => Spin, 55 => Take
       if (btn.buttonNo === 77 || btn.buttonNo === 99 || btn.buttonNo === 55) {
         mainBtnTemp.push(btn);
       } else {
@@ -415,6 +416,7 @@ const GamePlay = () => {
 
     setMainBtn(mainBtnTemp.reverse());
 
+    // IGT subButton
     if (btnStyle === 'igt-poker') {
       setSubBtn(subBtnTemp);
     } else if (btnStyle === 'igt-cashcove' || btnStyle === 'igt-cleopatra') {
@@ -426,8 +428,19 @@ const GamePlay = () => {
         }
       });
       setSubBtn(subBtnTemp);
-    } else {
-      setSubBtn(subBtnTemp.reverse());
+    }
+
+    // 貴族SubButton
+    if (btnStyle === 'Aristocrat') {
+      subBtnTemp.sort((a, b) => {
+        if (a.buttonNo < b.buttonNo) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+      setSubBtn(subBtnTemp);
+      console.log(subBtnTemp, 'btn');
     }
   }, [btnList, btnStyle]);
 

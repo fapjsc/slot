@@ -19,7 +19,5 @@ export const connectWithWss = () => {
     playingArr.forEach(el => {
       arr.push(el.MapId);
     });
-
-    console.log(arr === arr);
   };
 };
