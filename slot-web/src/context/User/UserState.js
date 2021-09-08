@@ -1,6 +1,6 @@
 import { apiUrl, apiCasinoUrl } from '../../api/config';
 
-import { useReducer } from 'react';
+import { useReducer, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import UserReducer from './UserReducer';
 import UserContext from './UserContext';
@@ -28,6 +28,7 @@ import {
   SET_USER_INFO,
   MACHINE_DISPLAY_HORIZONTAL_MODE,
   // SET_GAME_LOADING,
+  SET_GET_USER_INFO_LOADING,
 } from '../type';
 
 const UserState = props => {
@@ -53,6 +54,7 @@ const UserState = props => {
     userInfo: null,
     machineDisplayHorizontal: false,
     showPadding: true,
+    getUserInfoLoading: false,
     // isGameLoading: false,
   };
 
@@ -97,7 +99,8 @@ const UserState = props => {
   };
 
   // User Info
-  const getUserInfo = async (token, data) => {
+  const getUserInfo = useCallback(async (token, data) => {
+    setGetUserInfoLoading(true);
     const headers = getHeaders(token, data);
     const url = `${apiUrl}PlayerDataApi?casino=${data.casino}&pc=${data.pc}`;
 
@@ -109,13 +112,17 @@ const UserState = props => {
       });
 
       const resData = await res.json();
-      // console.log(resData);
+      console.log(resData);
 
       if (resData.code === 35) setUserInfo(resData.playerObj);
     } catch (error) {
       console.log(error.message);
     }
-  };
+
+    setTimeout(() => {
+      setGetUserInfoLoading(false);
+    }, 1000);
+  }, []);
 
   // User Review
   const userReview = async (token, data) => {
@@ -469,6 +476,10 @@ const UserState = props => {
     dispatch({ type: MACHINE_DISPLAY_HORIZONTAL_MODE, payload: value });
   };
 
+  const setGetUserInfoLoading = value => {
+    dispatch({ type: SET_GET_USER_INFO_LOADING, payload: value });
+  };
+
   // const setGameLoading = value => {
   //   dispatch({ type: SET_GAME_LOADING, payload: value });
   // };
@@ -496,6 +507,7 @@ const UserState = props => {
         userInfo: state.userInfo,
         machineDisplayHorizontal: state.machineDisplayHorizontal,
         isGameLoading: state.isGameLoading,
+        getUserInfoLoading: state.getUserInfoLoading,
 
         setApiToken,
         setEgmList,

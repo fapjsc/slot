@@ -1,11 +1,6 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { useDispatch } from 'react-redux';
-
-// Actions
-import { setEgmList } from '../store/actions/egmAction';
-
 // Components
 import EgmList from '../components/EgmList';
 
@@ -25,8 +20,6 @@ const EgmScreen = () => {
   // Router Props
   const history = useHistory();
 
-  const dispatch = useDispatch();
-
   const { data: egmData, status, error, sendRequest: getEgmList } = useHttp(getEgmProps);
 
   const onClickHandler = egmMapId => {
@@ -38,9 +31,7 @@ const EgmScreen = () => {
   }, [getEgmList]);
 
   return (
-    <div>
-      <h3>EGM Status</h3>
-
+    <div style={{ marginTop: '2rem' }}>
       {status === 'pending' && (
         <Center>
           <Spinner animation="border" />
@@ -49,7 +40,7 @@ const EgmScreen = () => {
 
       {status === 'completed' && error && (
         <Center>
-          <Alert style={{ width: '50%' }} variant="danger">
+          <Alert className="w-50 p-4 fs-2" variant="danger">
             {error}
           </Alert>
         </Center>

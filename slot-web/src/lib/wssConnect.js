@@ -74,6 +74,7 @@ export const connectWithWebSocket = () => {
     // Kick state
     if (message.data.includes('KickEgmNotify')) {
       if (message.data === kickStateTmp) return;
+
       kickStateTmp = message.data;
       let str = message.data.replace('KickEgmNotify*>>*', '').replace('*^**>>*', '*^*');
       let strArr = str.split('*^*');
@@ -105,6 +106,7 @@ export const connectWithWebSocket = () => {
     // // Egm Playing State
     if (message.data.includes('EgmPlayingState')) {
       if (playingStateTmp === message.data) return;
+      console.log(message.data);
       playingStateTmp = message.data;
       let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**>>*', '*^*');
       let strArr = str.split('*^*');

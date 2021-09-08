@@ -1,65 +1,180 @@
-import { useParams } from 'react-router-dom';
-import btnStyle from '../data/btnStyle';
+// Validator
+import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../lib/validator';
+
+// Components
+import Input from '../components/element/Input';
+
+// Router Props
+import { useHistory } from 'react-router-dom';
 
 // Style
 import { Form, Row, Col, Button, Card } from 'react-bootstrap';
+import { Fragment } from 'react';
 
-const EgmForm = () => {
-  const { egmMapId } = useParams();
+const EgmForm = props => {
+  // Init State
 
-  const onSubmitHandler = e => {
-    e.preventDefault();
+  const { inputHandler, formState, onSubmitHandler } = props;
+
+  // Router Props
+  const history = useHistory();
+
+  const cancelUpdateFormHandler = () => {
+    history.replace('/egm');
   };
 
-  //==== Jsx Element ====//
-  const optionEl = btnStyle.map(btn => <option key={btn}>{btn}</option>);
-
   return (
-    <Card>
-      <Card.Header>
-        <h3>EGM Map：{egmMapId}</h3>
-      </Card.Header>
+    <Card style={{ paddingTop: '1rem' }}>
       <Card.Body>
         <Form onSubmit={onSubmitHandler}>
-          <Row className="mb-3">
-            <Form.Group as={Col} controlId="name">
-              <Form.Label>名稱</Form.Label>
-              <Form.Control type="text" placeholder="機台名稱" />
-            </Form.Group>
+          {/* 中文 */}
+          {props.tw && (
+            <Fragment>
+              <Row className="mb-4">
+                <Input
+                  id="gameName"
+                  element="input"
+                  type="text"
+                  label="遊戲中文名稱"
+                  placeholder="請輸入遊戲中文名稱"
+                  validators={[VALIDATOR_REQUIRE()]}
+                  errorText="請輸入有效的遊戲中文名稱."
+                  onInput={inputHandler}
+                  initialValue={formState.inputs.gameName.value}
+                  initialValid={formState.inputs.gameName.isValid}
+                />
+              </Row>
+              <Row className="my-4">
+                <Input
+                  id="gameDesc"
+                  element="textarea"
+                  label="遊戲中文描述"
+                  placeholder="請輸入遊戲中文描述"
+                  validators={[VALIDATOR_MINLENGTH(5)]}
+                  errorText="至少輸入五個字."
+                  onInput={inputHandler}
+                  initialValue={formState.inputs.gameDesc.value}
+                  initialValid={formState.inputs.gameDesc.isValid}
+                />
+              </Row>
+            </Fragment>
+          )}
 
-            <Form.Group as={Col} controlId="formGridPassword">
-              <Form.Label>語系</Form.Label>
-              <select disabled className="form-select" id="langues">
-                <option>中文</option>
-              </select>
-            </Form.Group>
-          </Row>
+          {/* 英文 */}
+          {props.eng && (
+            <Fragment>
+              <Row className="mb-4">
+                <Input
+                  id="gameNameEn"
+                  element="input"
+                  type="text"
+                  label="遊戲英文名稱"
+                  placeholder="請輸入英文名稱"
+                  validators={[VALIDATOR_REQUIRE()]}
+                  errorText="請輸入有效的遊戲英文名稱."
+                  onInput={inputHandler}
+                  initialValue={formState.inputs.gameNameEn.value}
+                  initialValid={formState.inputs.gameNameEn.isValid}
+                />
+              </Row>
+              <Row className="my-4">
+                <Input
+                  id="gameDescEn"
+                  element="textarea"
+                  label="遊戲英文描述"
+                  placeholder="請輸入遊戲英文描述"
+                  validators={[VALIDATOR_MINLENGTH(5)]}
+                  errorText="至少輸入五個字."
+                  onInput={inputHandler}
+                  initialValue={formState.inputs.gameDescEn.value}
+                  initialValid={formState.inputs.gameDescEn.isValid}
+                />
+              </Row>
+            </Fragment>
+          )}
 
-          <Row className="mt-3">
-            <Form.Group className="mb-3" controlId="egmBtn">
-              <Form.Label>機台按鈕</Form.Label>
-              <select className="form-select" id="egmBtn">
-                {optionEl}
-              </select>
-            </Form.Group>
-          </Row>
+          {/* 日文 */}
+          {props.jp && (
+            <Fragment>
+              <Row className="mb-4">
+                <Input
+                  id="gameNameJp"
+                  element="input"
+                  type="text"
+                  label="遊戲日文名稱"
+                  placeholder="請輸入日文名稱"
+                  validators={[VALIDATOR_REQUIRE()]}
+                  errorText="請輸入有效的遊戲日文名稱."
+                  onInput={inputHandler}
+                  initialValue={formState.inputs.gameNameJp.value}
+                  initialValid={formState.inputs.gameNameJp.isValid}
+                />
+              </Row>
+              <Row className="my-4">
+                <Input
+                  id="gameDescJp"
+                  element="textarea"
+                  label="遊戲日文描述"
+                  placeholder="請輸入遊戲日文描述"
+                  validators={[VALIDATOR_MINLENGTH(5)]}
+                  errorText="至少輸入五個字."
+                  onInput={inputHandler}
+                  initialValue={formState.inputs.gameDescJp.value}
+                  initialValid={formState.inputs.gameDescJp.isValid}
+                />
+              </Row>
+            </Fragment>
+          )}
 
-          <Row className="mb-3">
-            <Form.Group className="mb-3" controlId="formGridAddress1">
-              <Form.Label>描述</Form.Label>
-              <Form.Control as="textarea" placeholder="機台描述" />
-            </Form.Group>
-          </Row>
+          {/* 通用 */}
+          {props.general && (
+            <Fragment>
+              <Row className="mb-4">
+                <Input
+                  id="uiOrder"
+                  element="input"
+                  type="number"
+                  label="遊戲排序"
+                  placeholder="請輸入排序"
+                  validators={[VALIDATOR_REQUIRE()]}
+                  errorText="請輸入有效排序."
+                  onInput={inputHandler}
+                  initialValue={formState.inputs.uiOrder.value}
+                  initialValid={formState.inputs.uiOrder.isValid}
+                />
+              </Row>
+              <Row className="my-4">
+                <Input
+                  id="picName"
+                  element="input"
+                  type="text"
+                  label="圖檔檔名"
+                  placeholder="請輸入圖檔檔名"
+                  validators={[VALIDATOR_REQUIRE()]}
+                  errorText="請輸入有效檔名."
+                  onInput={inputHandler}
+                  initialValue={formState.inputs.picName.value}
+                  initialValid={formState.inputs.picName.isValid}
+                />
+              </Row>
+            </Fragment>
+          )}
 
+          {/* Form Actions */}
           <Row className="mt-4">
             <Form.Group as={Col} md={12} className="text-center">
-              <Button variant="secondary" className="mb-3 w-50" type="submit">
+              <Button variant="outline-primary" className="mb-3 w-50 mt-3" type="submit">
                 確定
               </Button>
             </Form.Group>
 
             <Form.Group as={Col} md={12} className="text-center">
-              <Button variant="secondary" className="w-50" type="button">
+              <Button
+                variant="secondary"
+                className="w-50 mt-2"
+                type="button"
+                onClick={cancelUpdateFormHandler}
+              >
                 取消
               </Button>
             </Form.Group>

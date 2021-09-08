@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect, useCallback } from 'react';
 
 // Style
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,6 +13,8 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import SyncIcon from '@material-ui/icons/Sync';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Image
 // import logo from '../asset/tga-logo2.png';
@@ -48,7 +50,13 @@ const HomeHeader = props => {
   // const open = Boolean(anchorEl);
 
   // User Context
-  const { machineDisplayHorizontal, setMachineDisplayHorizontal } = useContext(UserContext);
+  const {
+    machineDisplayHorizontal,
+    setMachineDisplayHorizontal,
+    getUserInfo,
+    getUserInfoLoading,
+    userInfo,
+  } = useContext(UserContext);
 
   //   const handleChange = event => {
   //     setAuth(event.target.checked);
@@ -69,6 +77,31 @@ const HomeHeader = props => {
       setMachineDisplayHorizontal(true);
     }
   };
+
+  const getUserInfoHandler = useCallback(() => {
+    const token = localStorage.getItem('token');
+    const data = {
+      casino: localStorage.getItem('casino'),
+      pc: localStorage.getItem('player'),
+    };
+
+    getUserInfo(token, data);
+  }, [getUserInfo]);
+
+  useEffect(() => {
+    let timer;
+    if (userInfo && userInfo.walletState === 1) {
+      timer = setInterval(() => {
+        getUserInfoHandler();
+      }, 10000);
+    } else {
+      clearInterval(timer);
+    }
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [userInfo, getUserInfoHandler]);
 
   return (
     <div className={classes.root}>
@@ -105,16 +138,23 @@ const HomeHeader = props => {
               </div>
 
               <div>
-                <IconButton
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  color="inherit"
-                  style={buttonStyle}
-                >
-                  <MonetizationOnIcon />
-                  <span style={spanText}>{money}</span>
-                </IconButton>
+                {getUserInfoLoading ? (
+                  <CircularProgress size={23} color="secondary" />
+                ) : (
+                  <IconButton
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    color="inherit"
+                    style={buttonStyle}
+                  >
+                    <SyncIcon onClick={getUserInfoHandler} />
+
+                    <span style={userInfo && userInfo.walletState === 1 ? redText : spanText}>
+                      {userInfo && userInfo.walletState === 1 ? '結算中..' : `$${money}`}
+                    </span>
+                  </IconButton>
+                )}
               </div>
 
               <div>
@@ -172,6 +212,12 @@ const HomeHeader = props => {
 };
 
 const spanText = {
+  fontSize: '10px',
+  marginLeft: '4px',
+};
+
+const redText = {
+  color: 'red',
   fontSize: '10px',
   marginLeft: '4px',
 };

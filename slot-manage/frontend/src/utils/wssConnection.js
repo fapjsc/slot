@@ -17,9 +17,7 @@ export const connectWithWss = () => {
 
   socket.onmessage = message => {
     if (message.data === tmpStr) return;
-
     tmpStr = message.data;
-
     const dataFromServer = JSON.parse(message.data);
 
     // Set Playing Arr

@@ -34,7 +34,7 @@ const App = () => {
               <Redirect to="/egm" />
             </Route>
             <Route path="/egm" component={EgmScreen} exact />
-            <Route path="/egm/edit/:egmMapId" component={EditEgmScreen} />
+            <Route path="/egm/edit/:configId" component={EditEgmScreen} />
             <Route path="/accounting" component={AccountingScreen} />
             <Route path="*" component={NotFound} />
           </Switch>

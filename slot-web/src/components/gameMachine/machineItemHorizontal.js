@@ -51,12 +51,7 @@ const MachineItemHorizontal = props => {
 
   // Init State
   const [imgObj, setImgObj] = useState();
-  // const [isPlaying, setIsPlaying] = useState(false);
-  // const [hasCredit, setHasCredit] = useState(false);
-  // const [isConn, setIsConn] = useState(true);
   const [loginData, setLoginData] = useState(null);
-  // const [noConnState, setNoConnState] = useState(false);
-
   const [hasConnect, setHasConnect] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasCredit, setHasCredit] = useState(false);
@@ -106,12 +101,6 @@ const MachineItemHorizontal = props => {
     getImg();
   }, [pageNumber, getImg]);
 
-  // Playing
-  // useEffect(() => {
-  //   const temp = onActionEgmList.find(el => el === props.machineDetails.egmIp);
-  //   temp ? setIsPlaying(true) : setIsPlaying(false);
-  // }, [onActionEgmList, props.machineDetails]);
-
   // has connection
   useEffect(() => {
     egmConnectFailList.forEach(el => {
@@ -134,15 +123,6 @@ const MachineItemHorizontal = props => {
     };
   }, [egmPlayingList, machineDetails]);
 
-  // useEffect(() => {
-  //   if (!egmCreditList.length) return;
-  //   const arr = egmCreditList.filter(el => Number(el.credit) > 0);
-  //   const existingIndex = arr.findIndex(
-  //     el => Number(el.map) === Number(props.machineDetails.mapId)
-  //   );
-  //   existingIndex !== -1 ? setHasCredit(true) : setHasCredit(false);
-  // }, [egmCreditList, props.machineDetails]);
-
   // has credit
   useEffect(() => {
     egmCreditList.forEach(el => {
@@ -153,15 +133,6 @@ const MachineItemHorizontal = props => {
       setHasCredit(false);
     };
   }, [egmCreditList, machineDetails]);
-
-  // useEffect(() => {
-  //   if (!egmConnectList.length) return;
-  //   const arr = egmConnectList.filter(el => el.state !== 1);
-  //   const stateIndex = arr.findIndex(el => el.map === props.machineDetails.mapId); // state 等於2，無法連練
-  //   const existingItem = egmConnectList.findIndex(el => el.map === props.machineDetails.mapId); // 沒有在egmConnectList裡面，無法連線
-  //   existingItem === -1 ? setNoConnState(true) : setNoConnState(false);
-  //   stateIndex !== -1 ? setIsConn(false) : setIsConn(true);
-  // }, [egmConnectList, props.machineDetails]);
 
   return (
     <Grid container>

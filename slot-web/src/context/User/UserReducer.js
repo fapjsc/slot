@@ -15,6 +15,7 @@ import {
   SET_POINT_LOADING,
   SET_USER_INFO,
   MACHINE_DISPLAY_HORIZONTAL_MODE,
+  SET_GET_USER_INFO_LOADING,
   SET_GAME_LOADING,
 } from '../type';
 
@@ -182,6 +183,12 @@ const UserReducer = (state, action) => {
       return {
         ...state,
         apiToken: action.payload,
+      };
+
+    case SET_GET_USER_INFO_LOADING:
+      return {
+        ...state,
+        getUserInfoLoading: action.payload,
       };
     default:
       return state;

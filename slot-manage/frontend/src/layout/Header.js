@@ -12,7 +12,7 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <LinkContainer to="/" className="me-3">
+              <LinkContainer to="/egm" className="me-3">
                 <Nav.Link>
                   <i className="fas fa-home" style={iconSize}></i>
                   <span className="ms-2">首頁</span>
@@ -29,7 +29,7 @@ const Header = () => {
               <LinkContainer to="/test" className="me-3">
                 <Nav.Link>
                   <i className="fas fa-user" style={iconSize}></i>
-                  <span className="ms-2">User</span>
+                  <span className="ms-2">test123</span>
                 </Nav.Link>
               </LinkContainer>
 

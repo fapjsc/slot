@@ -85,8 +85,8 @@ const GameLoadingCard = ({ setShowGameLoading }) => {
       clearInterval(timer);
 
       // 現在時間加上三分鐘
-      const expirationTime = new Date(new Date().getTime() + 60 * 1000 * 3);
-      localStorage.setItem('expirationTime', expirationTime);
+      // const expirationTime = new Date(new Date().getTime() + 60 * 1000 * 3);
+      // localStorage.setItem('expirationTime', expirationTime);
     };
   }, [text.length]);
 

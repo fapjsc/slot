@@ -160,7 +160,7 @@ const GamePlay = () => {
     const imgPath = imgContext.keys().filter(path => path.includes(picName));
     // 轉成 es6 import obj
     const images = imgPath.map(path => imgContext(path));
-    console.log(images, '1234');
+    // console.log(images, '1234');
     // return react 可以用的src obj
     if (images[0]) setSnackBarPic(images[0].default);
 
@@ -184,7 +184,7 @@ const GamePlay = () => {
       if (responseData.code > 100000000) {
         alert(responseData.msg);
         setOpen(false);
-        handleLogout();
+        // handleLogout();
       }
 
       if (responseData.code === 6 || responseData.code === 5) {
@@ -204,7 +204,7 @@ const GamePlay = () => {
     } catch (error) {
       alert('ERROR message: 發生錯誤');
       setOpen(false);
-      handleLogout();
+      // handleLogout();
     }
   };
 
@@ -222,41 +222,41 @@ const GamePlay = () => {
     }
   };
 
-  const calculateRemainingTime = expirationTime => {
-    const currentTime = new Date().getTime();
-    const adjExpirationTime = new Date(expirationTime).getTime();
-    const remainingDuration = adjExpirationTime - currentTime;
-    return remainingDuration;
-  };
+  // const calculateRemainingTime = expirationTime => {
+  //   const currentTime = new Date().getTime();
+  //   const adjExpirationTime = new Date(expirationTime).getTime();
+  //   const remainingDuration = adjExpirationTime - currentTime;
+  //   return remainingDuration;
+  // };
 
-  const updateExpirationTime = () => {
-    // 現在時間加上三分鐘
-    const expirationTime = new Date(new Date().getTime() + 60 * 1000 * 3);
-    localStorage.setItem('expirationTime', expirationTime);
-  };
+  // const updateExpirationTime = () => {
+  //   // 現在時間加上三分鐘
+  //   const expirationTime = new Date(new Date().getTime() + 60 * 1000 * 3);
+  //   localStorage.setItem('expirationTime', expirationTime);
+  // };
 
-  const checkRemainingTime = useCallback(() => {
-    const expirationTime = localStorage.getItem('expirationTime');
-    if (!expirationTime) return;
+  // const checkRemainingTime = useCallback(() => {
+  //   const expirationTime = localStorage.getItem('expirationTime');
+  //   if (!expirationTime) return;
 
-    // console.log('checking...');
+  //   // console.log('checking...');
 
-    const remainingTime = calculateRemainingTime(expirationTime);
+  //   const remainingTime = calculateRemainingTime(expirationTime);
 
-    if (remainingTime <= 0) {
-      // alert('閒置超過三分鐘');
-      alert('閒置過久, 請重新登入');
-      handleLogout();
-    }
-  }, [handleLogout]);
+  //   if (remainingTime <= 0) {
+  //     // alert('閒置超過三分鐘');
+  //     alert('閒置過久, 請重新登入');
+  //     handleLogout();
+  //   }
+  // }, [handleLogout]);
 
-  window.onfocus = () => {
-    checkRemainingTime();
-  };
+  // window.onfocus = () => {
+  //   checkRemainingTime();
+  // };
 
-  window.onblur = () => {
-    checkRemainingTime();
-  };
+  // window.onblur = () => {
+  //   checkRemainingTime();
+  // };
 
   // 未分類
   useEffect(() => {
@@ -285,15 +285,15 @@ const GamePlay = () => {
     getSnackImg(picName);
   }, [picName, getSnackImg]);
 
-  useEffect(() => {
-    checkTimer = setInterval(() => {
-      checkRemainingTime();
-    }, 3000);
+  // useEffect(() => {
+  //   checkTimer = setInterval(() => {
+  //     checkRemainingTime();
+  //   }, 3000);
 
-    return () => {
-      clearInterval(checkTimer);
-    };
-  });
+  //   return () => {
+  //     clearInterval(checkTimer);
+  //   };
+  // });
 
   // get current egm daa
   useEffect(() => {
@@ -327,7 +327,7 @@ const GamePlay = () => {
   // Spin
   const spin = useCallback(
     buttonNo => {
-      checkRemainingTime();
+      // checkRemainingTime();
       if (!credit || credit === '' || credit <= 50) {
         setAutoGame(false);
         alert('credit 不足');
@@ -345,7 +345,7 @@ const GamePlay = () => {
 
       spinButtonRequest(slotReqData);
     },
-    [apiToken, credit, egmIP, egmId, egmSession, mapId, spinButtonRequest, checkRemainingTime]
+    [apiToken, credit, egmIP, egmId, egmSession, mapId, spinButtonRequest]
   );
 
   // Auto Spin
@@ -381,9 +381,9 @@ const GamePlay = () => {
       alert(spinError);
     }
 
-    if (spinData.code === 4) {
-      updateExpirationTime();
-    }
+    // if (spinData.code === 4) {
+    //   updateExpirationTime();
+    // }
   }, [spinData, history, spinError, handleLogout]);
 
   useEffect(() => {
