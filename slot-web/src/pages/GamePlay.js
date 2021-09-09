@@ -69,7 +69,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-let checkTimer;
+// let checkTimer;
 
 const GamePlay = () => {
   // User Context
@@ -192,16 +192,17 @@ const GamePlay = () => {
       if (responseData.code === 6 || responseData.code === 5) {
         history.replace('/home');
         setOpen(false);
-        dispatch(removeIsPlaying(mapId));
-        dispatch(setSelectEgmData({}));
-        localStorage.removeItem('mapId');
-        localStorage.removeItem('egmId');
-        localStorage.removeItem('ses');
-        localStorage.removeItem('egmIP');
-        localStorage.removeItem('audioID');
-        localStorage.removeItem('cameraID');
-        localStorage.removeItem('webNumber');
-        localStorage.removeItem('expirationTime');
+        handleLogout();
+        // dispatch(removeIsPlaying(mapId));
+        // dispatch(setSelectEgmData({}));
+        // localStorage.removeItem('mapId');
+        // localStorage.removeItem('egmId');
+        // localStorage.removeItem('ses');
+        // localStorage.removeItem('egmIP');
+        // localStorage.removeItem('audioID');
+        // localStorage.removeItem('cameraID');
+        // localStorage.removeItem('webNumber');
+        // localStorage.removeItem('expirationTime');
       }
     } catch (error) {
       alert('ERROR message: 發生錯誤');
@@ -211,11 +212,18 @@ const GamePlay = () => {
   };
 
   const handleLogout = useCallback(() => {
-    localStorage.clear();
-    history.replace('/');
+    // localStorage.clear();
+    history.replace('/home');
     dispatch(removeIsPlaying(mapId));
     dispatch(setSelectEgmData({}));
-    clearInterval(checkTimer);
+    localStorage.removeItem('mapId');
+    localStorage.removeItem('egmId');
+    localStorage.removeItem('ses');
+    localStorage.removeItem('egmIP');
+    localStorage.removeItem('audioID');
+    localStorage.removeItem('cameraID');
+    localStorage.removeItem('webNumber');
+    localStorage.removeItem('expirationTime');
   }, [dispatch, history, mapId]);
 
   const handleFullScreen = () => {
@@ -223,42 +231,6 @@ const GamePlay = () => {
       screenfull.request();
     }
   };
-
-  // const calculateRemainingTime = expirationTime => {
-  //   const currentTime = new Date().getTime();
-  //   const adjExpirationTime = new Date(expirationTime).getTime();
-  //   const remainingDuration = adjExpirationTime - currentTime;
-  //   return remainingDuration;
-  // };
-
-  // const updateExpirationTime = () => {
-  //   // 現在時間加上三分鐘
-  //   const expirationTime = new Date(new Date().getTime() + 60 * 1000 * 3);
-  //   localStorage.setItem('expirationTime', expirationTime);
-  // };
-
-  // const checkRemainingTime = useCallback(() => {
-  //   const expirationTime = localStorage.getItem('expirationTime');
-  //   if (!expirationTime) return;
-
-  //   // console.log('checking...');
-
-  //   const remainingTime = calculateRemainingTime(expirationTime);
-
-  //   if (remainingTime <= 0) {
-  //     // alert('閒置超過三分鐘');
-  //     alert('閒置過久, 請重新登入');
-  //     handleLogout();
-  //   }
-  // }, [handleLogout]);
-
-  // window.onfocus = () => {
-  //   checkRemainingTime();
-  // };
-
-  // window.onblur = () => {
-  //   checkRemainingTime();
-  // };
 
   // 未分類
   useEffect(() => {
@@ -286,16 +258,6 @@ const GamePlay = () => {
   useEffect(() => {
     getSnackImg(picName);
   }, [picName, getSnackImg]);
-
-  // useEffect(() => {
-  //   checkTimer = setInterval(() => {
-  //     checkRemainingTime();
-  //   }, 3000);
-
-  //   return () => {
-  //     clearInterval(checkTimer);
-  //   };
-  // });
 
   // get current egm daa
   useEffect(() => {
