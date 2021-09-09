@@ -99,10 +99,23 @@ export const egmListReducers = (state = egmListInitState, action) => {
       }
 
     case EGM_REMOVE_IS_PLAYING:
-      return {
-        ...state,
-        egmPlayingList: state.egmPlayingList.filter(el => el !== action.playingItem),
-      };
+      const existsPlayingItem = state.egmPlayingList.find(
+        el => Number(el.map) === action.playingItem
+      );
+
+      if (existsPlayingItem) {
+        const newPlayingItem = { ...existsPlayingItem, state: 'False', userToken: 'null' };
+        return {
+          ...state,
+          egmPlayingList: state.egmPlayingList.map(el =>
+            Number(el.map) === action.playingItem ? newPlayingItem : el
+          ),
+        };
+      } else {
+        return {
+          ...state,
+        };
+      }
 
     default:
       return state;

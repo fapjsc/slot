@@ -1,6 +1,5 @@
 // import { w3cwebsocket as W3CWebsocket } from 'websocket';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-// import WS from 'ws';
 
 import store from '../store';
 import * as egmActions from '../actions/egmActions';
@@ -16,7 +15,6 @@ const socketEventTypes = {
   WS_SET_EGM_KICK: 'WS_SET_EGM_KICK',
 };
 
-let playingStateTmp;
 let kickStateTmp;
 let egmConnectSuccessArrTmp = [];
 let egmConnectFailArrTmp = [];
@@ -24,7 +22,7 @@ let egmCreditArrTmp = [];
 
 let client;
 
-let reconTime = 1000 * 60 * 10;
+let reconTime = 1000 * 60 * 60 * 24;
 
 const egmStateWebSocketUri = `${wsUri}stateQuote`;
 
@@ -86,7 +84,6 @@ export const connectWithWebSocket = () => {
       kickStateTmp = message.data;
       let str = message.data.replace('KickEgmNotify*>>*', '').replace('*^**>>*', '*^*');
       let strArr = str.split('*^*');
-      // console.log(strArr, 'kkk');
 
       let kickData = {};
       let kickItem = {};
@@ -98,8 +95,6 @@ export const connectWithWebSocket = () => {
           kickItem.token = arr[1];
         }
       });
-
-      // console.log(kickItem, 'kkk');
 
       if (!kickItem.egm || !kickItem.token) return;
 
@@ -113,9 +108,6 @@ export const connectWithWebSocket = () => {
 
     // // Egm Playing State
     if (message.data.includes('EgmPlayingState')) {
-      // if (playingStateTmp === message.data) return;
-      // console.log(message.data, 'play');
-      // playingStateTmp = message.data;
       let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**>>*', '*^*');
       let strArr = str.split('*^*');
       let egmPlayingStateList = [];

@@ -213,9 +213,9 @@ const GamePlay = () => {
 
   const handleLogout = useCallback(() => {
     // localStorage.clear();
-    history.replace('/home');
     dispatch(removeIsPlaying(mapId));
     dispatch(setSelectEgmData({}));
+    history.replace('/home');
     localStorage.removeItem('mapId');
     localStorage.removeItem('egmId');
     localStorage.removeItem('ses');
