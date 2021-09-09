@@ -14,7 +14,7 @@ import { Fragment } from 'react';
 const EgmForm = props => {
   // Init State
 
-  const { inputHandler, formState, onSubmitHandler } = props;
+  const { inputHandler, formState, onSubmitHandler, formIsValid } = props;
 
   // Router Props
   const history = useHistory();
@@ -163,9 +163,12 @@ const EgmForm = props => {
           {/* Form Actions */}
           <Row className="mt-4">
             <Form.Group as={Col} md={12} className="text-center">
-              <Button variant="outline-primary" className="mb-3 w-50 mt-3" type="submit">
+              <button
+                className={`mb-3 w-50 mt-3 btn btn-outline-primary ${!formIsValid && 'disabled'}`}
+                type="submit"
+              >
                 確定
-              </Button>
+              </button>
             </Form.Group>
 
             <Form.Group as={Col} md={12} className="text-center">

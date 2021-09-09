@@ -110,7 +110,7 @@ export default function MachineItem(props) {
   // Playing
   useEffect(() => {
     egmPlayingList.forEach(el => {
-      if (el === machineDetails.mapId) setIsPlaying(true);
+      if (Number(el.map) === machineDetails.mapId && el.state === 'True') setIsPlaying(true);
     });
 
     return () => {
@@ -132,15 +132,6 @@ export default function MachineItem(props) {
   //==== Jsx Element //====
   const cardActionsElement = (
     <CardActions disableSpacing style={{ justifyContent: 'center' }}>
-      {/* 結算中 */}
-      {hasCredit && !isPlaying && hasConnect && (
-        <span style={disableBtnStyle}>
-          <Button disabled style={{ color: '#f2f2f2' }}>
-            結算中
-          </Button>
-        </span>
-      )}
-
       {/* 可以遊戲 */}
       {hasConnect && !isPlaying && !hasCredit && (
         <Button variant="contained" color="primary" onClick={chooseEgmHandler}>
@@ -153,6 +144,15 @@ export default function MachineItem(props) {
         <span style={disableBtnStyle}>
           <Button disabled style={{ color: '#f2f2f2' }}>
             遊戲中...
+          </Button>
+        </span>
+      )}
+
+      {/* 結算中 */}
+      {hasCredit && !isPlaying && hasConnect && (
+        <span style={disableBtnStyle}>
+          <Button disabled style={{ color: '#f2f2f2' }}>
+            結算中
           </Button>
         </span>
       )}

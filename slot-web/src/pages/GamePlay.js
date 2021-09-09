@@ -93,7 +93,9 @@ const GamePlay = () => {
   const history = useHistory();
 
   // Redux
-  const { egmCreditList, selectEgmData, kickList } = useSelector(state => state.egm);
+  const { egmCreditList, selectEgmData, kickList, egmPlayingList } = useSelector(
+    state => state.egm
+  );
   const {
     btnList,
     btnStyle,
@@ -399,6 +401,25 @@ const GamePlay = () => {
     });
   }, [kickList, egmSession, handleLogout]);
 
+  useEffect(() => {
+    const existsEgm = egmPlayingList.find(el => el.map === mapId);
+    if (!existsEgm) return;
+    const userToken = localStorage.getItem('token');
+    const existsUser = egmPlayingList.find(el => el.userToken === userToken);
+
+    if (existsEgm.state === 'False') {
+      alert('egm is not playing');
+      handleLogout();
+      return;
+    }
+
+    if (!existsUser && existsEgm) {
+      alert('user error');
+      handleLogout();
+      return;
+    }
+  }, [egmPlayingList, mapId, handleLogout]);
+
   // Button Handle
   useEffect(() => {
     if (!btnList) return;
@@ -492,15 +513,7 @@ const GamePlay = () => {
         setCloseWebRtcConnect={setCloseWebRtcConnect}
       />
 
-      {openSnack && (
-        <div
-          onClick={handleAutoPlay}
-          // style={{
-          //   backgroundImage: `url(${SnackBarBasicImage})`,
-          // }}
-          className={classes.snackBar}
-        ></div>
-      )}
+      {openSnack && <div onClick={handleAutoPlay} className={classes.snackBar}></div>}
     </div>
   );
 
@@ -607,15 +620,7 @@ const GamePlay = () => {
       }
     >
       <Box className={classes.slotScreenLandscape}>
-        {openSnack && (
-          <div
-            onClick={handleAutoPlay}
-            // style={{
-            //   backgroundImage: `url(${SnackBarBasicImage})`,
-            // }}
-            className={classes.snackBarLandscape}
-          ></div>
-        )}
+        {openSnack && <div onClick={handleAutoPlay} className={classes.snackBarLandscape}></div>}
         <Screen
           setSocketClient={setSocketClient}
           autoPlay={autoPlay}

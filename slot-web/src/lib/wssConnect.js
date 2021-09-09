@@ -78,7 +78,7 @@ export const connectWithWebSocket = () => {
       kickStateTmp = message.data;
       let str = message.data.replace('KickEgmNotify*>>*', '').replace('*^**>>*', '*^*');
       let strArr = str.split('*^*');
-      console.log(strArr, 'kkk');
+      // console.log(strArr, 'kkk');
 
       let kickData = {};
       let kickItem = {};
@@ -91,7 +91,7 @@ export const connectWithWebSocket = () => {
         }
       });
 
-      console.log(kickItem, 'kkk');
+      // console.log(kickItem, 'kkk');
 
       if (!kickItem.egm || !kickItem.token) return;
 
@@ -105,23 +105,25 @@ export const connectWithWebSocket = () => {
 
     // // Egm Playing State
     if (message.data.includes('EgmPlayingState')) {
-      if (playingStateTmp === message.data) return;
-      console.log(message.data);
-      playingStateTmp = message.data;
+      // if (playingStateTmp === message.data) return;
+      console.log(message.data, 'play');
+      // playingStateTmp = message.data;
       let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**>>*', '*^*');
       let strArr = str.split('*^*');
       let egmPlayingStateList = [];
+
       strArr.forEach(el => {
         let obj = {};
         if (el !== '') {
           let arr = el.split('*|*');
           obj.map = arr[0];
           obj.state = arr[3];
+          obj.userToken = arr[4];
         }
 
-        // if (!obj.map || !obj.state) return;
+        if (!obj.map || !obj.state) return;
 
-        if (obj.state === 'True') egmPlayingStateList.push(Number(obj.map));
+        egmPlayingStateList.push(obj);
       });
 
       const playingData = {

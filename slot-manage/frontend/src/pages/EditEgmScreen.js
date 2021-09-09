@@ -23,6 +23,7 @@ import { Card, Button, Spinner } from 'react-bootstrap';
 import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
 
 const EditEgmScreen = () => {
+  console.log(AiFillCheckCircle);
   // Init State
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -70,8 +71,7 @@ const EditEgmScreen = () => {
     return (
       <Card style={CardStyle} className="flex-center">
         <AiFillExclamationCircle style={{ fontSize: '10rem' }} className="text-danger" />
-        <h2 className="my-4">設定EGM時發生錯誤</h2>
-        <h3 className="text-danger mb-4">{setEgmErrorMessage}</h3>
+        <h2 className="text-danger my-4">{setEgmErrorMessage}</h2>
         <Button onClick={backToHomeHandler} className="w-50" variant="outline-primary">
           回首頁
         </Button>
@@ -107,7 +107,8 @@ const EditEgmScreen = () => {
 
 const CardStyle = {
   padding: '5rem',
-  marginTop: '5rem',
+  maxWidth: '45rem',
+  margin: '5rem auto 0 auto',
 };
 
 export default EditEgmScreen;

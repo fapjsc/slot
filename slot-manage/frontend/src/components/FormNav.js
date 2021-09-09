@@ -172,6 +172,7 @@ const FormNav = ({
             inputHandler={inputHandler}
             formState={formState}
             onSubmitHandler={onSubmitHandler}
+            formIsValid={formState.isValid}
             tw
           />
         </div>
@@ -181,6 +182,7 @@ const FormNav = ({
             inputHandler={inputHandler}
             formState={formState}
             onSubmitHandler={onSubmitHandler}
+            formIsValid={formState.isValid}
             eng
           />
         </div>
@@ -190,6 +192,7 @@ const FormNav = ({
             inputHandler={inputHandler}
             formState={formState}
             onSubmitHandler={onSubmitHandler}
+            formIsValid={formState.isValid}
             jp
           />
         </div>
@@ -199,6 +202,7 @@ const FormNav = ({
             inputHandler={inputHandler}
             formState={formState}
             onSubmitHandler={onSubmitHandler}
+            formIsValid={formState.isValid}
             general
           />
         </div>
@@ -210,6 +214,7 @@ const FormNav = ({
 const CardStyle = {
   padding: '10rem',
   marginTop: '5rem',
+  maxWidth: '45rem',
 };
 
 export default FormNav;
