@@ -1,5 +1,6 @@
 // import { w3cwebsocket as W3CWebsocket } from 'websocket';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+// import WS from 'ws';
 
 import store from '../store';
 import * as egmActions from '../actions/egmActions';
@@ -23,9 +24,16 @@ let egmCreditArrTmp = [];
 
 let client;
 
+let reconTime = 1000 * 60 * 10;
+
+const egmStateWebSocketUri = `${wsUri}stateQuote`;
+
 export const connectWithWebSocket = () => {
-  const egmStateWebSocketUri = `${wsUri}stateQuote`;
-  client = new ReconnectingWebSocket(egmStateWebSocketUri);
+  client = new ReconnectingWebSocket(egmStateWebSocketUri, null, {
+    debug: false,
+    reconnectInterval: 3000,
+    maxReconnectInterval: reconTime,
+  });
 
   // 1.建立連接
   client.onopen = () => {
@@ -106,7 +114,7 @@ export const connectWithWebSocket = () => {
     // // Egm Playing State
     if (message.data.includes('EgmPlayingState')) {
       // if (playingStateTmp === message.data) return;
-      console.log(message.data, 'play');
+      // console.log(message.data, 'play');
       // playingStateTmp = message.data;
       let str = message.data.replace('EgmPlayingState*>>*', '').replace('*^**>>*', '*^*');
       let strArr = str.split('*^*');

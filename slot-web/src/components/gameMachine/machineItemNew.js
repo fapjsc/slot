@@ -109,24 +109,32 @@ export default function MachineItem(props) {
 
   // Playing
   useEffect(() => {
-    egmPlayingList.forEach(el => {
-      if (Number(el.map) === machineDetails.mapId && el.state === 'True') setIsPlaying(true);
-    });
+    const existsItem = egmPlayingList.find(el => String(el.map) === String(machineDetails.mapId));
 
-    return () => {
-      setIsPlaying(false);
-    };
+    if (!existsItem) return;
+    existsItem.state === 'True' ? setIsPlaying(true) : setIsPlaying(false);
   }, [egmPlayingList, machineDetails]);
 
   // has credit
-  useEffect(() => {
-    egmCreditList.forEach(el => {
-      if (el.map === machineDetails.mapId && el.credit > 0) setHasCredit(true);
-    });
+  // useEffect(() => {
+  //   egmCreditList.forEach(el => {
+  //     if (el.map === machineDetails.mapId && el.credit > 0) setHasCredit(true);
+  //   });
 
-    return () => {
-      setHasCredit(false);
-    };
+  //   return () => {
+  //     setHasCredit(false);
+  //   };
+  // }, [egmCreditList, machineDetails]);
+
+  useEffect(() => {
+    const creditExistsItem = egmCreditList.find(
+      el => String(el.map) === String(machineDetails.mapId)
+    );
+
+    console.log(creditExistsItem);
+    if (!creditExistsItem) return;
+
+    creditExistsItem.credit > 0 ? setHasCredit(true) : setHasCredit(false);
   }, [egmCreditList, machineDetails]);
 
   //==== Jsx Element //====

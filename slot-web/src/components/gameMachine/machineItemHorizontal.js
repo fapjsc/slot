@@ -114,24 +114,22 @@ const MachineItemHorizontal = props => {
 
   // Playing
   useEffect(() => {
-    egmPlayingList.forEach(el => {
-      if (el === machineDetails.mapId) setIsPlaying(true);
-    });
+    const existsItem = egmPlayingList.find(el => String(el.map) === String(machineDetails.mapId));
 
-    return () => {
-      setIsPlaying(false);
-    };
+    if (!existsItem) return;
+    existsItem.state === 'True' ? setIsPlaying(true) : setIsPlaying(false);
   }, [egmPlayingList, machineDetails]);
 
   // has credit
   useEffect(() => {
-    egmCreditList.forEach(el => {
-      if (el.map === machineDetails.mapId && el.credit > 0) setHasCredit(true);
-    });
+    const creditExistsItem = egmCreditList.find(
+      el => String(el.map) === String(machineDetails.mapId)
+    );
 
-    return () => {
-      setHasCredit(false);
-    };
+    console.log(creditExistsItem);
+    if (!creditExistsItem) return;
+
+    creditExistsItem.credit > 0 ? setHasCredit(true) : setHasCredit(false);
   }, [egmCreditList, machineDetails]);
 
   return (
@@ -181,6 +179,15 @@ const MachineItemHorizontal = props => {
                     </span>
                   )}
 
+                  {/* 結算中 */}
+                  {hasCredit && !isPlaying && hasConnect && (
+                    <span style={disableBtnStyle}>
+                      <Button disabled style={{ color: '#f2f2f2' }}>
+                        結算中
+                      </Button>
+                    </span>
+                  )}
+
                   {/* 連線中 */}
                   {!hasConnect && (
                     <span style={disableBtnStyle}>
@@ -189,37 +196,6 @@ const MachineItemHorizontal = props => {
                       </Button>
                     </span>
                   )}
-                  {/* <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                    {!isConn || noConnState ? (
-                      <span style={disableBtnStyle}>
-                        <Button disabled style={{ color: '#f2f2f2' }}>
-                          連線中
-                        </Button>
-                      </span>
-                    ) : isPlaying && props.machineDetails.isPlaying ? (
-                      <span style={disableBtnStyle}>
-                        <Button disabled style={{ color: '#f2f2f2' }}>
-                          遊戲中...
-                        </Button>
-                      </span>
-                    ) : // hasCredit
-                    hasCredit ? (
-                      <span style={disableBtnStyle}>
-                        <Button disabled style={{ color: '#f2f2f2' }}>
-                          結算中...
-                        </Button>
-                      </span>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        style={{}}
-                        onClick={chooseEgmHandler}
-                      >
-                        {props.buttonName ? props.buttonName : '開始玩'}
-                      </Button>
-                    )}
-                  </Typography> */}
                 </Grid>
               </Grid>
             </Grid>

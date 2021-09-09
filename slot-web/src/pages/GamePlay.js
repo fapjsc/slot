@@ -402,18 +402,19 @@ const GamePlay = () => {
   }, [kickList, egmSession, handleLogout]);
 
   useEffect(() => {
-    const existsEgm = egmPlayingList.find(el => el.map === mapId);
-    if (!existsEgm) return;
-    const userToken = localStorage.getItem('token');
-    const existsUser = egmPlayingList.find(el => el.userToken === userToken);
+    const currentEgm = egmPlayingList.find(el => String(el.map) === String(mapId));
 
-    if (existsEgm.state === 'False') {
+    if (!currentEgm) return;
+
+    const userToken = localStorage.getItem('token');
+
+    if (currentEgm.state === 'False') {
       alert('egm is not playing');
       handleLogout();
       return;
     }
 
-    if (!existsUser && existsEgm) {
+    if (currentEgm.userToken !== userToken) {
       alert('user error');
       handleLogout();
       return;
