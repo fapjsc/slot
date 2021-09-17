@@ -5,6 +5,7 @@ import { useLocation, useHistory, useParams } from 'react-router-dom';
 
 // Components
 import FormNav from '../components/FormNav';
+import TheCard from '../components/element/TheCard';
 
 // Layout
 import FormContainer from '../layout/FormContainer';
@@ -76,6 +77,8 @@ const EditEgmScreen = () => {
           回首頁
         </Button>
       </Card>
+
+      // <TheCard title={setEgmErrorMessage} action={backToHomeHandler} />
     );
   }
 

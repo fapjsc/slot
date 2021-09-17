@@ -159,11 +159,11 @@ const FormNav = ({
           </Nav.Link>
         </Nav.Item>
 
-        <Nav.Item style={{ boxShadow: 'none' }} className="flex-center">
-          <span className={`badge rounded-pill ${isPlaying ? 'bg-success' : 'bg-primary'}`}>
-            {configId}
-          </span>
-        </Nav.Item>
+        <span
+          className={`flex-center badge rounded-pill ${isPlaying ? 'bg-success' : 'bg-primary'}`}
+        >
+          {configId}
+        </span>
       </Nav>
 
       <section id="myTabContent" className="tab-content">

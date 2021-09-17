@@ -26,7 +26,13 @@ table {
   font-size: 1.3rem;
 }
 
-/* Time Pick Class */
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*==== Time Pick Class ====*/
 .MuiPickersToolbar-toolbar {
   /* background-color: red !important; */
 }
@@ -35,8 +41,23 @@ table {
   /* background-color: red !important; */
 }
 
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* Label */
+.MuiFormLabel-root {
+  color: #7b8ab8 !important;
+}
+/* Input */
+.MuiInputBase-input {
+  color: #7b8ab8 !important;
+}
+/* Icon */
+.MuiSvgIcon-root {
+  color: #7b8ab8 !important;
+}
+
+/* Under line */
+.MuiInput-underline:before {
+  border-bottom: 1px solid #7b8ab8 !important;
+}
+.MuiInput-underline:after {
+  border-bottom: 2px solid #98a6d1 !important;
 }

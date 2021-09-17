@@ -38,7 +38,7 @@ const EgmScreen = () => {
         </Center>
       )}
 
-      {status === 'completed' && error && (
+      {error && (
         <Center>
           <Alert className="w-50 p-4 fs-2" variant="danger">
             {error}
@@ -46,16 +46,16 @@ const EgmScreen = () => {
         </Center>
       )}
 
-      {status === 'completed' && !error && (
+      {status === 'completed' && !error && egmData.propConfigList.length > 0 && (
         <Card style={{ padding: '2rem' }}>
-          {egmData.propConfigList.length > 0 ? (
-            <EgmList egmList={egmData.propConfigList} onClickHandler={onClickHandler} />
-          ) : (
-            <Center>
-              <p>Not found, please check local Server ip.</p>
-            </Center>
-          )}
+          <EgmList egmList={egmData.propConfigList} onClickHandler={onClickHandler} />
         </Card>
+      )}
+
+      {status === 'completed' && !error && egmData.propConfigList.length === 0 && (
+        <Center>
+          <p>Not found, please check local Server ip.</p>
+        </Center>
       )}
     </div>
   );

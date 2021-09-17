@@ -52,6 +52,8 @@ import Box from '@material-ui/core/Box';
 import BuildIcon from '@material-ui/icons/Build';
 import ScreenRotationIcon from '@material-ui/icons/ScreenRotation';
 
+import RtmpDemo from '../pages/demo/RtmpDemo';
+
 // Material Style
 const useStyles = makeStyles(theme => ({
   backdrop: {
@@ -465,20 +467,25 @@ const GamePlay = () => {
   );
 
   // Portrait El
-  const portraitScreenAndSnackEl = () => (
-    <div className={`${classes.slotScreen}`}>
-      <Screen
-        setSocketClient={setSocketClient}
-        autoPlay={autoPlay}
-        setAutoPlay={setAutoPlay}
-        leave={leave}
-        closeWebRtcConnect={closeWebRtcConnect}
-        setCloseWebRtcConnect={setCloseWebRtcConnect}
-      />
+  const portraitScreenAndSnackEl = () =>
+    webNumber === '29' ? (
+      <div className={classes.slotScreen}>
+        <RtmpDemo />
+      </div>
+    ) : (
+      <div className={`${classes.slotScreen}`}>
+        <Screen
+          setSocketClient={setSocketClient}
+          autoPlay={autoPlay}
+          setAutoPlay={setAutoPlay}
+          leave={leave}
+          closeWebRtcConnect={closeWebRtcConnect}
+          setCloseWebRtcConnect={setCloseWebRtcConnect}
+        />
 
-      {openSnack && <div onClick={handleAutoPlay} className={classes.snackBar}></div>}
-    </div>
-  );
+        {openSnack && <div onClick={handleAutoPlay} className={classes.snackBar}></div>}
+      </div>
+    );
 
   // Button -P
   const portraitMainBtnListEl = mainBtn.map(btn => {
@@ -584,14 +591,19 @@ const GamePlay = () => {
     >
       <Box className={classes.slotScreenLandscape}>
         {openSnack && <div onClick={handleAutoPlay} className={classes.snackBarLandscape}></div>}
-        <Screen
-          setSocketClient={setSocketClient}
-          autoPlay={autoPlay}
-          setAutoPlay={setAutoPlay}
-          leave={leave}
-          closeWebRtcConnect={closeWebRtcConnect}
-          setCloseWebRtcConnect={setCloseWebRtcConnect}
-        />
+
+        {webNumber === '29' ? (
+          <RtmpDemo />
+        ) : (
+          <Screen
+            setSocketClient={setSocketClient}
+            autoPlay={autoPlay}
+            setAutoPlay={setAutoPlay}
+            leave={leave}
+            closeWebRtcConnect={closeWebRtcConnect}
+            setCloseWebRtcConnect={setCloseWebRtcConnect}
+          />
+        )}
       </Box>
     </Box>
   );

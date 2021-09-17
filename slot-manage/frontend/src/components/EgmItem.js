@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const EgmItem = ({ egm, onClickHandler, index }) => {
+const EgmItem = ({ egm, onClickHandler }) => {
   const { playingList } = useSelector(state => state.egm);
   const [egmState, setEgmState] = useState('');
 
@@ -20,15 +20,15 @@ const EgmItem = ({ egm, onClickHandler, index }) => {
 
   return (
     <tr key={egm.configId} onClick={() => onClickHandler(egm.configId)}>
-      <td>{index + 1}</td>
+      {/* <td>{index + 1}</td> */}
+      <td>{egm.uiOrder || 'null'}</td>
       <td>{egm.gameName || 'null'}</td>
       <td>{egm.mapId || 'null'}</td>
       <td>{egm.configId || 'null'}</td>
-      <td>{egm.casinoCode || 'null'}</td>
-      <td>{egm.localServer || 'null'}</td>
+      <td>{egm.egmId || 'null'}</td>
       <td>{egm.cameraIndex || 'null'}</td>
-      {/* <td>{egm.player || 'null'}</td>
-      <td>{egm.credit || 'null'}</td> */}
+      <td>{egm.credit || 'null'}</td>
+      <td>{egm.player || 'null'}</td>
       <td>{egmState === 'isPlaying' ? isPlaying : hasConn}</td>
     </tr>
   );
