@@ -1,17 +1,20 @@
 import {
   EGM_SET_EGM_LIST,
-  EGM_SET_EGM_CONNECT_FAIL_LIST,
-  EGM_SET_EGM_REMOVE_FAIL_LIST,
+  // EGM_SET_EGM_CONNECT_FAIL_LIST,
+  // EGM_SET_EGM_REMOVE_FAIL_LIST,
   EGM_SET_EGM_PLAYING_LIST,
   EGM_SET_EGM_CREDIT_LIST,
   EGM_SET_SELECT_EGM_DATA,
   EGM_SET_KICK_LIST,
   EGM_REMOVE_IS_PLAYING,
+  EGM_SET_EGM_CONNECT_SUCCESS_LIST,
+  EGM_SET_EGM_CONNECT_REMOVE_SUCCESS_LIST,
 } from '../constants/egmConstants';
 
 const egmListInitState = {
   egmList: [],
-  egmConnectFailList: [],
+  // egmConnectFailList: [],
+  egmConnectSuccessList: [],
   egmPlayingList: [],
   egmCreditList: [],
   selectEgmData: {},
@@ -26,23 +29,35 @@ export const egmListReducers = (state = egmListInitState, action) => {
         egmList: action.egmList,
       };
 
-    case EGM_SET_EGM_CONNECT_FAIL_LIST:
-      const failItem = action.egmConnectFailItem;
-      const existFailItem = state.egmConnectFailList.find(el => el === failItem);
+    case EGM_SET_EGM_CONNECT_SUCCESS_LIST:
+      return {
+        ...state,
+        egmConnectSuccessList: [...action.egmConnectSuccessList],
+      };
 
-      if (existFailItem) {
-        return {
-          ...state,
-          egmConnectFailList: state.egmConnectFailList.map(el =>
-            el === existFailItem ? failItem : el
-          ),
-        };
-      } else {
-        return {
-          ...state,
-          egmConnectFailList: [...state.egmConnectFailList, failItem],
-        };
-      }
+    case EGM_SET_EGM_CONNECT_REMOVE_SUCCESS_LIST:
+      return {
+        ...state,
+        egmConnectSuccessList: state.egmConnectSuccessList.filter(egm => egm !== action.removeEgm),
+      };
+
+    // case EGM_SET_EGM_CONNECT_FAIL_LIST:
+    //   const failItem = action.egmConnectFailItem;
+    //   const existFailItem = state.egmConnectFailList.find(el => el === failItem);
+
+    //   if (existFailItem) {
+    //     return {
+    //       ...state,
+    //       egmConnectFailList: state.egmConnectFailList.map(el =>
+    //         el === existFailItem ? failItem : el
+    //       ),
+    //     };
+    //   } else {
+    //     return {
+    //       ...state,
+    //       egmConnectFailList: [...state.egmConnectFailList, failItem],
+    //     };
+    //   }
 
     case EGM_SET_EGM_PLAYING_LIST:
       return {
@@ -50,13 +65,13 @@ export const egmListReducers = (state = egmListInitState, action) => {
         egmPlayingList: action.egmPlayingList,
       };
 
-    case EGM_SET_EGM_REMOVE_FAIL_LIST:
-      return {
-        ...state,
-        egmConnectFailList: state.egmConnectFailList.filter(
-          el => el !== action.removeFailConnectItem
-        ),
-      };
+    // case EGM_SET_EGM_REMOVE_FAIL_LIST:
+    //   return {
+    //     ...state,
+    //     egmConnectFailList: state.egmConnectFailList.filter(
+    //       el => el !== action.removeFailConnectItem
+    //     ),
+    //   };
 
     case EGM_SET_EGM_CREDIT_LIST:
       const creditItem = action.egmCreditItem;

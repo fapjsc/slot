@@ -3,9 +3,11 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { egmReducer } from './reducers/egmReducer';
+import { dateFilterReducer } from './reducers/accountReducer';
 
 const reducer = combineReducers({
   egm: egmReducer,
+  account: dateFilterReducer,
 });
 
 const middleWare = [thunk];

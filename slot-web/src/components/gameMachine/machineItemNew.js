@@ -42,12 +42,12 @@ export default function MachineItem(props) {
   const { pageNumber, machineDetails, chooseEgmRequest } = props;
 
   // Redux
-  const { egmConnectFailList, egmPlayingList, egmCreditList } = useSelector(state => state.egm);
+  const { egmConnectSuccessList, egmPlayingList, egmCreditList } = useSelector(state => state.egm);
 
   // Init State
   const [imgObj, setImgObj] = useState();
   const [loginData, setLoginData] = useState(null);
-  const [hasConnect, setHasConnect] = useState(true);
+  const [hasConnect, setHasConnect] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasCredit, setHasCredit] = useState(false);
 
@@ -98,14 +98,14 @@ export default function MachineItem(props) {
 
   // has connection
   useEffect(() => {
-    egmConnectFailList.forEach(el => {
-      if (el === machineDetails.mapId) setHasConnect(false);
+    egmConnectSuccessList.forEach(el => {
+      if (el === machineDetails.mapId) setHasConnect(true);
     });
 
     return () => {
-      setHasConnect(true);
+      setHasConnect(false);
     };
-  }, [machineDetails, egmConnectFailList]);
+  }, [machineDetails, egmConnectSuccessList]);
 
   // Playing
   useEffect(() => {

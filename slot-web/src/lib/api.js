@@ -136,6 +136,8 @@ export const pointCash = async reqData => {
     throw new Error(data.msg || '開分失敗');
   }
 
+  console.log(data);
+
   return data;
 };
 

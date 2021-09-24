@@ -1,5 +1,5 @@
 import { Card, Button } from 'react-bootstrap';
-import { AiFillCheckCircle, AiFillExclamationCircle } from 'react-icons/ai';
+import { AiFillExclamationCircle } from 'react-icons/ai';
 
 const TheCard = ({ icon, title, btnTxt, type, action }) => {
   return (

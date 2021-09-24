@@ -176,29 +176,18 @@ const handleSocketActions = data => {
 
       egmConnectSuccessArrTmp.push(egmConnectSuccess);
 
-      const failIndex = egmConnectFailArrTmp.findIndex(el => el === egmConnectSuccess);
-
-      if (failIndex !== -1) {
-        store.dispatch(egmActions.removeFailConnectList(egmConnectSuccess));
-        egmConnectFailArrTmp.splice(failIndex, 1);
-      }
+      store.dispatch(egmActions.setEgmConnectSuccessList(egmConnectSuccessArrTmp));
       break;
 
     // Connect fail
     case socketEventTypes.WS_SET_EGM_CONNECT_FAIL_STATE:
       const { egmConnectFail } = data;
-      let tmpFail = egmConnectFailArrTmp.find(el => el === egmConnectFail);
-
-      if (tmpFail) return;
-
-      egmConnectFailArrTmp.push(egmConnectFail);
-      store.dispatch(egmActions.setEgmConnectFailList(egmConnectFail));
-
-      const successIndex = egmConnectSuccessArrTmp.findIndex(el => el === egmConnectFail);
-
-      if (successIndex !== -1) {
-        egmConnectSuccessArrTmp.splice(successIndex, 1);
+      const existsIndex = egmConnectSuccessArrTmp.findIndex(el => el === egmConnectFail);
+      if (existsIndex !== -1) {
+        egmConnectSuccessArrTmp.splice(existsIndex, 1);
+        store.dispatch(egmActions.removeEgmConnectSuccessList(egmConnectFail));
       }
+
       break;
 
     // Playing state

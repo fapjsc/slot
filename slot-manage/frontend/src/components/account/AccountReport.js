@@ -1,39 +1,195 @@
-import { Table } from 'react-bootstrap';
-const AccountReport = () => {
-  return (
-    <section style={{ marginTop: '5rem' }}>
-      <h2 className="mb-4">報表</h2>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td colSpan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
-      </Table>
-    </section>
+import { useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { Table, Dropdown, Alert } from 'react-bootstrap';
+
+import { _getFilterData } from '../../lib/helper';
+
+import DUMMY_DATA from '../../mock/fakeData';
+DUMMY_DATA.sort((a, b) => new Date(a.cashInTime).getTime() - new Date(b.cashInTime).getTime());
+
+const AccountReport = ({ setPageCount, dataPerPage, pagesVisited }) => {
+  const history = useHistory();
+
+  let playerList = [];
+  let machineList = [];
+
+  DUMMY_DATA.forEach(el => {
+    playerList.push(el.player);
+  });
+
+  DUMMY_DATA.forEach(el => {
+    machineList.push(el.machine);
+  });
+
+  const { cashIn, cashOut } = useSelector(state => state.account);
+
+  const [selectPlayer, setSelectPlayer] = useState('');
+  const [selectMachine, setSelectMachine] = useState('');
+  const [isFilterPlayer, setIsFilterPlayer] = useState(false);
+  const [isFilterMachine, setIsFilterMachine] = useState(false);
+  const [cashInTimeFilter, setCashInTimeFilter] = useState(false);
+  const [cashOutTimeFilter, setCashOutTimeFilter] = useState(false);
+
+  const [noFilterResult, setNoFilterResult] = useState(false);
+
+  const filterResultData = _getFilterData(
+    DUMMY_DATA,
+    selectPlayer,
+    selectMachine,
+    isFilterPlayer,
+    isFilterMachine,
+    cashInTimeFilter,
+    cashOutTimeFilter,
+    cashIn,
+    cashOut
   );
+
+  const handleSelect = e => {
+    const type = e.split('=')[0];
+    const name = e.split('=')[1];
+
+    if (type === 'player') setSelectPlayer(name);
+    if (type === 'machine') setSelectMachine(name);
+  };
+
+  useEffect(() => {
+    if (filterResultData && filterResultData.length > 0) {
+      let num = Math.ceil(filterResultData.length / 20);
+      setPageCount(num);
+      setNoFilterResult(false);
+    } else {
+      setNoFilterResult(true);
+    }
+  }, [filterResultData, setPageCount]);
+
+  const hasNotFilter = useCallback(() => {
+    setIsFilterPlayer(false);
+    setIsFilterMachine(false);
+    setCashInTimeFilter(false);
+    setCashOutTimeFilter(false);
+    setNoFilterResult(false);
+    setSelectPlayer('');
+    setSelectMachine('');
+    history.replace('/accounting');
+  }, [history]);
+
+  useEffect(() => {
+    selectPlayer ? setIsFilterPlayer(true) : setIsFilterPlayer(false);
+    selectMachine ? setIsFilterMachine(true) : setIsFilterMachine(false);
+    if (cashIn && cashIn.startTime && cashIn.endTime) setCashInTimeFilter(true);
+    if (cashOut && cashOut.startTime && cashOut.endTime) setCashOutTimeFilter(true);
+    if (!cashIn || !cashIn.startTime || !cashIn.endTime) setCashInTimeFilter(false);
+    if (!cashOut || !cashOut.startTime || !cashOut.endTime) setCashOutTimeFilter(false);
+  }, [selectPlayer, selectMachine, cashIn, cashOut]);
+
+  useEffect(() => {
+    hasNotFilter();
+  }, [hasNotFilter]);
+
+  const tableContent = filterResultData
+    .slice(pagesVisited, pagesVisited + dataPerPage)
+    .map((el, index) => (
+      <tr key={index}>
+        <td>{index + 1}</td>
+        <td>{el.machine}</td>
+        <td>{el.cashIn}</td>
+        <td>{el.cashOut}</td>
+        <td>{el.cashInTime}</td>
+        <td>{el.cashOutTime}</td>
+
+        <td>{el.betAmount}</td>
+        <td>{el.player}</td>
+      </tr>
+    ));
+
+  const playerDropDownItem = playerList.map((el, index) => (
+    <Dropdown.Item key={index} eventKey={`player=${el}`} onSelect={handleSelect}>
+      {el}
+    </Dropdown.Item>
+  ));
+
+  const machineDropDownItem = machineList.map((el, index) => (
+    <Dropdown.Item key={index} eventKey={`machine=${el}`} onSelect={handleSelect}>
+      {el}
+    </Dropdown.Item>
+  ));
+
+  return (
+    <>
+      <section style={{ minHeight: '20rem' }}>
+        {noFilterResult && (
+          <div
+            className="alert alert-dismissible alert-light text-center"
+            style={{ marginTop: '5rem', padding: '5rem', fontSize: '1.5rem' }}
+          >
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="alert"
+              onClick={hasNotFilter}
+            />
+            <strong>找不到資料!</strong>
+          </div>
+        )}
+
+        {!noFilterResult && (
+          <Table bordered hover responsive="lg">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      style={dropStyle}
+                      id="dropdown-basic"
+                      className={isFilterMachine && 'text-primary'}
+                    >
+                      機器名稱
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="scroll-big">
+                      <Dropdown.Item onClick={hasNotFilter}>看全部</Dropdown.Item>
+                      {machineDropDownItem}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </th>
+                <th>開分</th>
+                <th>洗分</th>
+                <th className={cashInTimeFilter ? 'text-primary' : ''}>開分時間</th>
+                <th className={cashOutTimeFilter ? 'text-primary' : ''}>洗分時間</th>
+
+                <th>押碼量</th>
+                <th>
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      style={dropStyle}
+                      id="dropdown-basic"
+                      className={isFilterPlayer && 'text-primary'}
+                    >
+                      PLAYER
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="scroll-big">
+                      <Dropdown.Item onClick={hasNotFilter}>看全部</Dropdown.Item>
+                      {playerDropDownItem}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </th>
+              </tr>
+            </thead>
+            <tbody>{tableContent}</tbody>
+          </Table>
+        )}
+      </section>
+    </>
+  );
+};
+
+const dropStyle = {
+  boxShadow: 'none',
+  background: 'transparent',
+  fontWeight: 'bold',
+  padding: 0,
+  fontSize: '1.3rem',
 };
 
 export default AccountReport;

@@ -26,10 +26,24 @@ table {
   font-size: 1.3rem;
 }
 
+/*==== Utils ====*/
 .flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.scroll-big {
+  height: 30rem !important;
+  overflow-y: auto !important;
+}
+
+.divider-line {
+  border-bottom: 1px solid rgba(55, 94, 148, 0.1);
+}
+
+.my-big {
+  margin: 3rem 0;
 }
 
 /*==== Time Pick Class ====*/

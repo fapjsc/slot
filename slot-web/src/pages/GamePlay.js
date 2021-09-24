@@ -174,7 +174,7 @@ const GamePlay = () => {
   const leave = async () => {
     setOpen(true);
     setAutoGame(false);
-    socketClient.emit('unsubscribe', webNumber);
+    // socketClient.emit('unsubscribe', webNumber);
     setCloseWebRtcConnect(true);
     try {
       const responseData = await ApiController().endGameApi(
