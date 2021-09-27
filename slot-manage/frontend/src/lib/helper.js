@@ -1,5 +1,5 @@
 export const _getFilterData = (
-  DUMMY_DATA,
+  reportData,
   selectPlayer,
   selectMachine,
   isFilterPlayer,
@@ -13,12 +13,12 @@ export const _getFilterData = (
 
   // Only Player
   if (isFilterPlayer && !isFilterMachine && !cashInTimeFilter && !cashOutTimeFilter) {
-    filterResultData = DUMMY_DATA.filter(el => el.player === selectPlayer);
+    filterResultData = reportData.filter(el => el.player === selectPlayer);
   }
 
   // Player & CashIn
   if (isFilterPlayer && !isFilterMachine && cashInTimeFilter && !cashOutTimeFilter) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         el.player === selectPlayer &&
         cashIn.startTime <= new Date(el.cashInTime).getTime() &&
@@ -28,7 +28,7 @@ export const _getFilterData = (
 
   // Player & CashOut
   if (isFilterPlayer && cashOutTimeFilter && !isFilterMachine && !cashInTimeFilter) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         el.player === selectPlayer &&
         cashOut.startTime <= new Date(el.cashOutTime).getTime() &&
@@ -38,7 +38,7 @@ export const _getFilterData = (
 
   // Player & CashIn & CashOut
   if (isFilterPlayer && cashInTimeFilter && cashOutTimeFilter && !isFilterMachine) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         el.player === selectPlayer &&
         cashIn.startTime <= new Date(el.cashInTime).getTime() &&
@@ -50,12 +50,12 @@ export const _getFilterData = (
 
   // Only Machine
   if (isFilterMachine && !isFilterPlayer && !cashInTimeFilter && !cashOutTimeFilter) {
-    filterResultData = DUMMY_DATA.filter(el => el.machine === selectMachine);
+    filterResultData = reportData.filter(el => el.machine === selectMachine);
   }
 
   // Machine & CashIn
   if (isFilterMachine && cashInTimeFilter && !isFilterPlayer && !cashOutTimeFilter) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         el.machine === selectMachine &&
         cashIn.startTime <= new Date(el.cashInTime).getTime() &&
@@ -65,7 +65,7 @@ export const _getFilterData = (
 
   // Machine & CashOut
   if (isFilterMachine && cashOutTimeFilter && !isFilterPlayer && !cashInTimeFilter) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         el.machine === selectMachine &&
         cashOut.startTime <= new Date(el.cashOutTime).getTime() &&
@@ -75,7 +75,7 @@ export const _getFilterData = (
 
   // Machine & CashIn & CashOut
   if (isFilterMachine && cashInTimeFilter && cashOutTimeFilter && !isFilterPlayer) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         el.machine === selectMachine &&
         cashIn.startTime <= new Date(el.cashInTime).getTime() &&
@@ -87,14 +87,14 @@ export const _getFilterData = (
 
   // Machine & Player
   if (isFilterPlayer && isFilterMachine && !cashInTimeFilter && !cashOutTimeFilter) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el => el.player === selectPlayer && el.machine === selectMachine
     );
   }
 
   // Machine & Player & CashIn
   if (isFilterPlayer && isFilterMachine && cashInTimeFilter && !cashOutTimeFilter) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         el.player === selectPlayer &&
         el.machine === selectMachine &&
@@ -105,7 +105,7 @@ export const _getFilterData = (
 
   // Machine & Player & CashOut
   if (isFilterPlayer && isFilterMachine && cashOutTimeFilter && !cashInTimeFilter) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         el.player === selectPlayer &&
         el.machine === selectMachine &&
@@ -116,7 +116,7 @@ export const _getFilterData = (
 
   // Only CashIn Date
   if (cashInTimeFilter && !cashOutTimeFilter && !isFilterPlayer && !isFilterMachine) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         cashIn.startTime <= new Date(el.cashInTime).getTime() &&
         new Date(el.cashInTime).getTime() <= cashIn.endTime
@@ -125,7 +125,7 @@ export const _getFilterData = (
 
   // Only CashOut Date
   if (cashOutTimeFilter && !cashInTimeFilter && !isFilterPlayer && !isFilterMachine) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         cashOut.startTime <= new Date(el.cashOutTime).getTime() &&
         new Date(el.cashOutTime).getTime() <= cashOut.endTime
@@ -134,7 +134,7 @@ export const _getFilterData = (
 
   // CashIn & CashOut Date
   if (cashOutTimeFilter && cashInTimeFilter && !isFilterPlayer && !isFilterMachine) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         cashIn.startTime <= new Date(el.cashInTime).getTime() &&
         new Date(el.cashInTime).getTime() <= cashIn.endTime &&
@@ -145,12 +145,12 @@ export const _getFilterData = (
 
   // No Filter
   if (!isFilterPlayer && !isFilterMachine && !cashInTimeFilter && !cashOutTimeFilter) {
-    filterResultData = DUMMY_DATA;
+    filterResultData = reportData;
   }
 
   // All Filter
   if (cashOutTimeFilter && cashInTimeFilter && isFilterPlayer && isFilterMachine) {
-    filterResultData = DUMMY_DATA.filter(
+    filterResultData = reportData.filter(
       el =>
         el.player === selectPlayer &&
         el.machine === selectMachine &&

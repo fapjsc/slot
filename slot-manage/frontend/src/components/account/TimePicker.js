@@ -63,7 +63,7 @@ const TimePicker = ({ filterType }) => {
     <>
       <h5>{filterType}</h5>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Form style={fontStyle} onSubmit={onSubmitHandler} className="bg-dark">
+        <Form style={fontStyle} onSubmit={onSubmitHandler} className="">
           <Row className="p-4 d-flex justify-content-between">
             <Form.Group as={Col} md={4} className="">
               <KeyboardDateTimePicker
@@ -91,10 +91,6 @@ const TimePicker = ({ filterType }) => {
                 minDate={aMonthAgo}
                 maxDate={endTime}
               />
-            </Form.Group>
-
-            <Form.Group as={Col} md={2}>
-              <Form.Control />
             </Form.Group>
 
             <Form.Group as={Col} md={3} className="d-flex justify-content-around">

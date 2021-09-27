@@ -45,8 +45,28 @@ export const postEgmProps = async reqData => {
   }
 
   if (data.code !== 15) {
-    throw new Error(data.msg || 'Set Egm fail');
+    throw new Error(data.msg || 'Set Egm fail.');
   }
 
   return data;
+};
+
+export const getAccountReport = async () => {
+  const headers = getHeader();
+  const response = await fetch(`${AGENT_URL}/MngSessionStatisticDataApi`, {
+    headers,
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.msg || 'Could not get accounting data.');
+  }
+
+  if (data.code !== 41) {
+    throw new Error(data.msg || 'Get report fail.');
+  }
+
+  console.log(data);
+  return data.dataList;
 };

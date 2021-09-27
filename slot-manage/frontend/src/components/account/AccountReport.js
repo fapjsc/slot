@@ -1,26 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Table, Dropdown, Alert } from 'react-bootstrap';
+import { Table, Dropdown } from 'react-bootstrap';
 
 import { _getFilterData } from '../../lib/helper';
 
-import DUMMY_DATA from '../../mock/fakeData';
-DUMMY_DATA.sort((a, b) => new Date(a.cashInTime).getTime() - new Date(b.cashInTime).getTime());
+import moment from 'moment';
 
-const AccountReport = ({ setPageCount, dataPerPage, pagesVisited }) => {
+// import DUMMY_DATA from '../../mock/fakeData';
+// DUMMY_DATA.sort((a, b) => new Date(a.cashInTime).getTime() - new Date(b.cashInTime).getTime());
+
+const AccountReport = ({ setPageCount, dataPerPage, pagesVisited, reportData }) => {
   const history = useHistory();
-
-  let playerList = [];
-  let machineList = [];
-
-  DUMMY_DATA.forEach(el => {
-    playerList.push(el.player);
-  });
-
-  DUMMY_DATA.forEach(el => {
-    machineList.push(el.machine);
-  });
 
   const { cashIn, cashOut } = useSelector(state => state.account);
 
@@ -33,8 +24,11 @@ const AccountReport = ({ setPageCount, dataPerPage, pagesVisited }) => {
 
   const [noFilterResult, setNoFilterResult] = useState(false);
 
+  let playerList = [];
+  let machineList = [];
+
   const filterResultData = _getFilterData(
-    DUMMY_DATA,
+    reportData,
     selectPlayer,
     selectMachine,
     isFilterPlayer,
@@ -44,6 +38,32 @@ const AccountReport = ({ setPageCount, dataPerPage, pagesVisited }) => {
     cashIn,
     cashOut
   );
+
+  if (reportData) {
+    reportData.sort((a, b) => new Date(a.cashInTime).getTime() - new Date(b.cashInTime).getTime());
+  }
+
+  if (filterResultData && !selectPlayer && !selectMachine) {
+    filterResultData.forEach(el => {
+      playerList.push(el.player);
+      machineList.push(el.machine);
+    });
+  }
+
+  if (filterResultData && selectPlayer !== '') {
+    const machineArr = reportData.filter(el => el.player === selectPlayer);
+    machineArr.forEach(el => machineList.push(el.machine));
+    playerList.push(selectPlayer);
+  }
+
+  if (filterResultData && selectMachine !== '') {
+    const playerArr = reportData.filter(el => el.machine === selectMachine);
+    playerArr.forEach(el => playerList.push(el.player));
+    machineList.push(selectMachine);
+  }
+
+  playerList = Array.from(new Set(playerList));
+  machineList = Array.from(new Set(machineList));
 
   const handleSelect = e => {
     const type = e.split('=')[0];
@@ -87,33 +107,37 @@ const AccountReport = ({ setPageCount, dataPerPage, pagesVisited }) => {
     hasNotFilter();
   }, [hasNotFilter]);
 
-  const tableContent = filterResultData
-    .slice(pagesVisited, pagesVisited + dataPerPage)
-    .map((el, index) => (
+  const tableContent =
+    filterResultData &&
+    filterResultData.slice(pagesVisited, pagesVisited + dataPerPage).map((el, index) => (
       <tr key={index}>
         <td>{index + 1}</td>
+        <td>{el.uiOdr}</td>
         <td>{el.machine}</td>
         <td>{el.cashIn}</td>
         <td>{el.cashOut}</td>
-        <td>{el.cashInTime}</td>
-        <td>{el.cashOutTime}</td>
-
+        <td>{moment(el.cashInTime).format('YYYY-MM-DD HH:mm')}</td>
+        <td>{moment(el.cashOutTime).format('YYYY-MM-DD HH:mm')}</td>
         <td>{el.betAmount}</td>
         <td>{el.player}</td>
       </tr>
     ));
 
-  const playerDropDownItem = playerList.map((el, index) => (
-    <Dropdown.Item key={index} eventKey={`player=${el}`} onSelect={handleSelect}>
-      {el}
-    </Dropdown.Item>
-  ));
+  const playerDropDownItem =
+    playerList &&
+    playerList.map((el, index) => (
+      <Dropdown.Item key={index} eventKey={`player=${el}`} onSelect={handleSelect}>
+        {el}
+      </Dropdown.Item>
+    ));
 
-  const machineDropDownItem = machineList.map((el, index) => (
-    <Dropdown.Item key={index} eventKey={`machine=${el}`} onSelect={handleSelect}>
-      {el}
-    </Dropdown.Item>
-  ));
+  const machineDropDownItem =
+    machineList &&
+    machineList.map((el, index) => (
+      <Dropdown.Item key={index} eventKey={`machine=${el}`} onSelect={handleSelect}>
+        {el}
+      </Dropdown.Item>
+    ));
 
   return (
     <>
@@ -138,6 +162,7 @@ const AccountReport = ({ setPageCount, dataPerPage, pagesVisited }) => {
             <thead>
               <tr>
                 <th>#</th>
+                <th>Order</th>
                 <th>
                   <Dropdown>
                     <Dropdown.Toggle
@@ -145,7 +170,7 @@ const AccountReport = ({ setPageCount, dataPerPage, pagesVisited }) => {
                       id="dropdown-basic"
                       className={isFilterMachine && 'text-primary'}
                     >
-                      機器名稱
+                      遊戲名稱
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="scroll-big">
                       <Dropdown.Item onClick={hasNotFilter}>看全部</Dropdown.Item>
