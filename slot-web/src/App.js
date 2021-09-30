@@ -11,7 +11,8 @@ import PublicRoute from './hooks/PublicRoute';
 import PrivateRoute from './hooks/PrivateRoute';
 
 // Demo
-import RtmpDemo from './pages/demo/RtmpDemo';
+// import RtmpDemo from './pages/demo/Video';
+import GamePlayV2 from './pages/GamePlayV2';
 // import Demo from './pages/demo/Demo';
 // import Demo2 from './pages/demo/Demo2';
 // import HomeLevel from './pages/demo/HomeLevel';
@@ -29,7 +30,7 @@ const App = () => {
           <PublicRoute path="/load/" component={LoadingScreen} />
           <PrivateRoute path="/home" component={Home} exact />
           <PrivateRoute path="/gameStart" component={GamePlay} exact />
-          <PublicRoute path="/rtmpDemo" component={RtmpDemo} exact />
+          <PublicRoute path="/v2" component={GamePlayV2} exact />
           {/* <PrivateRoute path="/demo" component={Demo} exact />
           <PrivateRoute path="/demo2" component={Demo2} exact />
           <PrivateRoute path="/level" component={HomeLevel} exact />

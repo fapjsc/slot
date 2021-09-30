@@ -5,8 +5,6 @@ import { Table, Dropdown } from 'react-bootstrap';
 
 import { _getFilterData } from '../../lib/helper';
 
-import moment from 'moment';
-
 // import DUMMY_DATA from '../../mock/fakeData';
 // DUMMY_DATA.sort((a, b) => new Date(a.cashInTime).getTime() - new Date(b.cashInTime).getTime());
 
@@ -116,8 +114,8 @@ const AccountReport = ({ setPageCount, dataPerPage, pagesVisited, reportData }) 
         <td>{el.machine}</td>
         <td>{el.cashIn}</td>
         <td>{el.cashOut}</td>
-        <td>{moment(el.cashInTime).format('YYYY-MM-DD HH:mm')}</td>
-        <td>{moment(el.cashOutTime).format('YYYY-MM-DD HH:mm')}</td>
+        <td>{el.cashInTime}</td>
+        <td>{el.cashOutTime}</td>
         <td>{el.betAmount}</td>
         <td>{el.player}</td>
       </tr>

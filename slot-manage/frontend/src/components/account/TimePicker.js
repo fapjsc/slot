@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import moment from 'moment-timezone';
+
 //Actions
 import { setCashInCondition, setCashOutCondition } from '../../store/actions/accountAction';
 
@@ -15,11 +17,19 @@ import DateFnsUtils from '@date-io/date-fns';
 const TimePicker = ({ filterType }) => {
   //==== Time Initial ====//
   // 當前時間
-  const currentTime = new Date();
+  // const currentTime = new Date(
+  //   new Date().getFullYear(),
+  //   new Date().getMonth(),
+  //   new Date().getDate(),
+  //   new Date().getHours(),
+  //   new Date().getMinutes()
+  // );
+  // 當前時間
+  const currentTime = new Date(moment(new Date()).format('YYYY-MM-DD HH:mm'));
   // 前一天
-  const theDayBefore = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+  const theDayBefore = new Date(currentTime.getTime() - 24 * 60 * 60 * 1000);
   // 前一個月
-  const aMonthAgo = new Date(new Date().getTime() - 24 * 60 * 60 * 1000 * 31);
+  const aMonthAgo = new Date(currentTime.getTime() - 24 * 60 * 60 * 1000 * 31);
   //======================//
 
   const dispatch = useDispatch();
@@ -28,8 +38,9 @@ const TimePicker = ({ filterType }) => {
   const [endTime, setEndTime] = useState(currentTime);
 
   const onSubmitHandler = e => {
+    console.log(startTime);
+    console.log(endTime);
     e.preventDefault();
-
     if (startTime.getTime() > endTime.getTime()) {
       alert('錯誤的時間');
       return;
@@ -64,7 +75,7 @@ const TimePicker = ({ filterType }) => {
       <h5>{filterType}</h5>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Form style={fontStyle} onSubmit={onSubmitHandler} className="">
-          <Row className="p-4 d-flex justify-content-between">
+          <Row className="p-1 d-flex justify-content-between">
             <Form.Group as={Col} md={4} className="">
               <KeyboardDateTimePicker
                 variant="inline"

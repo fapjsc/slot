@@ -4,9 +4,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 // Reducers
 import { egmListReducers } from './reducers/egmReducers';
+import { chatReducers } from './reducers/chatReducers';
 
 const reducer = combineReducers({
   egm: egmListReducers,
+  chat: chatReducers,
 });
 
 const middleware = [thunk];

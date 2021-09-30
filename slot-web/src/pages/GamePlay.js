@@ -52,7 +52,7 @@ import Box from '@material-ui/core/Box';
 import BuildIcon from '@material-ui/icons/Build';
 import ScreenRotationIcon from '@material-ui/icons/ScreenRotation';
 
-import RtmpDemo from '../pages/demo/RtmpDemo';
+import RtmpDemo from '../pages/demo/Video';
 
 // Material Style
 const useStyles = makeStyles(theme => ({

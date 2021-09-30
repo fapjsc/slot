@@ -1,7 +1,9 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { SrsRtcPlayerAsync } from '../../utils/srs.sdk';
 
-const RtmpDemo = () => {
+import { connectChatSocket } from '../../lib/chatSocket';
+
+const Video = () => {
   const cameraRef = useRef();
   const sdkRef = useRef();
 
@@ -27,20 +29,24 @@ const RtmpDemo = () => {
 
   useEffect(() => {
     startPlay();
+    connectChatSocket();
   }, [startPlay]);
 
   return (
-    <video
-      ref={cameraRef}
-      id="video-webrtc"
-      autoPlay
-      controls
-      playsInline
-      // style={{ width: '100%', height: '100%' }}
-      width="100%"
-      height="100%"
-    />
+    <>
+      <div style={{ backgroundColor: 'black', minHeight: '40vh' }}>
+        <video
+          ref={cameraRef}
+          // id="video-webrtc"
+          autoPlay
+          controls
+          playsInline
+          width="100%"
+          style={{ height: '40vh' }}
+        />
+      </div>
+    </>
   );
 };
 
-export default RtmpDemo;
+export default Video;
