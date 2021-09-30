@@ -38,7 +38,7 @@ const AccountReport = ({ setPageCount, dataPerPage, pagesVisited, reportData }) 
   );
 
   if (reportData) {
-    reportData.sort((a, b) => new Date(a.cashInTime).getTime() - new Date(b.cashInTime).getTime());
+    reportData.sort((a, b) => new Date(b.cashInTime).getTime() - new Date(a.cashInTime).getTime());
   }
 
   if (filterResultData && !selectPlayer && !selectMachine) {
