@@ -10,6 +10,10 @@ import UserState from './context/User/UserState';
 import PublicRoute from './hooks/PublicRoute';
 import PrivateRoute from './hooks/PrivateRoute';
 
+// Toast
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // Demo
 // import RtmpDemo from './pages/demo/Video';
 import GamePlayV2 from './pages/GamePlayV2';
@@ -24,6 +28,7 @@ import './App.scss';
 const App = () => {
   return (
     <Router>
+      <ToastContainer autoClose={5000} theme="dark" pauseOnHover={false} limit={5} />
       <Switch>
         <UserState>
           <PublicRoute restricted={true} path="/" component={Auth} exact />

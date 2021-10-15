@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Actions
-import { setSelectEgmData, removeIsPlaying } from '../actions/egmActions';
+import { setSelectEgmData, removeIsPlaying } from '../store/actions/egmActions';
 
 import screenfull from 'screenfull';
 

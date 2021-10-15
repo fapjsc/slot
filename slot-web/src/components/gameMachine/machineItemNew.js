@@ -52,8 +52,8 @@ export default function MachineItem(props) {
   const [hasCredit, setHasCredit] = useState(false);
 
   // User Context
-  const userContext = useContext(UserContext);
-  const { apiToken } = userContext;
+  // const userContext = useContext(UserContext);
+  // const { apiToken } = userContext;
 
   // 動態加載圖片
   const getImg = useCallback(() => {
@@ -73,9 +73,12 @@ export default function MachineItem(props) {
       mapId: machineDetails.mapId,
       egmId: machineDetails.egmId,
       egmIP: machineDetails.egmIp,
-      picName: machineDetails.pinName,
-      apiToken,
+      picName: machineDetails.picName,
+      apiToken: localStorage.getItem('token'),
     };
+
+    console.log(reqData);
+    console.log(machineDetails);
     chooseEgmRequest(reqData);
   };
 

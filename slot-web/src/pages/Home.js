@@ -1,5 +1,17 @@
-import React, { useEffect, useContext, useState, Fragment } from 'react';
+import React, { useCallback, useEffect, useContext, useState, Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
+
+// Redux
+import { useDispatch } from 'react-redux';
+
+// Actions
+import { setSelectEgmData } from '../store/actions/egmActions';
+
+// Api
+import { getPlayerInfo } from '../lib/api';
+
+// Utils
+import { _getLocalStorageItem } from '../utils/helper';
 
 // Components
 import MachineList from '../components/gameMachine/machineList';
@@ -21,9 +33,6 @@ import Footer from '../layout/Footer';
 
 // Context
 import UserContext from '../context/User/UserContext';
-
-// Api
-// import { wsUri } from '../api/config';
 
 // Style
 import Box from '@material-ui/core/Box';
@@ -69,6 +78,9 @@ const Home = () => {
   const classes = useStyles();
   const history = useHistory();
 
+  // Redux
+  const dispatch = useDispatch();
+
   // Init State
   const [showGameLoading, setShowGameLoading] = useState(false);
 
@@ -80,33 +92,33 @@ const Home = () => {
     sendRequest: getEgmListRequest,
   } = useHttp(getEgmList, true);
 
+  const {
+    status: getPlayerInfoStatus,
+    // error: getPlayerInfoError,
+    data: playerInfo,
+    sendRequest: getPlayerInfoRequest,
+  } = useHttp(getPlayerInfo);
+
   // User Context
   const userContext = useContext(UserContext);
-  const { apiToken, setApiToken, wsClient, getUserInfo, userInfo } = userContext;
+  const { wsClient } = userContext;
 
-  useEffect(() => {
-    let token = localStorage.getItem('token');
-    let player = localStorage.getItem('player');
-    let casino = localStorage.getItem('casino');
-
-    const data = {
-      casino,
-      pc: player,
-    };
-    setApiToken(token);
-    getUserInfo(token, data);
-
-    window.history.pushState(null, document.title, window.location.href);
-    window.addEventListener('popstate', function (event) {
-      window.history.pushState(null, document.title, window.location.href);
-    });
-
-    // eslint-disable-next-line
-  }, []);
+  const getPlayerInfoHandler = useCallback(() => {
+    const getPlayerInfoReqData = _getLocalStorageItem('getPlayerInfo');
+    getPlayerInfoRequest(getPlayerInfoReqData, true);
+  }, [getPlayerInfoRequest]);
 
   useEffect(() => {
     connectWithWebSocket();
   }, []);
+
+  useEffect(() => {
+    getPlayerInfoHandler();
+  }, [getPlayerInfoHandler]);
+
+  useEffect(() => {
+    dispatch(setSelectEgmData({}));
+  }, [dispatch]);
 
   useEffect(() => {
     const reqData = {
@@ -168,8 +180,12 @@ const Home = () => {
             <Box style={headerBox}>
               <HomeHeader
                 handleLogout={handleLogout}
-                user={userInfo && userInfo.playerCode}
-                money={userInfo && userInfo.walletMoney}
+                getPlayerInfoHandler={getPlayerInfoHandler}
+                playerInfo={playerInfo}
+                getPlayerInfoStatus={getPlayerInfoStatus}
+                // playerCode={playerCode && playerCode}
+                // walletMoney={walletMoney && walletMoney}
+                // walletState={walletState && walletState}
               />
             </Box>
 
@@ -182,7 +198,7 @@ const Home = () => {
             {status === 'completed' && !error && egmData.egmList.length > 0 && (
               <MachineList
                 egmList={egmData.egmList}
-                token={apiToken}
+                token={playerInfo && playerInfo.apiToken}
                 setShowGameLoading={setShowGameLoading}
               />
             )}

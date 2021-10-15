@@ -59,14 +59,6 @@ const MachineList = props => {
     sendRequest: chooseEgmRequest,
   } = useHttp(chooseEgm);
 
-  // // 開分
-  // const {
-  //   status: pointCashStatus,
-  //   error: pointCashError,
-  //   data: pointCashData,
-  //   sendRequest: pointCashRequest,
-  // } = useHttp(pointCash);
-
   const { egmList, setShowGameLoading } = props;
 
   // Init State
@@ -77,7 +69,7 @@ const MachineList = props => {
   const pagesVisited = pageNumber * dataPerPage;
 
   // User Context
-  const { pointLading, machineDisplayHorizontal } = useContext(UserContext);
+  const { machineDisplayHorizontal } = useContext(UserContext);
 
   const changePage = ({ selected }) => {
     setPageNumber(selected);

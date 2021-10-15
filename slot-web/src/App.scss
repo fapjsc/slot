@@ -8,18 +8,9 @@ html {
 body {
   margin: 0;
   padding: 0;
-  /* background-color: black;
-  background-image: url('./asset/5dde4f6dc409c1574850413996.jpg');
-  background-size: cover;
-  background-position: center; */
-}
-
-.MuiBackdrop-root {
-  /* background-color: red !important; */
 }
 
 .MuiDialog-paper {
-  /* background-image: linear-gradient(to top, #09203f 0%, #537895 100%); */
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0.15) 100%),
     radial-gradient(at top center, rgba(255, 255, 255, 0.4) 0%, rgba(0, 0, 0, 0.4) 120%) #989898;
   background-blend-mode: multiply, multiply;
@@ -43,11 +34,6 @@ input[type='number'] {
   font-family: 'Roboto', sans-serif;
   color: #fff;
 }
-
-/* .odometer-inside {
-  display: flex;
-  align-items: center;
-} */
 
 .slider-contain
   > .awssld
@@ -119,9 +105,6 @@ input[type='number'] {
   height: 30px;
   width: 30px;
 
-  // &:hover {
-  //   background-color: #7116ad;
-  // }
   &.active,
   &:active {
     background-color: #7116ad;
@@ -132,14 +115,47 @@ input[type='number'] {
   background-color: #7116ad;
 }
 
-.previous {
-}
-
-.next {
-}
-
+//======= V2 ========//
+// React suit
 .rs-drawer-content {
   .rs-icon {
     display: none;
   }
+
+  background-color: transparent !important;
+}
+
+// React chat element
+.rce-mbox {
+  background-color: rgba(255, 255, 255, 0.7);
+  svg {
+    display: none;
+  }
+}
+
+// 避免ios點擊input後，將畫面比例放大
+input,
+textarea {
+  font-size: initial !important;
+}
+
+// custom-feedBack dialog
+.custom-feedBack {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .rs-modal-content {
+    background-color: #ddd;
+  }
+}
+
+// custom loader backdrop
+.rs-loader-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85) !important;
 }

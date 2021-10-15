@@ -1,8 +1,8 @@
 // import { w3cwebsocket as W3CWebsocket } from 'websocket';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
-import store from '../store';
-import * as egmActions from '../actions/egmActions';
+import store from '../store/store';
+import * as egmActions from '../store/actions/egmActions';
 
 //==== WebSocket ====//
 const wsUri = 'ws://220.135.67.240:8000/';
@@ -17,7 +17,7 @@ const socketEventTypes = {
 
 let kickStateTmp;
 let egmConnectSuccessArrTmp = [];
-let egmConnectFailArrTmp = [];
+// let egmConnectFailArrTmp = [];
 let egmCreditArrTmp = [];
 
 let client;

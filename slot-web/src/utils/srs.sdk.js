@@ -25,7 +25,7 @@ export const SrsRtcPlayerAsync = () => {
         sdp: offer.sdp,
       };
 
-      console.log('Generated offer: ', data);
+      // console.log('Generated offer: ', data);
 
       axios({
         method: 'POST',
@@ -35,8 +35,7 @@ export const SrsRtcPlayerAsync = () => {
         dataType: 'json',
       })
         .then(data => {
-          console.log(data);
-          console.log('Got answer: ', data.data);
+          // console.log('Got answer: ', data.data);
           if (data.code) {
             reject(data);
             return;

@@ -1,0 +1,29 @@
+// Drawer
+.drawerBody {
+  padding: 3px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  .chat-header {
+    text-align: right;
+    color: #fff;
+    font-size: 1.7rem;
+
+    svg {
+      cursor: pointer;
+    }
+  }
+
+  .chat-body {
+    max-height: 87%;
+    overflow: auto;
+    flex: 1;
+    padding-bottom: 5px;
+  }
+
+  .chat-footer {
+    position: fixed;
+    bottom: 0;
+  }
+}

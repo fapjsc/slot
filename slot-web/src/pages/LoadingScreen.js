@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useEffect, useCallback } from 'react';
 
 // Components
 import backgroundImg from '../asset/5dde4f6dc409c1574850413996.jpg';
-import ApiController from '../api/apiController';
+
+// Hooks
+import useHttp from '../hooks/useHttp';
+
+// Api
+import { playerLanding } from '../lib/api';
 
 // Style
 import { makeStyles } from '@material-ui/core/styles';
@@ -31,53 +35,25 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ history, location }) => {
   const classes = useStyles();
 
-  // InitState
-  const [loadFailed, setIsLoadFailed] = useState(false);
+  const { data, status, error, sendRequest } = useHttp(playerLanding);
 
   // Router Props
-  let location = useLocation();
   let params = new URLSearchParams(location.search);
 
-  const history = useHistory();
+  const player = params.get('player');
+  const casino = params.get('casino');
+  const at = params.get('at');
+  const backToCasinoUrl = params.get('returnUrl');
 
-  let playerLandingApi = async () => {
-    setIsLoadFailed(false);
-    let player = params.get('player');
-    let casino = params.get('casino');
-    let at = params.get('at');
-    let backToCasinoUrl = params.get('returnUrl');
-
+  const setDataToLocalStorage = useCallback(() => {
     localStorage.setItem('player', player);
     localStorage.setItem('casino', casino);
     localStorage.setItem('at', at);
     localStorage.setItem('backToCasinoUrl', backToCasinoUrl); // 返回娛樂城的url
-
-    try {
-      let responseData = await ApiController().playerLandingApi(player, casino, at);
-      console.log(responseData);
-
-      if (responseData.code > 100000000) {
-        // code 超過 100000000 為問題回傳
-        setIsLoadFailed(true);
-        localStorage.clear();
-        return;
-      }
-      if (responseData.code < 100000000) {
-        localStorage.setItem('token', responseData.apiToken);
-        localStorage.setItem('casino', responseData.casinoCode);
-        history.replace('/home');
-      }
-    } catch (error) {
-      console.log('ERROR message: ', error);
-      setIsLoadFailed(true);
-      alert('Landing error');
-      localStorage.clear();
-      history.replace('/');
-    }
-  };
+  }, [player, casino, at, backToCasinoUrl]);
 
   const handleClick = () => {
     localStorage.clear();
@@ -85,12 +61,20 @@ const LoadingScreen = () => {
   };
 
   useEffect(() => {
-    playerLandingApi();
-    // eslint-disable-next-line
-  }, []);
+    setDataToLocalStorage();
+    sendRequest();
+  }, [sendRequest, setDataToLocalStorage]);
+
+  useEffect(() => {
+    if (status === 'completed' && !error && data.code === 1) {
+      // localStorage.setItem('token', data.apiToken);
+      history.replace('/home');
+    }
+  }, [data, status, error, history]);
+
   return (
     <div className={classes.root}>
-      {!loadFailed ? (
+      {!error ? (
         <Paper className={classes.paper}>
           <Box m={4}>
             <LinearProgress />

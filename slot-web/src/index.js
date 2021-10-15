@@ -6,7 +6,7 @@ import 'rsuite/dist/rsuite.min.css';
 
 // Redux
 import { Provider } from 'react-redux';
-import store from './store';
+import store from './store/store';
 
 ReactDOM.render(
   <React.StrictMode>

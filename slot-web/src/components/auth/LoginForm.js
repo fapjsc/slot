@@ -1,7 +1,13 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect } from 'react';
 
-// Context
-import UserContext from '../../context/User/UserContext';
+// Hooks
+import useHttp from '../../hooks/useHttp';
+
+// Api
+import { userLogin } from '../../lib/api';
+
+// Middleware
+import { login } from '../../middleware/auth';
 
 // Style
 import Avatar from '@material-ui/core/Avatar';
@@ -35,12 +41,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const LoginForm = props => {
+const LoginForm = ({ history }) => {
   const classes = useStyles();
-  console.log('login');
 
-  // UserContext
-  const { userLanding } = useContext(UserContext);
+  // http
+  const { status, data, error, sendRequest } = useHttp(userLogin);
 
   // Init State
   const [name, setName] = useState('');
@@ -58,14 +63,19 @@ const LoginForm = props => {
       password,
     };
 
-    // login(props, data);
-    userLanding(data);
+    sendRequest(data);
   };
 
-  window.history.pushState(null, document.title, window.location.href);
-  window.addEventListener('popstate', function (event) {
-    window.history.pushState(null, document.title, window.location.href);
-  });
+  useEffect(() => {
+    if (status !== 'completed' || error) {
+      // handle Error...
+      return;
+    }
+
+    if (data && data.supplierURL) {
+      login(history, data);
+    }
+  }, [status, error, data, history]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -103,7 +113,6 @@ const LoginForm = props => {
             id="password"
             autoComplete="current-password"
           />
-          {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="記住我" /> */}
           <Button
             type="submit"
             fullWidth

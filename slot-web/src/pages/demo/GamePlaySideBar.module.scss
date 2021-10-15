@@ -1,0 +1,117 @@
+.glass-panel {
+  color: #fff;
+  margin: 0;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 9rem;
+  border-radius: 5px;
+  padding: 5px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  margin-bottom: 0;
+  position: relative;
+
+  transition: all 0.6s;
+}
+
+.glass-panel-open {
+  transform: translateX(0%) !important;
+}
+
+.glass-panel-close {
+  transform: translateX(-100%) !important;
+}
+
+.side-nav {
+  color: rgb(236, 236, 236) !important;
+  font-weight: bold;
+  background-color: inherit !important;
+}
+
+.item {
+  background-color: inherit !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding: 0.6rem !important;
+  padding-left: 1rem !important;
+
+  .icon {
+    font-size: 1.6rem;
+  }
+
+  .text {
+    margin-left: 0.6rem;
+    font-size: 1rem;
+  }
+
+  &:hover {
+    background-color: inherit !important;
+    color: blue !important;
+  }
+}
+
+.arrowBox {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  cursor: pointer;
+
+  transition: all 0.6s;
+}
+
+.arrowBoxLeft {
+  transform: rotate(90deg) !important;
+  top: 25px;
+}
+
+.arrowBoxRight {
+  transform: rotate(270deg) !important;
+  right: -15px;
+}
+
+// h2,
+// h2 a {
+//   min-height: 120px;
+//   width: 90%;
+//   max-width: 700px;
+//   vertical-align: middle;
+//   text-align: center;
+//   margin: 0 auto;
+//   text-decoration: none;
+//   color: #fff;
+//   padding-top: 60px;
+//   color: rgba(255, 255, 255, 0.8);
+// }
+
+// p {
+//   width: 80%;
+//   margin: 0 auto;
+//   padding-bottom: 32px;
+//   color: rgba(255, 255, 255, 0.6);
+// }
+
+// .glass-button {
+//   margin: 15px;
+//   margin-top: 40px;
+// }
+
+// .glass-button {
+//   display: inline-block;
+//   padding: 24px 32px;
+//   border: 0;
+//   text-decoration: none;
+//   border-radius: 15px;
+//   background-color: rgba(255, 255, 255, 0.1);
+//   border: 1px solid rgba(255, 255, 255, 0.1);
+//   backdrop-filter: blur(30px);
+//   color: rgba(255, 255, 255, 0.8);
+//   font-size: 14px;
+//   letter-spacing: 2px;
+//   cursor: pointer;
+//   text-transform: uppercase;
+// }
+
+// .glass-button:hover {
+//     background-color: rgba(255, 255, 255, 0.2);
+//   }

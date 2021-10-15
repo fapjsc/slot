@@ -120,9 +120,13 @@ const GameLoadingCard = ({ setShowGameLoading }) => {
     }
 
     if (pointCashData.code === 3) {
-      history.replace('/gameStart');
+      if (selectEgmData.mapId === 102) {
+        history.replace('/v2');
+      } else {
+        history.replace('/gameStart');
+      }
     }
-  }, [pointCashStatus, history, pointCashData]);
+  }, [pointCashStatus, history, pointCashData, selectEgmData.mapId]);
 
   return (
     <Card className={classes.root}>

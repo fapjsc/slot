@@ -1,35 +1,45 @@
 import { useState, useRef, useEffect } from 'react';
 
+// Redux
 import { useSelector } from 'react-redux';
 
-import classes from './Chat.module.scss';
+// Chat Socket
 import { sendMessage } from '../../lib/chatSocket';
 
-import Drawer from 'rsuite/Drawer';
-import CloseIcon from '@rsuite/icons/Close';
+// Style
+import classes from './ChatWidget.module.scss';
 
-const Chat = ({ open, setOpen, placement, height }) => {
+// Rsuite Components
+import { Drawer, Input, InputGroup } from 'rsuite';
+
+// React Chat Element
+import { MessageBox } from 'react-chat-elements';
+import 'react-chat-elements/dist/main.css';
+
+// Icon
+import { RiSendPlaneFill, RiCloseCircleFill } from 'react-icons/ri';
+
+const ChatWidget = ({ open, setOpen, placement, height, width }) => {
+  // State
+  const [enterMessage, setEnterMessage] = useState('');
+
+  // Store
   const { messageList } = useSelector(state => state.chat);
-  const [newMessage, setNewMessage] = useState(false);
-  const messageEndRef = useRef(null);
 
-  const message = messageList.map((el, index) => (
-    <div key={index} className={classes.message}>
-      <p className={classes.meta}>
-        {el.username} <span>{el.time}</span>
-      </p>
-      <p className={classes.text}>{el.text}</p>
-    </div>
-  ));
+  // Ref
+  const messageEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   const onChangeHandler = e => {
-    if (e.target.value.trim() === '') return;
-    setNewMessage(e.target.value);
+    if (e.trim() === '') return;
+    setEnterMessage(e.trim());
   };
 
   const messageOnSubmit = e => {
     e.preventDefault();
-    sendMessage(newMessage);
+    if (enterMessage.trim() === '') return;
+    sendMessage(enterMessage);
+    setEnterMessage('');
   };
 
   const scrollToBottom = () => {
@@ -38,78 +48,66 @@ const Chat = ({ open, setOpen, placement, height }) => {
   };
 
   useEffect(() => {
+    if (open) scrollToBottom();
+  }, [open]);
+
+  useEffect(() => {
     scrollToBottom();
   }, [messageList]);
+
+  const message = messageList.map((el, index) => (
+    <div key={index}>
+      <MessageBox
+        position={'left'}
+        title={el.username}
+        titleColor={'blue'}
+        type={'text'}
+        text={el.text}
+        dateString={el.time}
+      />
+    </div>
+  ));
 
   return (
     <>
       <Drawer
-        style={{ height: height }}
+        style={{
+          height: height,
+          width: width ? width : '100%',
+          padding: 0,
+        }}
+        className={classes.drawerBody}
         placement={placement}
         open={open}
         onClose={() => setOpen(false)}
       >
-        <header className={classes['chat-header']}>
-          <CloseIcon className={classes.icon} onClick={() => setOpen(false)} />
-          <h4>聊天室</h4>
-        </header>
+        <Drawer.Body className={classes.drawerBody}>
+          <div className={classes['chat-header']}>
+            <RiCloseCircleFill onClick={() => setOpen(false)} />
+          </div>
 
-        <Drawer.Body style={{ padding: '1rem', height: '75%' }}>
-          <div className={classes['chat-messages']}>
+          <div className={classes['chat-body']}>
             {message}
             <div ref={messageEndRef} />
+          </div>
+
+          <div className={classes.footer}>
+            <InputGroup inside>
+              <Input
+                placeholder="  Enter message..."
+                value={enterMessage}
+                onChange={onChangeHandler}
+                ref={inputRef}
+              />
+              <InputGroup.Button onClick={messageOnSubmit}>
+                <RiSendPlaneFill style={{ color: 'blue', fontSize: '1.2rem' }} />
+              </InputGroup.Button>
+            </InputGroup>
           </div>
         </Drawer.Body>
-
-        <Drawer.Actions>
-          <div className={classes['chat-form-container']}>
-            <form onSubmit={messageOnSubmit} id="chat-form">
-              <input
-                id="msg"
-                type="text"
-                placeholder="Enter Message"
-                required
-                autoComplete="off"
-                onChange={onChangeHandler}
-              />
-              <button className={classes['btn']}>
-                <i className="fas fa-paper-plane"></i> Send
-              </button>
-            </form>
-          </div>
-        </Drawer.Actions>
       </Drawer>
-      {/* <div className={classes['chat-container']}>
-        <header className={classes['chat-header']}>
-          <h3>聊天室</h3>
-          <hr />
-        </header>
-
-        <div className={classes['chat-main']}>
-          <div className={classes['chat-messages']}>
-            {message}
-            <div ref={messageEndRef} />
-          </div>
-        </div>
-
-        <div className={classes['chat-form-container']}>
-          <form onSubmit={messageOnSubmit} id="chat-form">
-            <input
-              id="msg"
-              type="text"
-              placeholder="Enter Message"
-              required
-              autoComplete="off"
-              onChange={onChangeHandler}
-            />
-            <button className={classes['btn']}>
-              <i className="fas fa-paper-plane"></i> Send
-            </button>
-          </form>
-        </div>
-      </div> */}
     </>
   );
 };
 
-export default Chat;
+export default ChatWidget;
