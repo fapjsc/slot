@@ -109,7 +109,6 @@ export const getPlayerInfo = async reqData => {
 };
 
 export const playerFeebBack = async reqData => {
-  console.log('hi');
   const headers = getHeaders(reqData.apiToken);
   if (!headers) return;
 
@@ -182,6 +181,7 @@ export const chooseEgm = async reqData => {
     event: httpDataControllerType.SET_SELECT_EGM_DATA,
     cameraIndex: String(data.cameraIndex),
     gameStream: `webrtc://220.135.67.240/game/${data.cameraIndex}`,
+    // gameStream: `webrtc://220.135.67.240/game/11`,
   });
   return data;
 };

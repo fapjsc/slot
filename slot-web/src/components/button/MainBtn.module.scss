@@ -1,0 +1,129 @@
+.image {
+  display: block;
+  margin: 0 auto;
+  background-size: 110% 110%;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 7rem;
+  width: 15rem;
+
+  @media only screen and(max-width: 1024px) {
+    height: 7rem;
+    width: 15rem;
+  }
+
+  @media only screen and(max-width: 768px) {
+    height: 5.5rem;
+    width: 12rem;
+  }
+
+  @media only screen and(max-width: 540px) {
+    height: 4rem;
+    width: 8.5rem;
+  }
+
+  @media only screen and(max-width: 414px) {
+    height: 3.8rem;
+    width: 7rem;
+  }
+
+  @media only screen and(max-width: 375px) {
+    height: 3.8rem;
+    width: 6.8rem;
+  }
+
+  @media only screen and(max-width: 360px) {
+    height: 3.2rem;
+    width: 6.5rem;
+  }
+
+  @media only screen and(max-width: 320px) {
+    height: 3rem;
+    width: 6rem;
+  }
+}
+
+.image[type='SPIN'] {
+  background-image: url(../../asset/v2/button/Aruze/spin1.png);
+}
+
+.image[type='MAX'] {
+  background-image: url(../../asset/v2/button/Aruze/max1.png);
+}
+.image[type='AUTO'] {
+  background-image: url(../../asset/v2/button/Aruze/auto1.png);
+}
+
+.image[wobble='SPIN'] {
+  animation: wobbleSpin 0.2s 1 ease-in-out;
+}
+
+.image[wobble='MAX'] {
+  animation: wobbleMax 0.2s 1 ease-in-out;
+}
+
+.image[wobble='AUTO'] {
+  animation: wobbleAuto 0.2s 1 ease-in-out;
+}
+
+// .image:focus,
+// .image:hover {
+//   animation: wobble 1s 1;
+// }
+
+// animation: wobbleAuto 0.1s infinite; => 無限執行
+
+@keyframes wobbleSpin {
+  0% {
+    background-image: url(../../asset/v2/button/Aruze/spin1.png);
+  }
+
+  25% {
+    background-image: url(../../asset/v2/button/Aruze/spin2.png);
+  }
+  50% {
+    background-image: url(../../asset/v2/button/Aruze/spin3.png);
+  }
+  75% {
+    background-image: url(../../asset/v2/button/Aruze/spin2.png);
+  }
+  100% {
+    background-image: url(../../asset/v2/button/Aruze/spin1.png);
+  }
+}
+
+@keyframes wobbleMax {
+  0% {
+    background-image: url(../../asset/v2/button/Aruze/max1.png);
+  }
+  25% {
+    background-image: url(../../asset/v2/button/Aruze/max2.png);
+  }
+  50% {
+    background-image: url(../../asset/v2/button/Aruze/max3.png);
+  }
+  75% {
+    background-image: url(../../asset/v2/button/Aruze/max2.png);
+  }
+  100% {
+    background-image: url(../../asset/v2/button/Aruze/max1.png);
+  }
+}
+
+@keyframes wobbleAuto {
+  0% {
+    background-image: url(../../asset/v2/button/Aruze/auto1.png);
+  }
+  25% {
+    background-image: url(../../asset/v2/button/Aruze/auto2.png);
+  }
+  50% {
+    background-image: url(../../asset/v2/button/Aruze/auto3.png);
+  }
+  75% {
+    background-image: url(../../asset/v2/button/Aruze/auto2.png);
+  }
+  100% {
+    background-image: url(../../asset/v2/button/Aruze/auto1.png);
+  }
+}

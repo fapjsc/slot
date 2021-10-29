@@ -92,13 +92,13 @@ export default function MachineItem(props) {
     };
 
     setLoginData(data);
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     getImg();
   }, [pageNumber, getImg]);
 
+  //** EGM Status Listen */
   // has connection
   useEffect(() => {
     egmConnectSuccessList.forEach(el => {

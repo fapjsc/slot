@@ -120,11 +120,13 @@ const GameLoadingCard = ({ setShowGameLoading }) => {
     }
 
     if (pointCashData.code === 3) {
-      if (selectEgmData.mapId === 102) {
-        history.replace('/v2');
-      } else {
-        history.replace('/gameStart');
-      }
+      history.replace('/v2');
+
+      // if (selectEgmData.mapId === 102) {
+      //   history.replace('/v2');
+      // } else {
+      //   history.replace('/gameStart');
+      // }
     }
   }, [pointCashStatus, history, pointCashData, selectEgmData.mapId]);
 

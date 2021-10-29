@@ -48,7 +48,7 @@ const Item = ({ url, updateOrder, updatePosition, ind, rotate, btnWidgetOpen }) 
           style={{
             height: rotate ? window.innerHeight : window.innerHeight / 2,
             width: rotate && btnWidgetOpen ? window.innerWidth / 2 : window.innerWidth,
-            backgroundColor: 'black',
+            backgroundColor: '#101A21',
           }}
         >
           <Video rtcUrl={url} />

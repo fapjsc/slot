@@ -34,7 +34,7 @@ const App = () => {
           <PublicRoute restricted={true} path="/" component={Auth} exact />
           <PublicRoute path="/load/" component={LoadingScreen} />
           <PrivateRoute path="/home" component={Home} exact />
-          <PrivateRoute path="/gameStart" component={GamePlay} exact />
+          {/* <PrivateRoute path="/gameStart" component={GamePlay} exact /> */}
           <PublicRoute path="/v2" component={GamePlayV2} exact />
           {/* <PrivateRoute path="/demo" component={Demo} exact />
           <PrivateRoute path="/demo2" component={Demo2} exact />

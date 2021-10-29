@@ -13,6 +13,7 @@ const Video = ({ rtcUrl: url }) => {
 
     sdkRef.current
       .play(url)
+      // .play('webrtc://220.135.67.240/game/11')
       .then(session => {
         // console.log(session, 'session');
         if (cameraRef.current) cameraRef.current.srcObject = sdkRef.current.stream;

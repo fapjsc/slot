@@ -1,137 +1,137 @@
-// Input Box
-.inputBox {
-  display: flex;
-  flex-direction: column;
-  padding: 1.2% 3%;
-  background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 20px;
-  width: 70%;
-  padding-bottom: 1rem;
+// // Input Box
+// .inputBox {
+//   display: flex;
+//   flex-direction: column;
+//   padding: 1.2% 3%;
+//   background-color: rgba(0, 0, 0, 0.7);
+//   border-radius: 20px;
+//   width: 70%;
+//   padding-bottom: 1rem;
 
-  input[type='number']::placeholder {
-    /* Firefox, Chrome, Opera */
-    padding-left: 5px;
-  }
+//   input[type='number']::placeholder {
+//     /* Firefox, Chrome, Opera */
+//     padding-left: 5px;
+//   }
 
-  input {
-    width: 90%;
-    padding: 3%;
-    background-color: white;
-    border-radius: 50rem;
+//   input {
+//     width: 90%;
+//     padding: 3%;
+//     background-color: white;
+//     border-radius: 50rem;
 
-    @media only screen and(max-width: 500px) {
-      width: 80%;
-    }
+//     @media only screen and(max-width: 500px) {
+//       width: 80%;
+//     }
 
-    // placeholder style
-    ::-webkit-input-placeholder {
-      /* Chrome/Opera/Safari */
-      font-size: 1rem;
-      @media only screen and(max-width: 450px) {
-        font-size: 0.7rem;
-      }
-    }
-    ::-moz-placeholder {
-      /* Firefox 19+ */
-      font-size: 1rem;
-    }
-    :-ms-input-placeholder {
-      /* IE 10+ */
-      font-size: 1rem;
-    }
-    :-moz-placeholder {
-      font-size: 1rem;
-    }
-  }
+//     // placeholder style
+//     ::-webkit-input-placeholder {
+//       /* Chrome/Opera/Safari */
+//       font-size: 1rem;
+//       @media only screen and(max-width: 450px) {
+//         font-size: 0.7rem;
+//       }
+//     }
+//     ::-moz-placeholder {
+//       /* Firefox 19+ */
+//       font-size: 1rem;
+//     }
+//     :-ms-input-placeholder {
+//       /* IE 10+ */
+//       font-size: 1rem;
+//     }
+//     :-moz-placeholder {
+//       font-size: 1rem;
+//     }
+//   }
 
-  .goldBox {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+//   .goldBox {
+//     display: flex;
+//     align-items: center;
+//     justify-content: flex-start;
 
-    .gold {
-      width: 20%;
-      height: 100%;
-    }
+//     .gold {
+//       width: 20%;
+//       height: 100%;
+//     }
 
-    .span {
-      color: #fff;
-      font-size: 1.5rem;
-      font-weight: bold;
+//     .span {
+//       color: #fff;
+//       font-size: 1.5rem;
+//       font-weight: bold;
 
-      @media only screen and(max-width: 500px) {
-        font-size: 0.8rem;
-      }
-    }
-  }
+//       @media only screen and(max-width: 500px) {
+//         font-size: 0.8rem;
+//       }
+//     }
+//   }
 
-  .inputInnerBox {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 1%;
-    height: 100%;
-  }
+//   .inputInnerBox {
+//     display: flex;
+//     align-items: center;
+//     justify-content: flex-start;
+//     padding: 1%;
+//     height: 100%;
+//   }
 
-  .slotIcon {
-    color: #fff;
-    cursor: pointer;
-    font-size: 2.2rem;
-    margin-left: 5px;
+//   .slotIcon {
+//     color: #fff;
+//     cursor: pointer;
+//     font-size: 2.2rem;
+//     margin-left: 5px;
 
-    @media only screen and(max-width: 500px) {
-      font-size: 2rem;
-    }
-  }
-}
+//     @media only screen and(max-width: 500px) {
+//       font-size: 2rem;
+//     }
+//   }
+// }
 
-// Credit Box
-.creditBox {
-  display: flex;
-  flex-direction: column;
-  padding: 1.2% 3%;
-  background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 20px;
-  width: 70%;
-  padding-bottom: 1rem;
+// // Credit Box
+// .creditBox {
+//   display: flex;
+//   flex-direction: column;
+//   padding: 1.2% 3%;
+//   background-color: rgba(0, 0, 0, 0.7);
+//   border-radius: 20px;
+//   width: 70%;
+//   padding-bottom: 1rem;
 
-  .moneyBox {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+//   .moneyBox {
+//     display: flex;
+//     align-items: center;
+//     justify-content: flex-start;
 
-    .money {
-      width: 20%;
-      height: 100%;
-    }
+//     .money {
+//       width: 20%;
+//       height: 100%;
+//     }
 
-    .span {
-      color: #fff;
-      font-size: 1.5rem;
-      font-weight: bold;
+//     .span {
+//       color: #fff;
+//       font-size: 1.5rem;
+//       font-weight: bold;
 
-      @media only screen and(max-width: 500px) {
-        font-size: 0.8rem;
-      }
-    }
-  }
+//       @media only screen and(max-width: 500px) {
+//         font-size: 0.8rem;
+//       }
+//     }
+//   }
 
-  .odometerBox {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 1%;
-    height: 100%;
-    font-size: 1.4rem;
-    background-color: rgba(0, 0, 0, 0.7);
-    border-radius: 20px;
+//   .odometerBox {
+//     display: flex;
+//     align-items: center;
+//     justify-content: flex-start;
+//     padding: 1%;
+//     height: 100%;
+//     font-size: 1.4rem;
+//     background-color: rgba(0, 0, 0, 0.7);
+//     border-radius: 20px;
 
-    @media only screen and(max-width: 500px) {
-      font-size: 1rem;
-    }
-    @media only screen and(max-width: 500px) {
-      margin-top: 3px;
-      font-size: 0.8rem;
-    }
-  }
-}
+//     @media only screen and(max-width: 500px) {
+//       font-size: 1rem;
+//     }
+//     @media only screen and(max-width: 500px) {
+//       margin-top: 3px;
+//       font-size: 0.8rem;
+//     }
+//   }
+// }

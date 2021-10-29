@@ -1,0 +1,34 @@
+.image {
+  display: block;
+  margin: 0 auto;
+  background-image: url(../../asset/v2/button/Aruze/spin1.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 5rem;
+  width: 5rem;
+}
+
+.image[wobble='1'] {
+  animation: wobble 0.2s ease-out;
+}
+
+// .image:focus,
+// .image:hover {
+//   animation: wobble 1s 1;
+// }
+
+@keyframes wobble {
+  25% {
+    background-image: url(../../asset/v2/button/Aruze/spin2.png);
+  }
+  50% {
+    background-image: url(../../asset/v2/button/Aruze/spin3.png);
+  }
+  75% {
+    background-image: url(../../asset/v2/button/Aruze/spin2.png);
+  }
+  100% {
+    background-image: url(../../asset/v2/button/Aruze/spin1.png);
+  }
+}

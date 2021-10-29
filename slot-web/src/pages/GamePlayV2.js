@@ -21,9 +21,15 @@ import { _remoteLocalStorageItem, _getLocalStorageItem } from '../utils/helper';
 // Components
 import GamePlaySideBar from './demo/GamePlaySideBar';
 import DragVideo from './demo/DragVideo';
+import CustomFeedBack from '../pages/demo/CustomFeedBack';
+
+// Widgets
+import MachineWidget from '../components/widget/MachineWidget';
 import ChatWidget from '../pages/demo/ChatWidget';
 import ButtonWidget from '../pages/demo/ButtonWidget';
-import CustomFeedBack from '../pages/demo/CustomFeedBack';
+
+// Images
+import HeaderBackImg from '../asset/v2/header.jpg';
 
 // Style
 import classes from './GamePlayV2.module.scss';
@@ -37,7 +43,7 @@ const GamePlayV2 = ({ history }) => {
   const [rotate, setRotate] = useState(false);
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const [chatWidgetOpen, setChatWidgetOpen] = useState(false);
-  const [btnWidgetOpen, setBtnWidgetOpen] = useState(true);
+  const [btnWidgetOpen, setBtnWidgetOpen] = useState(false);
   const [customFeedBackOpen, setCustomFeedBackOpen] = useState(false);
 
   // Redux store
@@ -46,7 +52,7 @@ const GamePlayV2 = ({ history }) => {
   // HTTP
   // Get Current Egm
   const {
-    // data: getCurrentEgmData,
+    data: getCurrentEgmData,
     status: getCurrentEgmStatus,
     error: getCurrentEgmError,
     sendRequest: getCurrentEgmRequest,
@@ -159,7 +165,7 @@ const GamePlayV2 = ({ history }) => {
   );
 
   return (
-    <section>
+    <section className={classes.container}>
       {/* Loading... */}
       {getPlayerInfoStatus === 'pending' ||
         getCurrentEgmStatus === 'pending' ||
@@ -174,6 +180,18 @@ const GamePlayV2 = ({ history }) => {
         selectEgm={selectEgmData}
         sendPlayerFeedBackRequest={sendPlayerFeedBackRequest}
         endGameRequest={endGameRequest}
+      />
+
+      {/* Machine Header */}
+      <div
+        style={{
+          backgroundImage: `url(${HeaderBackImg})`,
+          backgroundSize: '100% 100%',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          height: '6%',
+          width: '100vw',
+        }}
       />
 
       {/* Media Stream */}
@@ -198,6 +216,14 @@ const GamePlayV2 = ({ history }) => {
       </div>
 
       {/* Widgets */}
+      {/* Machine Bottom */}
+      <MachineWidget
+        open={true}
+        placement="bottom"
+        height="48%"
+        machineName={getCurrentEgmData && getCurrentEgmData.btnStyle}
+      />
+
       <ChatWidget
         open={chatWidgetOpen}
         setOpen={setChatWidgetOpen}

@@ -75,14 +75,14 @@ const ButtonWidget = ({ placement, open, setOpen, height, width, btnList, btnSty
     ));
 
   // Main Button
-  const mainBtnEl =
-    mainBtn &&
-    mainBtnImg &&
-    mainBtn.map((btn, index) => (
-      <button key={btn.buttonNo} onClick={() => pressSlotHandler(btn.buttonNo)}>
-        {btn.buttonTxt}
-      </button>
-    ));
+  // const mainBtnEl =
+  //   mainBtn &&
+  //   mainBtnImg &&
+  //   mainBtn.map((btn, index) => (
+  //     <button key={btn.buttonNo} onClick={() => pressSlotHandler(btn.buttonNo)}>
+  //       {btn.buttonTxt}
+  //     </button>
+  //   ));
 
   return (
     <Drawer
@@ -96,7 +96,7 @@ const ButtonWidget = ({ placement, open, setOpen, height, width, btnList, btnSty
       onClose={() => setOpen(false)}
     >
       <Drawer.Body style={drawerBody}>
-        <div style={manBtnBox}>{mainBtnEl}</div>
+        {/* <div style={manBtnBox}>{mainBtnEl}</div> */}
         <div style={subBtnBox}>{subBtnEl}</div>
       </Drawer.Body>
     </Drawer>
@@ -117,10 +117,10 @@ const subBtnBox = {
   height: '30%',
 };
 
-const manBtnBox = {
-  display: 'flex',
-  width: '100%',
-  height: '30%',
-};
+// const manBtnBox = {
+//   display: 'flex',
+//   width: '100%',
+//   height: '30%',
+// };
 
 export default ButtonWidget;

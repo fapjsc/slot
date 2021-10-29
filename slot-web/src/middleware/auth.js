@@ -34,6 +34,7 @@ export const login = (history, data, url) => {
     (data.name !== '105' && data.password !== '105')
   ) {
     localStorage.setItem('auth', data);
+    console.log(data);
     history.push(data.supplierURL);
   } else {
     alert('帳號密碼錯誤');
