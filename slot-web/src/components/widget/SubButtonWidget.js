@@ -10,14 +10,14 @@ import { pressSlot } from '../../lib/api';
 import { _getLocalStorageItem, _getButtonImg, _setSubBtnAndMainBtn } from '../../utils/helper';
 
 // Style
-import classes from './ButtonWidget.module.scss';
+import classes from './SubButtonWidget.module.scss';
 import { Drawer } from 'rsuite';
 
 const ButtonWidget = ({ placement, open, setOpen, height, width, btnList, btnStyle }) => {
   const [subBtn, setSubBtn] = useState([]);
   const [mainBtn, setMainBtn] = useState([]);
   const [subBtnImg, setSubBtnImg] = useState(null);
-  const [mainBtnImg, setMainBtnImg] = useState(null);
+  // const [mainBtnImg, setMainBtnImg] = useState(null);
 
   const {
     // data: pressData,
@@ -42,8 +42,7 @@ const ButtonWidget = ({ placement, open, setOpen, height, width, btnList, btnSty
   // Main and Sub Button Setup
   useEffect(() => {
     if (!btnList || (btnList && btnList.length === 0)) return;
-    const [mainBtnTemp, subBtnTemp] = _setSubBtnAndMainBtn(btnList);
-    setMainBtn(mainBtnTemp);
+    const [_, subBtnTemp] = _setSubBtnAndMainBtn(btnList);
     setSubBtn(subBtnTemp);
   }, [btnList]);
 
@@ -53,12 +52,6 @@ const ButtonWidget = ({ placement, open, setOpen, height, width, btnList, btnSty
     const imgGroup = _getButtonImg(btnStyle, subBtn, 'subBtn');
     setSubBtnImg(imgGroup);
   }, [btnStyle, subBtn]);
-
-  useEffect(() => {
-    if (!btnStyle || !mainBtn.length) return;
-    const imgGroup = _getButtonImg(btnStyle, mainBtn, 'mainBtn');
-    setMainBtnImg(imgGroup);
-  }, [btnStyle, mainBtn]);
 
   // Sub Button
   const subBtnEl =
@@ -74,16 +67,6 @@ const ButtonWidget = ({ placement, open, setOpen, height, width, btnList, btnSty
       </button>
     ));
 
-  // Main Button
-  // const mainBtnEl =
-  //   mainBtn &&
-  //   mainBtnImg &&
-  //   mainBtn.map((btn, index) => (
-  //     <button key={btn.buttonNo} onClick={() => pressSlotHandler(btn.buttonNo)}>
-  //       {btn.buttonTxt}
-  //     </button>
-  //   ));
-
   return (
     <Drawer
       style={{
@@ -96,7 +79,6 @@ const ButtonWidget = ({ placement, open, setOpen, height, width, btnList, btnSty
       onClose={() => setOpen(false)}
     >
       <Drawer.Body style={drawerBody}>
-        {/* <div style={manBtnBox}>{mainBtnEl}</div> */}
         <div style={subBtnBox}>{subBtnEl}</div>
       </Drawer.Body>
     </Drawer>
@@ -116,11 +98,5 @@ const subBtnBox = {
   width: '100%',
   height: '30%',
 };
-
-// const manBtnBox = {
-//   display: 'flex',
-//   width: '100%',
-//   height: '30%',
-// };
 
 export default ButtonWidget;

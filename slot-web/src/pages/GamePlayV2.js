@@ -22,11 +22,12 @@ import { _remoteLocalStorageItem, _getLocalStorageItem } from '../utils/helper';
 import GamePlaySideBar from './demo/GamePlaySideBar';
 import DragVideo from './demo/DragVideo';
 import CustomFeedBack from '../pages/demo/CustomFeedBack';
+// import SubBtnHolder from '../components/button/sub/SubBtnHolder';
 
 // Widgets
 import MachineWidget from '../components/widget/MachineWidget';
-import ChatWidget from '../pages/demo/ChatWidget';
-import ButtonWidget from '../pages/demo/ButtonWidget';
+import ChatWidget from '../components/widget/ChatWidget';
+// import ButtonWidget from '../components/widget/ButtonWidget';
 
 // Images
 import HeaderBackImg from '../asset/v2/header.jpg';
@@ -217,12 +218,19 @@ const GamePlayV2 = ({ history }) => {
 
       {/* Widgets */}
       {/* Machine Bottom */}
-      <MachineWidget
-        open={true}
-        placement="bottom"
-        height="48%"
-        machineName={getCurrentEgmData && getCurrentEgmData.btnStyle}
-      />
+      {getCurrentEgmStatus === 'completed' && (
+        <>
+          <MachineWidget
+            open={true}
+            placement="bottom"
+            height="48%"
+            machineName={getCurrentEgmData && getCurrentEgmData.btnStyle}
+            // machineName="Aruze"
+          />
+
+          {/* <SubBtnHolder /> */}
+        </>
+      )}
 
       <ChatWidget
         open={chatWidgetOpen}
@@ -230,16 +238,6 @@ const GamePlayV2 = ({ history }) => {
         placement={rotate ? 'left' : 'bottom'}
         height={rotate ? '100%' : '80%'}
         width={rotate ? '50%' : '100%'}
-      />
-
-      <ButtonWidget
-        open={btnWidgetOpen}
-        setOpen={setBtnWidgetOpen}
-        placement={rotate ? 'right' : 'bottom'}
-        height={rotate ? '100%' : '50%'}
-        width={rotate ? '50%' : '100%'}
-        btnList={selectEgmData && selectEgmData.btnList}
-        btnStyle={selectEgmData && selectEgmData.btnStyle}
       />
     </section>
   );

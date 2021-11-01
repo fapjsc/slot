@@ -1,6 +1,8 @@
 import React, { useEffect, useContext, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 
+import { useHistory } from 'react-router-dom';
+
 // Components
 import MachineItemNew from './machineItemNew';
 import MachineItemHorizontal from './machineItemHorizontal';
@@ -50,6 +52,8 @@ const useStyles = makeStyles(theme => ({
 const MachineList = props => {
   const classes = useStyles();
 
+  const history = useHistory();
+
   // Hooks
   // choose egm
   const {
@@ -85,6 +89,7 @@ const MachineList = props => {
 
     if (chooseEgmData.code === 2) {
       setShowGameLoading(true);
+      // history.push('/v2');
     }
   }, [chooseEgmData, chooseEgmError, chooseEgmStatus, setShowGameLoading]);
 

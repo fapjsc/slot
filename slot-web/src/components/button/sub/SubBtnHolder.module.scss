@@ -1,0 +1,70 @@
+.container {
+  height: 100%;
+  background-color: transparent;
+  transform: translateY(82%);
+  transition: all 0.3s ease-in-out;
+}
+
+.open-5 {
+  animation: openAnimation-5 1s 1;
+  transform: translateY(62%);
+}
+
+.open-10 {
+  animation: openAnimation-10 1s 1;
+  transform: translateY(42%);
+}
+
+.header {
+  height: 18%;
+  background-image: url(../../../asset/v2/suBtnHeader.png);
+  background-size: 120% 100%;
+  background-position: center bottom -10px;
+  background-repeat: no-repeat;
+}
+
+.header[status='false'] {
+  animation: headerAnimation 1s infinite;
+}
+
+@keyframes headerAnimation {
+  0% {
+    transform: translateY(-2px);
+  }
+
+  50% {
+    transform: translateY(2px);
+  }
+
+  100% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes openAnimation-5 {
+  0% {
+    transform: translateY(82%);
+  }
+
+  40% {
+    transform: translateY(55%);
+  }
+
+  80% {
+    transform: translateY(62%);
+  }
+}
+
+@keyframes openAnimation-10 {
+  0% {
+    transform: translateY(82%);
+  }
+
+  40% {
+    transform: translateY(32%);
+  }
+
+  80% {
+    transform: translateY(42%);
+  }
+}
