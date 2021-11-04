@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { _getLocalStorageItem, _getMachineImg } from '../../utils/helper';
 
 const MachineWidget = ({ machineName, placement, open, setOpen, height, width }) => {
+  console.log(machineName);
   // Init State
   const [mainBtn, setMainBtn] = useState();
   const [subBtn, setSubBtn] = useState();
@@ -40,7 +41,7 @@ const MachineWidget = ({ machineName, placement, open, setOpen, height, width })
   // Http
   const {
     // data: pressData,
-    // status: pressStatus,
+    status: pressStatus,
     // error: pressError,
     sendRequest: pressRequest,
   } = useHttp(pressSlot);
@@ -60,9 +61,13 @@ const MachineWidget = ({ machineName, placement, open, setOpen, height, width })
 
   // listen machine name for get machine img
   useEffect(() => {
+    console.log(machineName);
     if (machineName) {
-      const img = _getMachineImg(machineName);
-      setMachineImg(img);
+      const { machineImg } = _getMachineImg(machineName);
+      console.log(machineName, 'img');
+      console.log(machineImg, 'img');
+
+      setMachineImg(machineImg);
     }
   }, [machineName]);
 

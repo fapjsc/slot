@@ -16,7 +16,7 @@ import { getCurrentEgm, endGame, playerFeebBack, getPlayerInfo } from '../lib/ap
 import { toast } from 'react-toastify';
 
 // Utils
-import { _remoteLocalStorageItem, _getLocalStorageItem } from '../utils/helper';
+import { _remoteLocalStorageItem, _getLocalStorageItem, _getMachineImg } from '../utils/helper';
 
 // Components
 import GamePlaySideBar from './demo/GamePlaySideBar';
@@ -28,9 +28,6 @@ import CustomFeedBack from '../pages/demo/CustomFeedBack';
 import MachineWidget from '../components/widget/MachineWidget';
 import ChatWidget from '../components/widget/ChatWidget';
 // import ButtonWidget from '../components/widget/ButtonWidget';
-
-// Images
-import HeaderBackImg from '../asset/v2/header.jpg';
 
 // Style
 import classes from './GamePlayV2.module.scss';
@@ -110,6 +107,7 @@ const GamePlayV2 = ({ history }) => {
   // Connect to chat socket
   useEffect(() => {
     connectChatSocket();
+    window.scrollTo(0, 1);
   }, []);
 
   // FeedBack Request Listen
@@ -145,9 +143,12 @@ const GamePlayV2 = ({ history }) => {
     if (endGameError) toast.error(endGameError);
   }, [playerFeedBackError, getPlayerInfoError, getCurrentEgmError, endGameError]);
 
+  // BtnStyle Listen
+  useEffect(() => {}, [getCurrentEgmData]);
+
   //==== Window Event====//
   // user重整網頁時重新獲取player info and current egm data
-  window.onload = event => {
+  window.onload = () => {
     const getCurrentEgmReqData = _getLocalStorageItem('getCurrentEgm');
     const getPlayerInfoReqData = _getLocalStorageItem('getPlayerInfo');
     getCurrentEgmRequest(getCurrentEgmReqData);
@@ -158,21 +159,46 @@ const GamePlayV2 = ({ history }) => {
   const beforeVideoLoad = (
     <div
       style={{
-        height: rotate ? window.innerHeight : window.innerHeight / 2,
+        height: rotate ? window.innerHeight : window.innerHeight / 2 - 21,
         width: rotate ? window.innerWidth / 2 : window.innerWidth,
         backgroundColor: 'black',
+        color: '#fff',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
-    />
+    >
+      請稍候..
+    </div>
   );
 
+  // Style
+  const loaderStyle = {
+    zIndex: 1999,
+  };
+
+  const headerStyle = {
+    backgroundImage:
+      selectEgmData &&
+      selectEgmData.btnStyle &&
+      `url(${_getMachineImg(selectEgmData.btnStyle).machineHeaderImg})`,
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundColor: '#101A21',
+    height: '44px',
+    width: '100%',
+  };
+
   return (
-    <section className={classes.container}>
+    <section className={classes.container} style={{ backgroundColor: '#101A21' }}>
       {/* Loading... */}
       {getPlayerInfoStatus === 'pending' ||
         getCurrentEgmStatus === 'pending' ||
         (endGameStatus === 'pending' && (
           <Loader size="md" inverse style={loaderStyle} backdrop content="Loading..." vertical />
         ))}
+      {/* <Loader s size="md" inverse style={loaderStyle} backdrop content="Loading..." vertical /> */}
 
       {/* Custom FeedBacd */}
       <CustomFeedBack
@@ -184,16 +210,7 @@ const GamePlayV2 = ({ history }) => {
       />
 
       {/* Machine Header */}
-      <div
-        style={{
-          backgroundImage: `url(${HeaderBackImg})`,
-          backgroundSize: '100% 100%',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          height: '6%',
-          width: '100vw',
-        }}
-      />
+      <div style={headerStyle} />
 
       {/* Media Stream */}
       <div>
@@ -218,18 +235,15 @@ const GamePlayV2 = ({ history }) => {
 
       {/* Widgets */}
       {/* Machine Bottom */}
-      {getCurrentEgmStatus === 'completed' && (
-        <>
-          <MachineWidget
-            open={true}
-            placement="bottom"
-            height="48%"
-            machineName={getCurrentEgmData && getCurrentEgmData.btnStyle}
-            // machineName="Aruze"
-          />
-
-          {/* <SubBtnHolder /> */}
-        </>
+      {selectEgmData && selectEgmData.btnStyle && (
+        <MachineWidget
+          open={true}
+          placement="bottom"
+          height={window.innerHeight / 2 - 21}
+          machineName={selectEgmData.btnStyle}
+          // machineName="Aruze"
+          // height: rotate ? window.innerHeight : window.innerHeight / 2.5,
+        />
       )}
 
       <ChatWidget
@@ -241,10 +255,6 @@ const GamePlayV2 = ({ history }) => {
       />
     </section>
   );
-};
-
-const loaderStyle = {
-  zIndex: 2,
 };
 
 export default GamePlayV2;

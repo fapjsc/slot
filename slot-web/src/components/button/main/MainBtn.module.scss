@@ -22,25 +22,30 @@
     width: 8.5rem;
   }
 
-  @media only screen and(max-width: 414px) {
+  @media only screen and(max-width: 424px) {
     height: 3.8rem;
     width: 7rem;
   }
 
+  // @media only screen and(max-width: 414px) {
+  //   height: 3.8rem;
+  //   width: 7rem;
+  // }
+
   @media only screen and(max-width: 375px) {
-    height: 3.8rem;
-    width: 6.8rem;
-  }
-
-  @media only screen and(max-width: 360px) {
-    height: 3.2rem;
-    width: 6.5rem;
-  }
-
-  @media only screen and(max-width: 320px) {
     height: 3rem;
     width: 6rem;
   }
+
+  // @media only screen and(max-width: 360px) {
+  //   height: 3.2rem;
+  //   width: 6.5rem;
+  // }
+
+  // @media only screen and(max-width: 320px) {
+  //   height: 3rem;
+  //   width: 6rem;
+  // }
 }
 
 .image[type='SPIN'] {

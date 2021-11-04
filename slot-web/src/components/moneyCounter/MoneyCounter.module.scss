@@ -1,0 +1,117 @@
+.img {
+  background-image: url(../../asset/v2/machine/money_counter_green/counter-1.png);
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 5.2rem;
+  height: 1.7rem;
+
+  -webkit-backface-visibility: hidden;
+  //   background-color: red;
+
+  animation: moneyCounterAnimation 2s infinite;
+}
+
+@keyframes moneyCounterAnimation {
+  13% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-2.png);
+  }
+
+  26% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-3.png);
+  }
+
+  39% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-4.png);
+  }
+
+  //   Blue
+  52% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-1.png);
+  }
+
+  68% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-2.png);
+  }
+
+  81% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-3.png);
+  }
+
+  94% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-4.png);
+  }
+
+  100% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-1.png);
+  }
+}
+
+@-webkit-keyframes moneyCounterAnimation {
+  13% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-2.png);
+  }
+
+  26% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-3.png);
+  }
+
+  39% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-4.png);
+  }
+
+  //   Blue
+  52% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-1.png);
+  }
+
+  68% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-2.png);
+  }
+
+  81% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-3.png);
+  }
+
+  94% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-4.png);
+  }
+
+  100% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-1.png);
+  }
+}
+@-moz-keyframes moneyCounterAnimation {
+  13% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-2.png);
+  }
+
+  26% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-3.png);
+  }
+
+  39% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-4.png);
+  }
+
+  //   Blue
+  52% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-1.png);
+  }
+
+  68% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-2.png);
+  }
+
+  81% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-3.png);
+  }
+
+  94% {
+    background-image: url(../../asset/v2/machine/money_counter_blue/counter-4.png);
+  }
+
+  100% {
+    background-image: url(../../asset/v2/machine/money_counter_green/counter-1.png);
+  }
+}

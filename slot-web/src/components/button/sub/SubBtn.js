@@ -3,7 +3,7 @@ import { useState } from 'react';
 import classes from './SubBtn.module.scss';
 
 const SubBtn = ({ pressSlotHandler, btnList, btnStyle }) => {
-  const [selectBtn, setSelectBtn] = useState('');
+  const [selectBtn, setSelectBtn] = useState('500');
 
   const onClickHandler = (btnNo, btnTxt) => {
     setSelectBtn(btnTxt);

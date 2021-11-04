@@ -77,8 +77,8 @@ export default function MachineItem(props) {
       apiToken: localStorage.getItem('token'),
     };
 
-    console.log(reqData);
-    console.log(machineDetails);
+    // console.log(reqData);
+    // console.log(machineDetails);
     chooseEgmRequest(reqData);
   };
 
@@ -134,7 +134,7 @@ export default function MachineItem(props) {
       el => String(el.map) === String(machineDetails.mapId)
     );
 
-    console.log(creditExistsItem);
+    // console.log(creditExistsItem);
     if (!creditExistsItem) return;
 
     creditExistsItem.credit > 0 ? setHasCredit(true) : setHasCredit(false);

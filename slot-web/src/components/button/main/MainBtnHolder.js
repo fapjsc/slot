@@ -1,5 +1,6 @@
 // Components
 import MainBtn from './MainBtn';
+import MoneyCounter from '../../moneyCounter/MoneyCounter';
 
 // Styles
 import classes from './MainBtnHolder.module.scss';
@@ -22,6 +23,7 @@ const BtnHolder = ({ pressSlotHandler, mainBtnList }) => {
 
   return (
     <div className={classes.container}>
+      <MoneyCounter />
       <MainBtn type="AUTO" />
       {mainBtn}
     </div>

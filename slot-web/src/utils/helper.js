@@ -106,13 +106,25 @@ export const _setSubBtnAndMainBtn = btnList => {
 export const _getMachineImg = machineName => {
   let machineImg;
 
-  machineImg = require(`../asset/v2/machine/${machineName}.jpg`);
+  let machineHeaderImag;
 
-  if (!machineImg) machineImg = require(`../asset/v2/machine/${machineName}.png`);
+  machineImg = require(`../asset/v2/machine/${machineName}/${machineName}.jpg`);
 
-  if (!machineImg) machineImg = require(`../asset/v2/machine/Aruze.jpg`);
+  if (!machineImg) machineImg = require(`../asset/v2/machine/${machineName}/${machineName}.png`);
 
-  return machineImg.default;
+  if (!machineImg) machineImg = require(`../asset/v2/machine/default.jpg`);
+
+  machineHeaderImag = require(`../asset/v2/machine/${machineName}/Header.jpg`);
+
+  if (!machineHeaderImag)
+    machineHeaderImag = require(`../asset/v2/machine/${machineName}/Header.png`);
+
+  if (!machineHeaderImag) machineHeaderImag = require(`../asset/v2/machine/defaultHeader.jpg`);
+
+  return {
+    machineImg: machineImg.default,
+    machineHeaderImg: machineHeaderImag.default,
+  };
 };
 
 //==== Array Helper ====//

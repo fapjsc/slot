@@ -18,6 +18,8 @@ import { _removeDuplicateItem } from '../../utils/helper';
 
 // VideoItem
 const Item = ({ url, updateOrder, updatePosition, ind, rotate, btnWidgetOpen }) => {
+  const windowHeight = `${window.innerHeight}`;
+
   const [isdragged, setIsDragged] = useState(false);
   const itemRef = useMeasurePosition(pos => updatePosition(ind, pos));
   console.log(btnWidgetOpen);
@@ -46,7 +48,8 @@ const Item = ({ url, updateOrder, updatePosition, ind, rotate, btnWidgetOpen }) 
       >
         <div
           style={{
-            height: rotate ? window.innerHeight : window.innerHeight / 2,
+            // height: rotate ? window.innerHeight : window.innerHeight / 2.5,
+            height: window.innerHeight / 2 - 21,
             width: rotate && btnWidgetOpen ? window.innerWidth / 2 : window.innerWidth,
             backgroundColor: '#101A21',
           }}

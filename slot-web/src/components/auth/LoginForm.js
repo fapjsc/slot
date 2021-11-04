@@ -22,6 +22,8 @@ import Container from '@material-ui/core/Container';
 
 import Image from '../../pages/demo/Image';
 
+import MoneyCounter from '../moneyCounter/MoneyCounter';
+
 const useStyles = makeStyles(theme => ({
   paper: {
     display: 'flex',
@@ -128,7 +130,7 @@ const LoginForm = ({ history }) => {
         </form>
       </div>
 
-      <Image />
+      <MoneyCounter />
     </Container>
   );
 };

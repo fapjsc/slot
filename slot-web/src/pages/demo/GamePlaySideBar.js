@@ -68,25 +68,25 @@ const GamePlaySideBar = ({
         <Sidenav className={classes['side-nav']}>
           <Sidenav.Body>
             <Nav onSelect={onSelectHandler}>
-              <Nav.Item className={classes.item} onClick={() => setBtnOpen(true)}>
+              {/* <Nav.Item className={classes.item} onClick={() => setBtnOpen(true)}>
                 <RiPaletteLine className={classes.icon} />
                 <span className={classes.text}>操作</span>
-              </Nav.Item>
-
+              </Nav.Item> */}
+              {/* 
               <Nav.Item className={classes.item} onClick={() => setChatOpen(true)}>
                 <RiChat1Line className={classes.icon} />
                 <span className={classes.text}>聊天室</span>
-              </Nav.Item>
+              </Nav.Item> */}
 
-              <Nav.Item className={classes.item}>
+              {/* <Nav.Item className={classes.item}>
                 <RiFileInfoLine className={classes.icon} />
                 <span className={classes.text}>資訊</span>
-              </Nav.Item>
+              </Nav.Item> */}
 
-              <Nav.Item className={classes.item}>
+              {/* <Nav.Item className={classes.item}>
                 <RiUserStarLine className={classes.icon} />
                 <span className={classes.text}>主播</span>
-              </Nav.Item>
+              </Nav.Item> */}
 
               <Nav.Item className={classes.item} onClick={endGameHandler}>
                 <RiLogoutBoxRLine className={classes.icon} />
